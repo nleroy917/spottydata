@@ -2,8 +2,25 @@
 	border-radius: 8px;
 	height: 100px;
 	width: 100px;
+	padding-right:0px;
 }
 
 .playlist {
 	padding: 5px;
+	display: flex;
+    flex: 1 1 auto;
 }
+
+.playlist-linkhover > .overlay {
+    width:100%;
+    height:100%;
+    position:absolute;
+    background-color:#000;
+    opacity:0.5;
+    border-radius:30px;
+} 
+
+.playlist-card {
+	padding-left:0px;
+}
+

@@ -1,22 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 
 import Home from './Components/Home'
-import Playlist from './Components/Playlist'
 import Playlists from './Components/Playlists'
 
 
 
 const App = () => {
-
-  const [username, setUsername] = useState(null);
 
   return (
     <Router>

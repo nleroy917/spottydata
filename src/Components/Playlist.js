@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Playlist.css';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+
 
 const axios = require('axios').default;
 const querystring = require('querystring');
@@ -22,15 +17,21 @@ class Playlist extends React.Component{
 
   		render() {
   			return (
-  			<div className="container h-100 playlist">
-  				<div className="row h-100 align-items-left">
-  				<img className="playlist-img" src={this.state.img_link}/>
-				<div class="card text-white bg-dark mb-3">
-				 <div class="card-body">
-				    <h5 class="card-title">{this.state.name}</h5>
-				  </div>
+  			<div className="border border-secondary container-fluid align-items-center">
+  			<a className="playlist-link" href="https://google.com">
+  				<div className="row">
+  					<div className="playlist-img col-4 mb-3">
+  						<img className="playlist-img rounded float-left artwork" src={this.state.img_link}/>
+					</div>
+					<div className="playlist-card col-8 mb-3">
+						<div className=" playlist-card card text-white bg-dark mb-3">
+							<div className="card-body">
+								<h4 className="card-title">{this.state.name}</h4>
+							</div>
+						</div>
+					</div>
 				</div>
-				</div>
+			</a>
 			</div>
   				);
   		}

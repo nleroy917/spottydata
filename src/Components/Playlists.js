@@ -1,11 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Playlists.css';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
 import Playlist from './Playlist'
 
 const axios = require('axios').default;
@@ -89,10 +83,10 @@ class Playlists extends React.Component{
 
 		render() {
 		return(
-		  <div class="container h-100">
-		    <div class="row h-100 align-items-center">
-		      <div class="col-8">
-		        <h2 class="font-weight-bold playlists-heading welcome-heading">Welcome {this.state.user}! Please select a playlist to analyze.</h2>
+		  <div className="container">
+		    <div className="row h-100 align-items-center">
+		      <div className="col-8">
+		        <h2 className="font-weight-bold playlists-heading welcome-heading">Welcome {this.state.user ? this.state.user.charAt(0).toUpperCase() + this.state.user.slice(1) : ' '}! Please select a playlist to analyze.</h2>
 		        <br></br>
 		        {this.state.playlists ? this.state.playlists.map((playlist,key) => {
 		        	return(
