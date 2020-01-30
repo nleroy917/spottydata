@@ -1,5 +1,5 @@
 # SpottyData.com
-This is a React site that attempts to push my original [Spotify Playlist Analyzer Python Project](https://github.com/NLeRoy917/spotify-playlist-analyzer Spotify Playlist Analyzer). This project has since been made into a small API with Flask, and this code can be found [here](https://github.com/NLeRoy917/playlist-analyzer-api Playlist Analyzer API).
+This is a React site that attempts to push my original [Spotify Playlist Analyzer Python Project](https://github.com/NLeRoy917/spotify-playlist-analyzer Spotify Playlist Analyzer) This project has since been made into a small API with Flask, and this code can be found [here](https://github.com/NLeRoy917/playlist-analyzer-api Playlist Analyzer API)
 
 {Link to site will go here}
 
