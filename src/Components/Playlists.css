@@ -1,6 +1,12 @@
 .main-page {
-
+ background-image: url('../images/base_background_img.png');
 }
+
+.welcome-heading {
+	padding-top:50px;
+	text-align:left;
+}
+
 
 .masthead {
   height: 100vh;
