@@ -1,7 +1,10 @@
+
+
 .masthead {
   height: 100vh;
   min-height: 500px;
-  background-image: url('../images/base_background_img.png');
+  background: #3BBDB5;
+  /* background-image: url('../images/base_background_img.png'); */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

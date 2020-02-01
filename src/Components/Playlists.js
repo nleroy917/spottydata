@@ -84,8 +84,8 @@ class Playlists extends React.Component{
 		render() {
 		return(
 		  <div className="container">
-		    <div className="row h-100 align-items-center">
-		      <div className="col-8">
+		    <div className="row h-100 align-items-left">
+		      <div className="page-div justify-content-center col-lg-8 col-md-10 col-sm-12">
 		        <h2 className="font-weight-bold playlists-heading welcome-heading">Welcome {this.state.user ? this.state.user.charAt(0).toUpperCase() + this.state.user.slice(1) : ' '}! Please select a playlist to analyze.</h2>
 		        <br></br>
 		        {this.state.playlists ? this.state.playlists.map((playlist,key) => {

@@ -23,7 +23,8 @@ return(
         <h1 className="font-weight-bold">Welcome to SpottyData</h1>
         <br></br>
         <p className="lead">This site will analyze the songs in your Spotify playlists and display the data to you</p>
-  		<a className="btn btn-dark" href={authorize_url}>Let's Go</a>
+        <br></br>
+  		<a className="btn-lg btn-dark" href={authorize_url}>Let's Go</a>
 
       </div>
     </div>

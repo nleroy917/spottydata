@@ -17,22 +17,27 @@ class Playlist extends React.Component{
 
   		render() {
   			return (
-  			<div className="border border-secondary container-fluid align-items-center">
+  			<div className="container-flex card-div">
   			<a className="playlist-link" href="https://google.com">
-  				<div className="row">
-  					<div className="playlist-img col-4 mb-3">
-  						<img className="playlist-img rounded float-left artwork" src={this.state.img_link}/>
-					</div>
-					<div className="playlist-card col-8 mb-3">
-						<div className=" playlist-card card text-white bg-dark mb-3">
-							<div className="card-body">
-								<h4 className="card-title">{this.state.name}</h4>
-							</div>
-						</div>
-					</div>
+				<div className="card text-white bg-dark playlist-card">
+				    <div className="row no-gutters">
+				        <div className="col-md-5 card-img" >
+				            <img src={this.state.img_link} className="img-fluid card-img-top h-100" alt="..."/>
+				        </div>
+				        <div className="col-md-7">
+				            <div className="card-body">
+				            	<br></br>
+				            	<br></br>
+				                <h3 className="card-title">{this.state.name}</h3>
+				                <br></br>
+				            	<br></br>
+				            </div>
+				        </div>
+				    </div>
 				</div>
 			</a>
 			</div>
+			
   				);
   		}
 }
