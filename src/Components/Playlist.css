@@ -1,8 +1,10 @@
 .playlist-img {
 	border-radius: 8px;
-	height: 100px;
-	width: 100px;
-	padding-right:0px;
+	  max-width:400px;
+	  max-height:400px;
+	  width: auto;
+	  height: auto;
+	display: block;
 }
 
 .playlist {
@@ -22,11 +24,12 @@
 
 .playlist-card {
 	padding: 10px;
+	background-color: #1F312E;
 }
 
 .card-img {
 	background: #868e96;
-	 width: 100%;
+	width: auto;
     height: 15vw;
     object-fit: cover;
 }

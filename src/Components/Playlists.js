@@ -11,7 +11,7 @@ class Playlists extends React.Component{
     		super(props);
 
     		this.state = {
-      		authCode: null,
+      		authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code,
       		accessToken: null,
       		client_id: '0ca7dd0007fd4ff2a34c3aab07379970',
       		client_secret: '7e9f4b39a1a84edfa78014e53d6a664d',
@@ -21,11 +21,10 @@ class Playlists extends React.Component{
     		};
   		}
 
-  		componentWillMount() {
+  		componentDidMount() {
   			localStorage.setItem('authCode',querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code)
   			this.setState({authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code},() => {this.fetchAccessToken()})
-  			console.log(this.state.authCode)
-
+  			//console.log(this.state.authCode)
   		}
 
 		fetchAccessToken = async () => {
@@ -44,11 +43,12 @@ class Playlists extends React.Component{
 			const response = await axios.post('https://accounts.spotify.com/api/token',querystring.stringify(body),{headers: headers})
 
 			if(response.status === 200) {
-				console.log(response)
+				//console.log(response)
 				const data = await response.data
 				this.setState({accessToken: data.access_token})
 				this.fetchName()
-				this.fetchPlaylists()
+
+				return data.access_token
 			}
 		}
 
@@ -60,9 +60,10 @@ class Playlists extends React.Component{
 
 			const response = await axios.get('https://api.spotify.com/v1/me',{headers})
 			if(response.status === 200) {
-		    	console.log(response);
+		    	//console.log(response) 
 		    	const data = await response.data
 		    	this.setState({user: data.display_name})
+		    	this.fetchPlaylists()
 			}
 
 		}
@@ -72,26 +73,29 @@ class Playlists extends React.Component{
 				'Content-Type': 'application/json',
 				'Authorization': 'Bearer ' + this.state.accessToken
 			}
+			//console.log('token: ' + this.state.accessToken)
 
 			const response = await axios.get('https://api.spotify.com/v1/me/playlists',{headers})
 			if(response.status === 200) {
-		    	console.log(response);
+		    	//console.log(response);
 		    	const data = await response.data
 		    	this.setState({playlists: data.items})
 		}
 	}
 
 		render() {
-		return(
-		  <div className="container">
-		    <div className="row h-100 align-items-left">
+
+
+		return (
+		  <div className="container justify-content-center align-items-center">
+		    <div className="row h-100 my-auto">
 		      <div className="page-div justify-content-center col-lg-8 col-md-10 col-sm-12">
 		        <h2 className="font-weight-bold playlists-heading welcome-heading">Welcome {this.state.user ? this.state.user.charAt(0).toUpperCase() + this.state.user.slice(1) : ' '}! Please select a playlist to analyze.</h2>
 		        <br></br>
 		        {this.state.playlists ? this.state.playlists.map((playlist,key) => {
 		        	return(
 		        		<div>
-		        		<Playlist name={playlist.name} img_link={playlist.images[0].url} />
+		        			<Playlist key={key} name={playlist.name} img_link={playlist.images[0].url} id={playlist.id} token={this.state.accessToken}/>
 		        		</div>
 		        		)
 		        }) : ' '}

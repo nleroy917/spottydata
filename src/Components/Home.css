@@ -1,9 +1,11 @@
-
+body{
+	background: #78C9AB;
+}
 
 .masthead {
   height: 100vh;
   min-height: 500px;
-  background: #3BBDB5;
+  background: #78C9AB;
   /* background-image: url('../images/base_background_img.png'); */
   background-size: cover;
   background-position: center;

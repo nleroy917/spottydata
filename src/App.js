@@ -8,6 +8,7 @@ import {
 
 import Home from './Components/Home'
 import Playlists from './Components/Playlists'
+import Analysis from './Components/Analysis'
 
 
 
@@ -18,6 +19,8 @@ const App = () => {
     <div className="App">
       <Switch>
         <Route path="/playlists/" component={Playlists}>
+        </Route>
+        <Route path="/analysis/" component={Analysis}>
         </Route>
         <Route path="/" exact component={Home}>
         </Route>
