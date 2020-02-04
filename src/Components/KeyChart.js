@@ -10,25 +10,26 @@ class KeyChart extends React.Component{
     		super(props);
 
     		this.state = {
-    			data: null
+    			data: null,
+    			options: {backgroundColor: '#89D3DA'}
     		}
 
   		}
 
   		componentDidMount() {
-  			this.setState({data: {datasets: Object.values(this.props.data), labels: Object.keys(this.props.data)}})
+  			this.setState({data: {datasets: [{label: 'Key Distribution',
+  											 data: Object.values(this.props.data)}], 
+  								  labels: Object.keys(this.props.data)}})
   		}
 
   		render() {
   			console.log(this.state.data)
   			return (
   				<div>
-  					{this.state.data ? 
   					<Bar
-					  data={this.state.data}
-					 /> :
-					 ' '}
-
+  						data={this.state.data}
+  						options={this.state.options}
+					 />
   				</div>
   				);
   		}
