@@ -16,7 +16,8 @@ class Playlists extends React.Component{
       		client_id: '0ca7dd0007fd4ff2a34c3aab07379970',
       		client_secret: '7e9f4b39a1a84edfa78014e53d6a664d',
       		user: null,
-      		playlists: null
+      		playlists: null,
+      		chunked_playlists: null
 
     		};
   		}
@@ -80,13 +81,57 @@ class Playlists extends React.Component{
 		    	//console.log(response);
 		    	const data = await response.data
 		    	this.setState({playlists: data.items})
+		    	this.setState({chunked_playlists: this.chunkPlaylists(data.items,3)})
+
+
+			}	
 		}
-	}
+
+		chunkPlaylists(playlists,cols) {
+
+			let chunked_playlists = [];
+			let chunk = [];
+
+			for(let i = 1; i<=playlists.length;i++) {
+
+				//console.log(playlists[i])
+				//console.log(i)
+				if(i%cols === 0) {
+					chunk.push(playlists[i])
+					chunked_playlists.push(chunk)
+					chunk = [];
+				} else {
+					chunk.push(playlists[i])
+
+				}
+			}
+			this.setState({chunked_playlists: chunked_playlists})
+			return chunked_playlists
+		}
 
 		render() {
-
-
+		
 		return (
+		<div className="container">
+			<div className="row heading-row">
+				<h2 className="font-weight-bold playlists-heading welcome-heading">Welcome {this.state.user ? this.state.user.charAt(0).toUpperCase() + this.state.user.slice(1) : ' '}! Please select a playlist to analyze.</h2>
+			</div>
+		{this.state.chunked_playlists ? this.state.chunked_playlists.map((chunk,key) => {
+			return(
+				<div className="row my-auto">
+					{chunk.map((playlist,key) => {
+						return (
+								<div className="col-md-4">
+									<Playlist key={key} name={playlist.name} img_link={playlist.images[0].url} id={playlist.id} token={this.state.accessToken} desc={playlist.description}/>
+								</div>
+							);
+					})}
+				</div>)
+				}) : ' '}
+		</div>
+				);
+
+		/* return (
 		  <div className="container justify-content-center align-items-center">
 		    <div className="row h-100 my-auto">
 		      <div className="page-div justify-content-center col-lg-8 col-md-10 col-sm-12">
@@ -102,7 +147,7 @@ class Playlists extends React.Component{
 		      </div>
 		    </div>
 		  </div>
-		 );
+		 ); */
 		}
 }
 

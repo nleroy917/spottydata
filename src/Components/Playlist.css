@@ -2,8 +2,8 @@
 	border-radius: 8px;
 	  max-width:400px;
 	  max-height:400px;
-	  width: auto;
-	  height: auto;
+	  min-width:100px;
+	  min-height:100px;
 	display: block;
 }
 

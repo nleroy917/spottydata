@@ -2,12 +2,16 @@ body{
  background: #78C9AB;
 }
 
+.heading-row {
+  padding:25px;
+}
+
 .page-div {
   display: inline;
 }
 
 .welcome-heading {
-	padding-top:50px;
+	padding-top:20px;
 	text-align:left;
 }
 
