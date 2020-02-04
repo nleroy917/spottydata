@@ -14,7 +14,7 @@ class Playlists extends React.Component{
       		authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code,
       		accessToken: null,
       		client_id: '0ca7dd0007fd4ff2a34c3aab07379970',
-      		client_secret: '7e9f4b39a1a84edfa78014e53d6a664d',
+      		client_secret: process.env.REACT_APP_CLIENT_SECRET,
       		user: null,
       		playlists: null,
       		chunked_playlists: null
