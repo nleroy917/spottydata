@@ -17,10 +17,11 @@ class Playlist extends React.Component{
     		};
   		}
 
-  	generateURL(access_token,playlist_id) {
+  	generateURL(access_token,playlist_id,name) {
   			let payload = {
   				access_token: access_token,
-  				id: playlist_id
+  				id: playlist_id,
+          name: name
   			}
 
   			let url_query = querystring.stringify(payload)
@@ -32,7 +33,7 @@ class Playlist extends React.Component{
   	render() {
   			return (
   			<div className="container-flex card-div">
-	  			<a className="playlist-link justify-content-center" href={this.generateURL(this.state.accessToken,this.state.id)}>
+	  			<a className="playlist-link justify-content-center" href={this.generateURL(this.state.accessToken,this.state.id,this.state.name)}>
 					<div className="card text-white playlist-card">
 	         <img src={this.state.img_link} className="img-fluid card-img-top h-100 playlist-img" alt="..."/>
 	            <div className="card-body">

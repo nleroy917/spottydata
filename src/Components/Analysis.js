@@ -14,6 +14,7 @@ class Analysis extends React.Component{
     		this.state = {
     			accessToken: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).access_token,
     			id: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).id,
+    			name: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).name,
     			analysis: null,
     			key_chart_data: null
     		}
@@ -73,7 +74,7 @@ class Analysis extends React.Component{
   				<div className="row h-100">
   					<div className="col-6">
   					<br></br>
-  					   <h1>Your Analysis </h1>
+  					   <h1>Analysis of {this.state.name}</h1>
   					<br></br>
   					</div>
   				</div>

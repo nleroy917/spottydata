@@ -11,7 +11,7 @@ class KeyChart extends React.Component{
 
     		this.state = {
     			data: null,
-    			options: {backgroundColor: '#89D3DA'}
+    			options: {fillColor: '#89D3DA'}
     		}
 
   		}
