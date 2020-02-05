@@ -11,14 +11,30 @@ class KeyChart extends React.Component{
 
     		this.state = {
     			data: null,
-    			options: {fillColor: '#89D3DA'}
-    		}
+    			options: { legend: { 
+									label: {
+			                				fontColor: "black",
+			                				fontSize: 18
+					            			}
+					        		 },
+					       	label: {
+					       			label: {
+					       					fontColor: "black"
 
+					       					}
+
+					       			}
+							}
+
+  			}
   		}
 
   		componentDidMount() {
   			this.setState({data: {datasets: [{label: 'Key Distribution',
-  											 data: Object.values(this.props.data)}], 
+  											 data: Object.values(this.props.data), 
+  											 backgroundColor: 'rgba(137, 211, 218, 1)',
+  											 borderColor: 'rgba(170, 218, 223, 0.41)'}],
+
   								  labels: Object.keys(this.props.data)}})
   		}
 
