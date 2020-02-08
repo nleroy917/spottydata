@@ -2,6 +2,7 @@ import React from 'react';
 import './Playlists.css';
 import Playlist from './Playlist'
 
+
 const axios = require('axios').default;
 const querystring = require('querystring');
 
@@ -94,7 +95,12 @@ class Playlists extends React.Component{
 
 			for(let i = 1; i<=playlists.length;i++) {
 
-				//console.log(playlists[i])
+				if (typeof playlists[i] === 'undefined') {
+					continue
+				}
+
+				console.log(typeof playlists[i])
+				console.log(playlists[i])
 				//console.log(i)
 				if(i%cols === 0) {
 					chunk.push(playlists[i])
@@ -105,6 +111,7 @@ class Playlists extends React.Component{
 
 				}
 			}
+
 			this.setState({chunked_playlists: chunked_playlists})
 			return chunked_playlists
 		}
@@ -122,7 +129,7 @@ class Playlists extends React.Component{
 					{chunk.map((playlist,key) => {
 						return (
 								<div className="col-md-4">
-									<Playlist key={key} name={playlist.name} img_link={playlist.images[0].url} id={playlist.id} token={this.state.accessToken} desc={playlist.description}/>
+									<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : "../images/blank_playlist.png"} id={playlist.id} token={this.state.accessToken} desc={playlist.description}/>
 								</div>
 							);
 					})}
