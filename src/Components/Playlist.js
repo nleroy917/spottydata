@@ -2,7 +2,7 @@ import React from 'react';
 import './Playlist.css';
 
 const querystring = require('querystring');
-const REDIRECT_BASE = 'http://localhost:3000/analysis?'
+const REDIRECT_BASE = process.env.REACT_APP_BASE_URL + '/analysis?'
 
 class Playlist extends React.Component{
 	constructor(props) {

@@ -139,24 +139,6 @@ class Playlists extends React.Component{
 				}) : ' '}
 		</div>
 				);
-
-		/* return (
-		  <div className="container justify-content-center align-items-center">
-		    <div className="row h-100 my-auto">
-		      <div className="page-div justify-content-center col-lg-8 col-md-10 col-sm-12">
-		        <h2 className="font-weight-bold playlists-heading welcome-heading">Welcome {this.state.user ? this.state.user.charAt(0).toUpperCase() + this.state.user.slice(1) : ' '}! Please select a playlist to analyze.</h2>
-		        <br></br>
-		        {this.state.playlists ? this.state.playlists.map((playlist,key) => {
-		        	return(
-		        		<div>
-		        			<Playlist key={key} name={playlist.name} img_link={playlist.images[0].url} id={playlist.id} token={this.state.accessToken}/>
-		        		</div>
-		        		)
-		        }) : ' '}
-		      </div>
-		    </div>
-		  </div>
-		 ); */
 		}
 }
 

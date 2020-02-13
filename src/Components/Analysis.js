@@ -1,6 +1,7 @@
 import React from 'react';
 import './Analysis.css';
 import KeyChart from './KeyChart'
+import GenreChart from './GenreChart'
 const querystring = require('querystring');
 const axios = require('axios').default;
 
@@ -15,58 +16,59 @@ class Analysis extends React.Component{
     			accessToken: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).access_token,
     			id: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).id,
     			name: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).name,
-    			analysis: null,
-    			key_chart_data: null
+    			key_data: null,
+          genre_data: null
     		}
 
   		}
 
   		componentDidMount() {
   			//console.log(this.state.accessToken)
-  			this.fetchAnalysis()
+  			this.fetchKeys()
+        this.fetchGenres()
   		}
 
-  		fetchAnalysis = async () => {
+  		fetchKeys = async () => {
   			const headers = {
 				'access_token': this.state.accessToken
 			   }
 
-  			const response = await axios.get(URL_BASE + `${this.state.id}/features`,{headers})
+  			const response = await axios.get(URL_BASE + `${this.state.id}/analysis/keys`,{headers})
   			if(response.status === 200) {
   		    	console.log(response) 
   		    	const data = await response.data
-  		    	this.setState({analysis: data})
-            	this.parseData()
+  		    	this.setState({key_data: data})
   			}
   		}
 
-      parseData() {
-        // Initialize the key object to store the data
-        let keys = {'A':0,
-                'A#':0,
-                'B':0,
-                'C':0,
-                'C#':0,
-                'D':0,
-                'D#':0,
-                'E':0,
-                'F':0,
-                'F#':0,
-                'G':0,
-                'G#':0}
+      fetchGenres = async () => {
+        const headers = {
+        'access_token': this.state.accessToken
+         }
 
-        for(let i = 0; i < this.state.analysis.key.length; i++) {
-      		//console.log(this.state.analysis.key[i])
-      		keys[this.state.analysis.key[i]] += 1
-      	}
+        const response = await axios.get(URL_BASE + `${this.state.id}/analysis/genre`,{headers})
+        if(response.status === 200) {
+            console.log(response) 
+            const data = await response.data
 
-      	this.setState({key_chart_data: keys})
+            var sortable = [];
+              for (var genre in data) {
+                  sortable.push([genre, data[genre]]);
+              }
+
+              sortable.sort(function(a, b) {
+                  return a[1] - b[1];
+              });
+
+              var genresSorted = {}
+                sortable.forEach(function(item){
+                    genresSorted[item[0]]=item[1]
+                })
+
+            this.setState({genre_data: genresSorted})
+            console.log(this.state.genre_data)
+        }
       }
-
-
-
-
-
 
   		render() {
   			return (
@@ -80,10 +82,10 @@ class Analysis extends React.Component{
   				</div>
   			  <div className="row h-100">
     				<div className="col-md-5">
-    					{this.state.key_chart_data ? <KeyChart data={this.state.key_chart_data} /> : ' '}
+    					{this.state.key_data ? <KeyChart data={this.state.key_data} /> : ' '}
     				</div>
     				<div className="col-md-5">
-
+              {this.state.genre_data ? <GenreChart data={this.state.genre_data} /> : ' '}
     				</div>
   				</div>
 
