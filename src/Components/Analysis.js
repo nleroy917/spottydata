@@ -46,8 +46,9 @@ class Analysis extends React.Component{
         'access_token': this.state.accessToken
          }
 
-        const response = await axios.get(URL_BASE + `${this.state.id}/analysis/genre`,{headers})
-        if(response.status === 200) {
+        const response = await axios.get(URL_BASE + `${this.state.id}/analysis/genre`, {headers})
+
+        if(response.status === 200){
             console.log(response) 
             const data = await response.data
 
@@ -58,17 +59,18 @@ class Analysis extends React.Component{
 
               sortable.sort(function(a, b) {
                   return a[1] - b[1];
-              });
+              })
 
               var genresSorted = {}
-                sortable.forEach(function(item){
-                    genresSorted[item[0]]=item[1]
-                }
 
+              sortable.forEach((item) => {
+              genresSorted[item[0]]=item[1]
+              })
+            }
             this.setState({genre_data: genresSorted})
             console.log(this.state.genre_data)
-        }
-      }
+          }
+
 
   		render() {
   			return (
