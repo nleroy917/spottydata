@@ -16,6 +16,7 @@ class Playlists extends React.Component{
       		accessToken: null,
       		client_id: '0ca7dd0007fd4ff2a34c3aab07379970',
       		client_secret: process.env.REACT_APP_CLIENT_SECRET,
+      		redirect_uri: process.env.REACT_APP_REDIRECT_URI,
       		user: null,
       		playlists: null,
       		chunked_playlists: null
@@ -40,7 +41,7 @@ class Playlists extends React.Component{
 			const body = {
 				grant_type: 'authorization_code',
 				code: this.state.authCode,
-				redirect_uri: 'http://localhost:3000/playlists'
+				redirect_uri: this.state.redirect_uri
 			}
 
 			const response = await axios.post('https://accounts.spotify.com/api/token',querystring.stringify(body),{headers: headers})
