@@ -63,7 +63,7 @@ class Analysis extends React.Component{
               var genresSorted = {}
                 sortable.forEach(function(item){
                     genresSorted[item[0]]=item[1]
-                })
+                }
 
             this.setState({genre_data: genresSorted})
             console.log(this.state.genre_data)
@@ -74,7 +74,7 @@ class Analysis extends React.Component{
   			return (
   			<div className="container">
   				<div className="row h-100">
-  					<div className="col-6">
+  					<div className="col-12">
   					<br></br>
   					   <h1>Analysis of {this.state.name}</h1>
   					<br></br>
