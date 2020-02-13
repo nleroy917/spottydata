@@ -24,6 +24,7 @@ class Playlists extends React.Component{
   		}
 
   		componentDidMount() {
+  			console.log(this.state.client_secret)
   			localStorage.setItem('authCode',querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code)
   			this.setState({authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code},() => {this.fetchAccessToken()})
   			//console.log(this.state.authCode)
