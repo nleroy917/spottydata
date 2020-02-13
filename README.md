@@ -1,5 +1,6 @@
 # SpottyData.com
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Heroku](https://heroku-badge.herokuapp.com/?app=spottydata)]
 ---
 This is a React site that attempts to push my original [Spotify Playlist Analyzer Python Project](https://github.com/NLeRoy917/spotify-playlist-analyzer) to the web. The original project anaylzed your Spotify playlists and produced nice data visualizations. This project has since been made into a small API with Flask which can be found [here](https://github.com/NLeRoy917/playlist-analyzer-api). This repository houses the Front-End for the website - built with React. 
 
