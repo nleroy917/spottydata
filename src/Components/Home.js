@@ -7,7 +7,7 @@ const payload = {
 	client_id: '0ca7dd0007fd4ff2a34c3aab07379970',
 	response_type: 'code',
 	scope: 'playlist-read-private playlist-read-collaborative user-top-read',
-	redirect_uri: 'http://localhost:3000/playlists',
+	redirect_uri: 'hhttps://spottydata.herokuapp.com/playlists,
 	show_dialog: true
 }
 
