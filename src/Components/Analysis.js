@@ -2,6 +2,10 @@ import React from 'react';
 import './Analysis.css';
 import KeyChart from './KeyChart'
 import GenreChart from './GenreChart'
+import FeelChart from './FeelChart'
+import TempoChart from './TempoChart'
+import loading_gif from '../images/loading.gif'
+
 const querystring = require('querystring');
 const axios = require('axios').default;
 
@@ -17,7 +21,9 @@ class Analysis extends React.Component{
     			id: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).id,
     			name: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).name,
     			key_data: null,
-          genre_data: null
+		        genre_data: null,
+		        feel_data: null,
+            tempo_data: null
     		}
 
   		}
@@ -25,7 +31,9 @@ class Analysis extends React.Component{
   		componentDidMount() {
   			//console.log(this.state.accessToken)
   			this.fetchKeys()
-        this.fetchGenres()
+	        this.fetchGenres()
+	        this.fetchFeel()
+          this.fetchTempo()
   		}
 
   		fetchKeys = async () => {
@@ -35,7 +43,7 @@ class Analysis extends React.Component{
 
   			const response = await axios.get(URL_BASE + `${this.state.id}/analysis/keys`,{headers})
   			if(response.status === 200) {
-  		    	console.log(response) 
+  		    	//console.log(response) 
   		    	const data = await response.data
   		    	this.setState({key_data: data})
   			}
@@ -49,7 +57,7 @@ class Analysis extends React.Component{
         const response = await axios.get(URL_BASE + `${this.state.id}/analysis/genre`, {headers})
 
         if(response.status === 200){
-            console.log(response) 
+            //console.log(response) 
             const data = await response.data
 
             var sortable = [];
@@ -58,7 +66,7 @@ class Analysis extends React.Component{
               }
 
               sortable.sort(function(a, b) {
-                  return a[1] - b[1];
+                  return b[1]- a[1];
               })
 
               var genresSorted = {}
@@ -67,32 +75,93 @@ class Analysis extends React.Component{
               genresSorted[item[0]]=item[1]
               })
             }
-            this.setState({genre_data: genresSorted})
-            console.log(this.state.genre_data)
+
+            // slice the object
+            var genres_sliced = {}
+            var max = 6
+            var cnt = 1
+            for(let genre in genresSorted) {
+              genres_sliced[genre] = genresSorted[genre]
+              cnt++
+              if(cnt >= max) {
+                break
+              }
+            }
+
+            this.setState({genre_data: genres_sliced})
+            //console.log(this.state.genre_data)
           }
+
+      fetchFeel = async () => {
+        const headers = {
+        'access_token': this.state.accessToken
+         }
+
+        const response = await axios.get(URL_BASE + `${this.state.id}/analysis/feel`,{headers})
+        if(response.status === 200) {
+            //console.log(response) 
+            const data = await response.data
+            this.setState({feel_data: data})
+            //console.log(this.state.feel_data)
+        }
+      }
+
+      fetchTempo = async () => {
+        const headers = {
+        'access_token': this.state.accessToken
+         }
+
+        const response = await axios.get(URL_BASE + `${this.state.id}/analysis/tempo`,{headers})
+        if(response.status === 200) {
+            //console.log(response) 
+            const data = await response.data
+            this.setState({tempo_data: data})
+            console.log(this.state.tempo_data)
+        }
+      }
 
 
   		render() {
+        if(this.state.key_data && this.state.genre_data && this.state.feel_data && this.state.tempo_data) {
   			return (
   			<div className="container">
   				<div className="row h-100">
   					<div className="col-12">
-  					<br></br>
+  					<br/>
   					   <h1>Analysis of {this.state.name}</h1>
   					<br></br>
   					</div>
   				</div>
   			  <div className="row h-100">
     				<div className="col-md-5">
+            <h5>Keys</h5>
     					{this.state.key_data ? <KeyChart data={this.state.key_data} /> : ' '}
     				</div>
-    				<div className="col-md-5">
+            <div className="col-md-5">
+            <h5>Genre</h5>
               {this.state.genre_data ? <GenreChart data={this.state.genre_data} /> : ' '}
     				</div>
   				</div>
-
+          <br></br>
+          <div className="row h-100">
+            <div className="col-md-5">
+            <h5>Tempo</h5>
+              {this.state.tempo_data ? <TempoChart data={this.state.tempo_data} /> : ' '}
+            </div>
+            <div className="col-md-5">
+            <h5>Playlist Feel</h5>
+              {this.state.feel_data ? <FeelChart data={this.state.feel_data} /> : ' '}
+            </div>
+          </div>
   			</div>
-  			)
+  			)}
+        else {
+          return(
+            <div>
+              <img className="img-responsive" src={loading_gif} />
+            </div>
+            )
+        }
   		}
 
 }

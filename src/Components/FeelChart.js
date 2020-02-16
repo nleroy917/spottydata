@@ -1,8 +1,8 @@
 import React from 'react';
-import './GenreChart.css';
+import './FeelChart.css';
 import { Radar } from 'react-chartjs-2';
 
-class GenreChart extends React.Component{
+class FeelChart extends React.Component{
 
 		  constructor(props) {
     		super(props);
@@ -15,7 +15,7 @@ class GenreChart extends React.Component{
   		componentDidMount() {
 			this.setState({data: {labels: Object.keys(this.props.data), 
 								    datasets:[
-								              {label:'Genre Data',data:Object.values(this.props.data),backgroundColor:'rgba(255, 0, 0, 0.6)'},]
+								              {label:'Feel Data',data:Object.values(this.props.data),backgroundColor:'rgba(255, 0, 0, 0.6)'}]
 									}})
   		}
 
@@ -28,4 +28,4 @@ class GenreChart extends React.Component{
   		}
   	}
 
-  	export default GenreChart;
+  	export default FeelChart;

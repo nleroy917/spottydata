@@ -25,7 +25,7 @@ class Playlists extends React.Component{
   		}
 
   		componentDidMount() {
-  			console.log(this.state.client_secret)
+  			//console.log(this.state.client_secret)
   			localStorage.setItem('authCode',querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code)
   			this.setState({authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code},() => {this.fetchAccessToken()})
   			//console.log(this.state.authCode)
@@ -101,8 +101,8 @@ class Playlists extends React.Component{
 					continue
 				}
 
-				console.log(typeof playlists[i])
-				console.log(playlists[i])
+				//console.log(typeof playlists[i])
+				//console.log(playlists[i])
 				//console.log(i)
 				if(i%cols === 0) {
 					chunk.push(playlists[i])
@@ -125,18 +125,18 @@ class Playlists extends React.Component{
 			<div className="row heading-row">
 				<h2 className="font-weight-bold playlists-heading welcome-heading">Welcome {this.state.user ? this.state.user.charAt(0).toUpperCase() + this.state.user.slice(1) : ' '}! Please select a playlist to analyze.</h2>
 			</div>
-		{this.state.chunked_playlists ? this.state.chunked_playlists.map((chunk,key) => {
-			return(
-				<div className="row my-auto">
-					{chunk.map((playlist,key) => {
-						return (
-								<div className="col-md-4">
-									<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : "../images/blank_playlist.png"} id={playlist.id} token={this.state.accessToken} desc={playlist.description}/>
-								</div>
-							);
-					})}
-				</div>)
-				}) : ' '}
+		{this.state.chunked_playlists ? this.state.chunked_playlists.map((chunk) => {
+		return(
+			<div className="row my-auto">
+				{chunk.map((playlist,key) => {
+					return (
+						<div className="col-md-4">
+							<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : "../images/blank_playlist.png"} id={playlist.id} token={this.state.accessToken} desc={playlist.description}/>
+						</div>
+					);
+				})}
+			</div>)
+			}) : ' '}
 		</div>
 				);
 		}
