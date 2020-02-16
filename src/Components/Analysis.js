@@ -30,39 +30,24 @@ class Analysis extends React.Component{
 
   		componentDidMount() {
   			//console.log(this.state.accessToken)
-  			this.fetchKeys()
-	        this.fetchGenres()
-	        this.fetchFeel()
-          this.fetchTempo()
+  			 this.fetchAnalysis()
   		}
 
-  		fetchKeys = async () => {
-  			const headers = {
-				'access_token': this.state.accessToken
-			   }
 
-  			const response = await axios.get(URL_BASE + `${this.state.id}/analysis/keys`,{headers})
-  			if(response.status === 200) {
-  		    	//console.log(response) 
-  		    	const data = await response.data
-  		    	this.setState({key_data: data})
-  			}
-  		}
-
-      fetchGenres = async () => {
+      fetchAnalysis = async () => {
         const headers = {
         'access_token': this.state.accessToken
          }
 
-        const response = await axios.get(URL_BASE + `${this.state.id}/analysis/genre`, {headers})
+        const response = await axios.get(URL_BASE + `${this.state.id}/analysis`, {headers})
 
         if(response.status === 200){
             //console.log(response) 
             const data = await response.data
 
             var sortable = [];
-              for (var genre in data) {
-                  sortable.push([genre, data[genre]]);
+              for (var genre in data.genres) {
+                  sortable.push([genre, data.genres[genre]]);
               }
 
               sortable.sort(function(a, b) {
@@ -74,7 +59,6 @@ class Analysis extends React.Component{
               sortable.forEach((item) => {
               genresSorted[item[0]]=item[1]
               })
-            }
 
             // slice the object
             var genres_sliced = {}
@@ -88,37 +72,16 @@ class Analysis extends React.Component{
               }
             }
 
+            this.setState({key_data: data.keys})
             this.setState({genre_data: genres_sliced})
+            this.setState({feel_data: data.feel})
+            this.setState({tempo_data: data.tempo})
+
             //console.log(this.state.genre_data)
           }
+            }
 
-      fetchFeel = async () => {
-        const headers = {
-        'access_token': this.state.accessToken
-         }
 
-        const response = await axios.get(URL_BASE + `${this.state.id}/analysis/feel`,{headers})
-        if(response.status === 200) {
-            //console.log(response) 
-            const data = await response.data
-            this.setState({feel_data: data})
-            //console.log(this.state.feel_data)
-        }
-      }
-
-      fetchTempo = async () => {
-        const headers = {
-        'access_token': this.state.accessToken
-         }
-
-        const response = await axios.get(URL_BASE + `${this.state.id}/analysis/tempo`,{headers})
-        if(response.status === 200) {
-            //console.log(response) 
-            const data = await response.data
-            this.setState({tempo_data: data})
-            console.log(this.state.tempo_data)
-        }
-      }
 
 
   		render() {
@@ -159,6 +122,8 @@ class Analysis extends React.Component{
           return(
             <div>
               <img className="img-fluid" src={loading_gif} />
+              <h3>Analyzing...</h3>
+              <p>Can take up to 20 seconds for large playlists</p>
             </div>
             )
         }
