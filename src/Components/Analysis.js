@@ -158,7 +158,7 @@ class Analysis extends React.Component{
         else {
           return(
             <div>
-              <img className="img-responsive" src={loading_gif} />
+              <img className="img-fluid" src={loading_gif} />
             </div>
             )
         }
