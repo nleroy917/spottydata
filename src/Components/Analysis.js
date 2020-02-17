@@ -4,6 +4,7 @@ import KeyChart from './KeyChart'
 import GenreChart from './GenreChart'
 import FeelChart from './FeelChart'
 import TempoChart from './TempoChart'
+import LyricCloud from './LyricCloud'
 import loading_gif from '../images/loading.gif'
 
 const querystring = require('querystring');
@@ -23,7 +24,8 @@ class Analysis extends React.Component{
     			key_data: null,
 		        genre_data: null,
 		        feel_data: null,
-            tempo_data: null
+            tempo_data: null,
+            lyrics_data: null
     		}
 
   		}
@@ -31,6 +33,7 @@ class Analysis extends React.Component{
   		componentDidMount() {
   			//console.log(this.state.accessToken)
   			 this.fetchAnalysis()
+         this.fetchLyrics()
   		}
 
 
@@ -76,10 +79,24 @@ class Analysis extends React.Component{
             this.setState({genre_data: genres_sliced})
             this.setState({feel_data: data.feel})
             this.setState({tempo_data: data.tempo})
-
-            //console.log(this.state.genre_data)
           }
             }
+
+        fetchLyrics = async () => {
+          const headers = {
+          'access_token': this.state.accessToken
+           }
+
+          const response = await axios.get(URL_BASE + `${this.state.id}/analysis/lyrics`, {headers})
+
+          if(response.status === 200){
+              //console.log(response) 
+              const data = await response.data
+              this.setState({lyrics_data: data})
+              console.log(this.state.lyrics_data)
+
+          }
+        }
 
 
 
@@ -95,6 +112,7 @@ class Analysis extends React.Component{
   					<br></br>
   					</div>
   				</div>
+
   			  <div className="row h-100">
     				<div className="col-md-5">
             <h5>Keys</h5>
@@ -106,6 +124,7 @@ class Analysis extends React.Component{
     				</div>
   				</div>
           <br></br>
+
           <div className="row h-100">
             <div className="col-md-5">
             <h5>Tempo</h5>
@@ -114,6 +133,17 @@ class Analysis extends React.Component{
             <div className="col-md-5">
             <h5>Playlist Feel</h5>
               {this.state.feel_data ? <FeelChart data={this.state.feel_data} /> : ' '}
+            </div>
+          </div>
+          <br></br>
+
+          <div className="row h-100">
+            <div className="col-md-5">
+            <h5>Lyrics</h5>
+              {this.state.lyric_data ? <LyricCloud words={this.state.lyrics_data} /> : ' '}
+            </div>
+            <div className="col-md-5">
+            <h5></h5>
             </div>
           </div>
   			</div>

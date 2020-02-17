@@ -16,7 +16,7 @@ class TempoChart extends React.Component{
 
   			this.setState({data: {labels: this.props.data.x, 
                             datasets:[
-                                      {label:'Tempo',data:this.props.data.y, backgroundColor:'rgba(127, 96, 205, 0.6)', pointradius:0}]
+                                      {label:'Tempo',data:this.props.data.y, backgroundColor:'rgba(127, 96, 205, 0.6)', pointradius:'0'}]
                       }})
       }
 
