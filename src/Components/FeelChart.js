@@ -15,7 +15,7 @@ class FeelChart extends React.Component{
   		componentDidMount() {
 			this.setState({data: {labels: Object.keys(this.props.data), 
 								    datasets:[
-								              {label:'Feel Data',data:Object.values(this.props.data),backgroundColor:'rgba(255, 0, 0, 0.6)'}]
+								              {label:'Feel Data',data:Object.values(this.props.data),backgroundColor:'rgba(236, 145, 216, 0.5)'}]
 									}})
   		}
 

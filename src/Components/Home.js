@@ -24,7 +24,7 @@ return(
 	        <br></br>
 	        <p className="lead">This site will analyze the songs in your Spotify playlists and display the data to you</p>
 	        <br></br>
-	  		<a className="btn-lg btn-dark" href={authorize_url}>Let's Go</a>
+	  		<a className="btn-lg btn-light" href={authorize_url}>Let's Go</a>
 
 	      </div>
 	    </div>

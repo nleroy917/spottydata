@@ -1,7 +1,7 @@
 import React from 'react';
 import './Playlists.css';
 import Playlist from './Playlist'
-
+import blank_image from '../images/blank_playlist.png'
 
 const axios = require('axios').default;
 const querystring = require('querystring');
@@ -131,7 +131,7 @@ class Playlists extends React.Component{
 				{chunk.map((playlist,key) => {
 					return (
 						<div className="col-md-4">
-							<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : "../images/blank_playlist.png"} id={playlist.id} token={this.state.accessToken} desc={playlist.description}/>
+							<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : {blank_image}} id={playlist.id} token={this.state.accessToken} desc={playlist.description}/>
 						</div>
 					);
 				})}
