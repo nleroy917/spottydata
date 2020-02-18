@@ -1,10 +1,9 @@
 .playlist-img {
 	border-radius: 8px;
-	  max-width:400px;
-	  max-height:400px;
-	  min-width:100px;
-	  min-height:100px;
-	display: block;
+	width:300px;
+	height:300px;
+	  display: block;
+	  overflow: hidden;
 }
 
 .playlist {
@@ -24,14 +23,15 @@
 
 .playlist-card {
 	padding: 10px;
-	background-color: #1F312E;
+	background-color: #01090F;
+	font-color: #E6FAFC;
 }
 
 .card-img {
 	background: #868e96;
-	width: auto;
-    height: 15vw;
-    object-fit: cover;
+	width: 100px;
+    height: 100px;
+    overflow: hidden;
 }
 
 .card-div {

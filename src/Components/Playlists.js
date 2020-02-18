@@ -122,12 +122,12 @@ class Playlists extends React.Component{
 		
 		return (
 		<div className="container">
-			<div className="row heading-row">
+			<div className="row heading-row justify-content-center">
 				<h2 className="font-weight-bold playlists-heading welcome-heading">Welcome {this.state.user ? this.state.user.charAt(0).toUpperCase() + this.state.user.slice(1) : ' '}! Please select a playlist to analyze.</h2>
 			</div>
 		{this.state.chunked_playlists ? this.state.chunked_playlists.map((chunk) => {
 		return(
-			<div className="row my-auto">
+			<div className="row">
 				{chunk.map((playlist,key) => {
 					return (
 						<div className="col-md-4">

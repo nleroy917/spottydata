@@ -32,13 +32,12 @@ class Playlist extends React.Component{
 
   	render() {
   			return (
-  			<div className="container-flex card-div">
+  			<div className="container-flex card-div justify-content-center">
 	  			<a className="playlist-link justify-content-center" href={this.generateURL(this.state.accessToken,this.state.id,this.state.name)}>
-					<div className="card text-white playlist-card">
-	         <img src={this.state.img_link} className="img-fluid card-img-top h-100 playlist-img" alt="..."/>
-	            <div className="card-body">
+					<div className="card text-white playlist-card h-100">
+	         <img src={this.state.img_link} className="img-fluid card-img-top playlist-img" alt="..."/>
+	            <div className="card-body h-100">
 	                <h3 className="card-title">{this.state.name}</h3>
-                  <p>Maybe put some artists here.</p>
 	            </div>
 	        </div>
 				</a>

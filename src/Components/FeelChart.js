@@ -9,7 +9,27 @@ class FeelChart extends React.Component{
 
     		this.state = {
     			data: null,
+          options: { 
+                scale:{
+                pointLabels:{
+                   fontColor: "white",
+                   fontSize:12
+                },
+            } ,
+            legend: {
+                labels: {
+                    fontColor: "white",
+                    fontSize: 12
+                }
+        },
+        scale: {
+          gridLines: {
+            color: 'white',
+            fontColor: 'white'
+          }
+        }
   			   }
+          }
   		}
 
   		componentDidMount() {
@@ -22,7 +42,9 @@ class FeelChart extends React.Component{
   		render() {
   			return(
   				<div>
-  					<Radar data={this.state.data} />
+  					<Radar data={this.state.data} 
+                   options={this.state.options}
+            />
   				</div>
   				)
   		}

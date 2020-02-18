@@ -12,15 +12,50 @@ class KeyChart extends React.Component{
 
     		this.state = {
     			data: null,
-          options: {gridLines: {zeroLineColor: '#E6FAFC'}}
+          options: {scales: {
+                        xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Key/Mode',
+                                fontColor:'#E6FAFC',
+                                fontSize:14
+                            },
+                            gridLines: {zeroLineColor: '#E6FAFC'},
+                            ticks: {
+                               fontColor: "white",
+                               fontSize: 12
+                              }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Count',
+                                fontColor: '#E6FAFC',
+                                fontSize:14
+                            },
+                            gridLines: {zeroLineColor: '#E6FAFC'},
+                            ticks: {
+                                  fontColor: "white",
+                                  fontSize: 10
+                            }
+                        }]
+                 },
+            legend: {
+            labels: {
+                fontColor: "white"
+            }
+        },
+           }
   			   }
   		}
   		componentDidMount() {
 
   			this.setState({data: {labels: ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'], 
                             datasets:[
-                                      {label:'Major',data:Object.values(this.props.data.major),backgroundColor:'rgba(135, 245, 251, 0.5)'},
-                                      {label:'Minor',data:Object.values(this.props.data.minor),backgroundColor:'rgba(236, 145, 216, 0.5)'}]
+                                      {label:'Major',data:Object.values(this.props.data.major),backgroundColor:'rgba(135, 245, 251, 0.8)'},
+                                      {label:'Minor',data:Object.values(this.props.data.minor),backgroundColor:'rgba(236, 145, 216, 0.8)'}]
                       }})
       }
 
@@ -29,7 +64,7 @@ class KeyChart extends React.Component{
   				<div>
   					<Bar
   						data={this.state.data}
-  						// options={this.state.options}
+  						options={this.state.options}
 					 />
   				</div>
   				);
