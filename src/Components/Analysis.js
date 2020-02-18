@@ -105,7 +105,7 @@ class Analysis extends React.Component{
         if(this.state.key_data && this.state.genre_data && this.state.feel_data && this.state.tempo_data) {
   			return (
   			<div className="container">
-  				<div className="row h-100">
+  				<div className="row h-100 justify-content-center">
   					<div className="col-12">
   					<br/>
   					   <h1>Analysis of {this.state.name}</h1>
@@ -113,7 +113,7 @@ class Analysis extends React.Component{
   					</div>
   				</div>
 
-  			  <div className="row h-100">
+  			  <div className="row h-100 justify-content-center">
     				<div className="col-md-5">
             <h5>Keys</h5>
     					{this.state.key_data ? <KeyChart data={this.state.key_data} /> : ' '}
@@ -125,7 +125,7 @@ class Analysis extends React.Component{
   				</div>
           <br></br>
 
-          <div className="row h-100">
+          <div className="row h-100 justify-content-center">
             <div className="col-md-5">
             <h5>Tempo</h5>
               {this.state.tempo_data ? <TempoChart data={this.state.tempo_data} /> : ' '}
@@ -137,7 +137,7 @@ class Analysis extends React.Component{
           </div>
           <br></br>
 
-          <div className="row h-100">
+          <div className="row h-100 justify-content-center">
             <div className="col-md-5">
             <h5>Lyrics</h5>
               {this.state.lyric_data ? <LyricCloud words={this.state.lyrics_data} /> : ' '}
