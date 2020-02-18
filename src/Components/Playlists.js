@@ -18,6 +18,7 @@ class Playlists extends React.Component{
       		client_secret: process.env.REACT_APP_CLIENT_SECRET,
       		redirect_uri: process.env.REACT_APP_REDIRECT_URI,
       		user: null,
+      		user_id: null,
       		playlists: null,
       		chunked_playlists: null
 
@@ -26,9 +27,14 @@ class Playlists extends React.Component{
 
   		componentDidMount() {
   			//console.log(this.state.client_secret)
-  			localStorage.setItem('authCode',querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code)
+  			this.fetchAuthCode()
   			this.setState({authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code},() => {this.fetchAccessToken()})
-  			//console.log(this.state.authCode)
+  			console.log(this.state.authCode)
+  		}
+
+  		fetchAuthCode = () => {
+  			var authCode = querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code
+  			this.setState({authCode: authCode},() => {this.fetchAccessToken()})
   		}
 
 		fetchAccessToken = async () => {
@@ -67,6 +73,7 @@ class Playlists extends React.Component{
 		    	//console.log(response) 
 		    	const data = await response.data
 		    	this.setState({user: data.display_name})
+		    	this.setState({user_id: data.id})
 		    	this.fetchPlaylists()
 			}
 
@@ -79,7 +86,7 @@ class Playlists extends React.Component{
 			}
 			//console.log('token: ' + this.state.accessToken)
 
-			const response = await axios.get('https://spottydata-api.herokuapp.com/' + this.state.user + '/playlists',{headers})
+			const response = await axios.get('https://spottydata-api.herokuapp.com/' + this.state.user_id + '/playlists',{headers})
 			if(response.status === 200) {
 		    	//console.log(response);
 		    	const data = await response.data
