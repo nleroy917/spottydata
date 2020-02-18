@@ -79,7 +79,7 @@ class Playlists extends React.Component{
 			}
 			//console.log('token: ' + this.state.accessToken)
 
-			const response = await axios.get('http://127.0.0.1:5000/' + this.state.user + '/playlists',{headers})
+			const response = await axios.get('https://spottydata-api.herokuapp.com/' + this.state.user + '/playlists',{headers})
 			if(response.status === 200) {
 		    	//console.log(response);
 		    	const data = await response.data
@@ -96,9 +96,9 @@ class Playlists extends React.Component{
 			let chunked_playlists = [];
 			let chunk = [];
 
-			for(let i = 0; i<=playlists.length;i++) {
+			for(let i = 1; i<=playlists.length;i++) {
 
-				if (typeof playlists[i] === 'undefined') {
+				if (typeof playlists[i-1] === 'undefined') {
 					continue
 				}
 
@@ -106,11 +106,11 @@ class Playlists extends React.Component{
 				//console.log(playlists[i])
 				//console.log(i)
 				if(i%cols === 0) {
-					chunk.push(playlists[i])
+					chunk.push(playlists[i-1])
 					chunked_playlists.push(chunk)
 					chunk = [];
 				} else {
-					chunk.push(playlists[i])
+					chunk.push(playlists[i-1])
 
 				}
 			}
