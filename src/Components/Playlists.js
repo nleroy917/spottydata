@@ -75,16 +75,17 @@ class Playlists extends React.Component{
 		fetchPlaylists = async () => {
 			const headers = {
 				'Content-Type': 'application/json',
-				'Authorization': 'Bearer ' + this.state.accessToken
+				'access_token': this.state.accessToken
 			}
 			//console.log('token: ' + this.state.accessToken)
 
-			const response = await axios.get('https://api.spotify.com/v1/me/playlists',{headers})
+			const response = await axios.get('http://127.0.0.1:5000/' + this.state.user + '/playlists',{headers})
 			if(response.status === 200) {
 		    	//console.log(response);
 		    	const data = await response.data
-		    	this.setState({playlists: data.items})
-		    	this.setState({chunked_playlists: this.chunkPlaylists(data.items,3)})
+		    	// console.log(data)
+		    	this.setState({playlists: data})
+		    	this.setState({chunked_playlists: this.chunkPlaylists(data,3)})
 
 
 			}	
@@ -95,7 +96,7 @@ class Playlists extends React.Component{
 			let chunked_playlists = [];
 			let chunk = [];
 
-			for(let i = 1; i<=playlists.length;i++) {
+			for(let i = 0; i<=playlists.length;i++) {
 
 				if (typeof playlists[i] === 'undefined') {
 					continue
@@ -114,7 +115,6 @@ class Playlists extends React.Component{
 				}
 			}
 
-			this.setState({chunked_playlists: chunked_playlists})
 			return chunked_playlists
 		}
 

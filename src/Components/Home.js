@@ -6,7 +6,7 @@ const base_url =  'https://accounts.spotify.com/authorize?'
 const payload = {
 	client_id: '0ca7dd0007fd4ff2a34c3aab07379970',
 	response_type: 'code',
-	scope: 'playlist-read-private playlist-read-collaborative user-top-read',
+	scope: 'playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-top-read',
 	redirect_uri: process.env.REACT_APP_REDIRECT_URI,
 	show_dialog: true
 }
