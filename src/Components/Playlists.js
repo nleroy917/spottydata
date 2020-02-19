@@ -2,9 +2,12 @@ import React from 'react';
 import './Playlists.css';
 import Playlist from './Playlist'
 import blank_image from '../images/blank_playlist.png'
+import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 
 const axios = require('axios').default;
 const querystring = require('querystring');
+
+const cookie_key = 'authCode';
 
 class Playlists extends React.Component{
 
@@ -23,6 +26,8 @@ class Playlists extends React.Component{
       		chunked_playlists: null
 
     		};
+
+    		bake_cookie('authCode', this.state.authCode);
   		}
 
   		componentDidMount() {
@@ -46,7 +51,7 @@ class Playlists extends React.Component{
 
 			const body = {
 				grant_type: 'authorization_code',
-				code: this.state.authCode,
+				code: read_cookie('authCode') ? read_cookie('authCode') : this.state.authCode,
 				redirect_uri: this.state.redirect_uri
 			}
 

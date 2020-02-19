@@ -48,12 +48,12 @@ class Playlist extends React.Component{
                 <Card>
                   <CardActionArea>
                     <CardMedia
-                      style = {{ height: 300, width: "max", paddingTop: '56%'}}
+                      style = {{ height: "300", width: "max", paddingTop: '100%'}}
                       image={this.state.img_link}
                       title="Image title"
                     />
                     <CardContent className='playlist-card'>
-                      <Typography
+                      <Typography className='playlist-card'
                         variant="h6"
                         color='error'
                       >
