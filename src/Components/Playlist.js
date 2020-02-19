@@ -17,7 +17,7 @@ import Typography from '@material-ui/core/Typography';
 const card_theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#E6FAFC'
+      main: '#e6fafc', contrastText: "#fff"
     }
   }
 });
@@ -67,8 +67,8 @@ class Playlist extends React.Component{
                       />
                       <CardContent className='playlist-card'>
                         <Typography className='playlist-card'
+                          theme={card_theme}
                           variant="h6"
-                          color='primary'
                         >
                           {this.state.name}
                         </Typography>
