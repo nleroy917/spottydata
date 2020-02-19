@@ -134,10 +134,10 @@ class Playlists extends React.Component{
 			</div>
 		{this.state.chunked_playlists ? this.state.chunked_playlists.map((chunk) => {
 		return(
-			<div className="row">
+			<div className="row card-row">
 				{chunk.map((playlist,key) => {
 					return (
-						<div className="col-md-4">
+						<div className="col-md-4 card-col">
 							<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : {blank_image}} id={playlist.id} token={this.state.accessToken} desc={playlist.description}/>
 						</div>
 					);
