@@ -19,6 +19,9 @@ const card_theme = createMuiTheme({
     primary: {
       main: '#e6fafc', contrastText: "#fff"
     }
+  },
+  h6: {
+
   }
 });
 
@@ -65,7 +68,7 @@ class Playlist extends React.Component{
                         image={this.state.img_link}
                         title="Image title"
                       />
-                      <CardContent className='playlist-card'>
+                      <CardContent className='playlist-card' style={{height: '100%'}}>
                         <Typography className='playlist-card'
                           theme={card_theme}
                           variant="h6"

@@ -1,3 +1,4 @@
+// load core react + custom components
 import React from 'react';
 import './Analysis.css';
 import KeyChart from './KeyChart'
@@ -7,13 +8,41 @@ import TempoChart from './TempoChart'
 import LyricCloud from './LyricCloud'
 import loading_gif from '../images/loading.gif'
 
+// Load in the materials-ui components
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader'
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
+// Load styling
+import { makeStyles } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+import styled, {ThemeProvider} from 'styled-components';
+
 const querystring = require('querystring');
 const axios = require('axios').default;
 
 const URL_BASE = 'https://spottydata-api.herokuapp.com/'
 //const URL_BASE = 'http://127.0.0.1:5000/'
 
-class Analysis extends React.Component{
+const withStyles = theme => ({
+  chart_header: {
+    background: '#35968e'
+  },
+
+  chart: {
+      padding: '0px',
+      background: '#212529',
+      color: '#E6FAFC'
+  }
+});
+
+
+class Analysis extends React.Component {
 
 		  constructor(props) {
     		super(props);
@@ -26,6 +55,7 @@ class Analysis extends React.Component{
 		        feel_data: null,
             tempo_data: null,
             lyrics_data: null
+
     		}
 
   		}
@@ -102,6 +132,9 @@ class Analysis extends React.Component{
 
 
   		render() {
+
+        const { classes } = this.props;
+
         if(this.state.key_data && this.state.genre_data && this.state.feel_data && this.state.tempo_data) {
   			return (
   			<div className="container">
@@ -114,25 +147,40 @@ class Analysis extends React.Component{
   				</div>
 
   			  <div className="row h-100 justify-content-center">
-    				<div className="col-md-5">
-            <h5>Keys</h5>
-    					{this.state.key_data ? <KeyChart data={this.state.key_data} /> : ' '}
+    				<div className="col-md-5" style={{padding: '10px'}}>
+            <CardHeader title="Keys" style={{background:'#35968e'}}/>
+              <Card>
+                <CardContent className='playlist-card' style={{height: '100%'}}>
+      					 {this.state.key_data ? <KeyChart data={this.state.key_data} /> : ' '}
+                </CardContent>
+              </Card>
     				</div>
-            <div className="col-md-5">
-            <h5>Genre</h5>
-              {this.state.genre_data ? <GenreChart data={this.state.genre_data} /> : ' '}
+            <div className="col-md-5" style={{padding: '10px'}}>
+            <CardHeader title="Genre" style={{background:'#35968e'}}/>
+              <Card>
+                <CardContent className='playlist-card' style={{height: '100%'}}>
+                  {this.state.genre_data ? <GenreChart data={this.state.genre_data} /> : ' '}
+                </CardContent>
+              </Card>
     				</div>
   				</div>
           <br></br>
-
           <div className="row h-100 justify-content-center">
-            <div className="col-md-5">
-            <h5>Tempo</h5>
-              {this.state.tempo_data ? <TempoChart data={this.state.tempo_data} /> : ' '}
+            <div className="col-md-5" style={{padding: '10px'}}>
+            <CardHeader title="Tempo" style={{background:'#35968e'}}/>
+              <Card>
+                <CardContent className='playlist-card' style={{height: '100%'}}>
+                  {this.state.tempo_data ? <TempoChart data={this.state.tempo_data} /> : ' '}
+                </CardContent>
+              </Card>
             </div>
-            <div className="col-md-5">
-            <h5>Playlist Feel</h5>
-              {this.state.feel_data ? <FeelChart data={this.state.feel_data} /> : ' '}
+            <div className="col-md-5" style={{padding: '10px'}}>
+            <CardHeader title="Genre" style={{background:'#35968e'}}/>
+              <Card>
+                <CardContent className='playlist-card' style={{height: '100%'}}>
+                  {this.state.feel_data ? <FeelChart data={this.state.feel_data} /> : ' '}
+                </CardContent>
+              </Card>
             </div>
           </div>
           <br></br>
