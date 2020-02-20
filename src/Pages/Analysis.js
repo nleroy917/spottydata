@@ -1,11 +1,11 @@
 // load core react + custom components
 import React from 'react';
-import './Analysis.css';
-import KeyChart from './KeyChart'
-import GenreChart from './GenreChart'
-import FeelChart from './FeelChart'
-import TempoChart from './TempoChart'
-import LyricCloud from './LyricCloud'
+import './css/Analysis.css';
+import KeyChart from '../Components/KeyChart'
+import GenreChart from '../Components/GenreChart'
+import FeelChart from '../Components/FeelChart'
+import TempoChart from '../Components/TempoChart'
+import LyricCloud from '../Components/LyricCloud'
 import loading_gif from '../images/loading.gif'
 
 // Load in the materials-ui components

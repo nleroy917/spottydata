@@ -1,6 +1,6 @@
 import React from 'react';
-import './Playlists.css';
-import Playlist from './Playlist'
+import './css/Playlists.css';
+import Playlist from '../Components/Playlist'
 import blank_image from '../images/blank_playlist.png'
 import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 

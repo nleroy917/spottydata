@@ -6,9 +6,9 @@ import {
   Route
 } from "react-router-dom";
 
-import Home from './Components/Home'
-import Playlists from './Components/Playlists'
-import Analysis from './Components/Analysis'
+import Home from './Pages/Home'
+import Playlists from './Pages/Playlists'
+import Analysis from './Pages/Analysis'
 
 
 

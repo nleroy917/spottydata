@@ -1,5 +1,5 @@
 import React from 'react';
-import './KeyChart.css';
+import './css/KeyChart.css';
 import { Bar } from 'react-chartjs-2';
 
 // Change default color

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Playlist.css';
+import './css/Playlist.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import styled, {ThemeProvider} from 'styled-components';

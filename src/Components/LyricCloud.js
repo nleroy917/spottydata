@@ -1,5 +1,5 @@
 import React from 'react';
-import './LyricCloud.css';
+import './css/LyricCloud.css';
 import ReactWordcloud from 'react-wordcloud';
 
 class LyricCloud extends React.Component{

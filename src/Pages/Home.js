@@ -1,5 +1,5 @@
 import React from 'react';
-import './Home.css';
+import './css/Home.css';
 
 const querystring = require('querystring');
 const base_url =  'https://accounts.spotify.com/authorize?'

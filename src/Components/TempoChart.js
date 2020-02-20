@@ -1,5 +1,5 @@
 import React from 'react';
-import './KeyChart.css';
+import './css/KeyChart.css';
 import { Line } from 'react-chartjs-2';
 
 class TempoChart extends React.Component{

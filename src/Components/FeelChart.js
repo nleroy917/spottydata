@@ -1,5 +1,5 @@
 import React from 'react';
-import './FeelChart.css';
+import './css/FeelChart.css';
 import { Radar } from 'react-chartjs-2';
 
 class FeelChart extends React.Component{

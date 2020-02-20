@@ -1,5 +1,5 @@
 import React from 'react';
-import './GenreChart.css';
+import './css/GenreChart.css';
 import { Radar } from 'react-chartjs-2';
 
 class GenreChart extends React.Component{
