@@ -9,6 +9,9 @@ import LyricCloud from '../Components/LyricCloud'
 import loading_gif from '../images/loading.gif'
 
 // Load in the materials-ui components
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -20,6 +23,8 @@ import Typography from '@material-ui/core/Typography';
 
 // Load styling
 import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types';
 import { createMuiTheme } from '@material-ui/core/styles';
 import styled, {ThemeProvider} from 'styled-components';
 
@@ -29,17 +34,34 @@ const axios = require('axios').default;
 const URL_BASE = 'https://spottydata-api.herokuapp.com/'
 //const URL_BASE = 'http://127.0.0.1:5000/'
 
-const withStyles = theme => ({
-  chart_header: {
-    background: '#35968e'
+const styles = theme => ({
+  playlist_image: {
+    overflow: 'hidden',
   },
-
-  chart: {
-      padding: '0px',
-      background: '#212529',
-      color: '#E6FAFC'
+  paper: {
+    background: '#212529'
   }
 });
+
+const title_theme = createMuiTheme()
+title_theme.typography.h3 = {
+  fontSize: '1.2rem',
+  '@media (min-width:600px)': {
+    fontSize: '1.5rem',
+  },
+  [title_theme.breakpoints.up('md')]: {
+    fontSize: '2.4rem',
+  },
+};
+title_theme.typography.h5 = {
+  fontSize: '1.2rem',
+  '@media (min-width:600px)': {
+    fontSize: '1.5rem',
+  },
+  [title_theme.breakpoints.up('md')]: {
+    fontSize: '2.4rem',
+  },
+};
 
 
 class Analysis extends React.Component {
@@ -50,6 +72,7 @@ class Analysis extends React.Component {
     			accessToken: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).access_token,
     			id: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).id,
     			name: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).name,
+          playlist: null,
     			key_data: null,
 		        genre_data: null,
 		        feel_data: null,
@@ -62,9 +85,26 @@ class Analysis extends React.Component {
 
   		componentDidMount() {
   			//console.log(this.state.accessToken)
+         this.fetchPlaylist()
   			 this.fetchAnalysis()
          this.fetchLyrics()
   		}
+
+      fetchPlaylist = async () => {
+          const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + this.state.accessToken
+          }
+
+        const response = await axios.get(`https://api.spotify.com/v1/playlists/${this.state.id}`, {headers: headers})
+
+        if(response.status === 200) {
+              //console.log(response)
+              const data = await response.data
+              this.setState({playlist: data})
+              console.log(this.state.playlist)
+        }
+      }
 
 
       fetchAnalysis = async () => {
@@ -137,65 +177,84 @@ class Analysis extends React.Component {
 
         if(this.state.key_data && this.state.genre_data && this.state.feel_data && this.state.tempo_data) {
   			return (
-  			<div className="container">
-  				<div className="row h-100 justify-content-center">
-  					<div className="col-12">
-  					<br/>
-  					   <h1>Analysis of {this.state.name}</h1>
-  					<br></br>
-  					</div>
-  				</div>
-
-  			  <div className="row h-100 justify-content-center">
-    				<div className="col-md-5" style={{padding: '10px'}}>
-            <CardHeader title="Keys" style={{background:'#35968e'}}/>
-              <Card>
-                <CardContent className='playlist-card' style={{height: '100%'}}>
-      					 {this.state.key_data ? <KeyChart data={this.state.key_data} /> : ' '}
-                </CardContent>
+        <div>
+        <br></br>
+        <Container>
+          <Grid container spacing={3}
+                direction="row"
+                justify="space-between"
+                alignItems="flex-start"
+          >
+            <Grid item lg={2}> 
+              <Card className={classes.playlist_image}>
+                <CardActionArea>
+                  <CardMedia
+                    style = {{ height: 'auto', width: "max", paddingTop: '100%'}}
+                    image={this.state.playlist.images[0].url}
+                    title="Image title"
+                  />
+                </CardActionArea>
               </Card>
-    				</div>
-            <div className="col-md-5" style={{padding: '10px'}}>
-            <CardHeader title="Genre" style={{background:'#35968e'}}/>
-              <Card>
-                <CardContent className='playlist-card' style={{height: '100%'}}>
-                  {this.state.genre_data ? <GenreChart data={this.state.genre_data} /> : ' '}
-                </CardContent>
-              </Card>
-    				</div>
-  				</div>
+            </Grid>
+            <Grid item lg={8}>
+              <ThemeProvider theme={title_theme}>
+                <Typography variant={'h3'} align={'left'}>{this.state.playlist.name}</Typography>
+                <Typography variant={'h5'} align={'left'}>A Playlist by {this.state.playlist.owner.id}</Typography>
+              </ThemeProvider>
+            </Grid>
+            <Grid item lg={2}>
+            </Grid>
+          </Grid>
+          <hr style={{'border-color':'#212529'}}></hr>
+          <Grid container spacing={2}
+            direction="row"
+            justify="space-between"
+            alignItems="flex-start"
+          >
+            <Grid item lg={4} xs={12}>
+              <Paper elevation={3} className={classes.paper}>
+  				      {this.state.key_data ? <KeyChart data={this.state.key_data} /> : ' '}
+              </Paper>
+            </Grid>
+            <Grid item lg={4} xs={12}>
+              <Paper elevation={3} className={classes.paper}>
+                {this.state.genre_data ? <GenreChart data={this.state.genre_data} /> : ' '}
+              </Paper>
+            </Grid>
+            <Grid item lg={4} xs={12}>
+              <Paper elevation={3} className={classes.paper}>
+                {this.state.tempo_data ? <TempoChart data={this.state.tempo_data} /> : ' '}
+              </Paper>
+            </Grid>
+          </Grid>
           <br></br>
-          <div className="row h-100 justify-content-center">
-            <div className="col-md-5" style={{padding: '10px'}}>
-            <CardHeader title="Tempo" style={{background:'#35968e'}}/>
-              <Card>
-                <CardContent className='playlist-card' style={{height: '100%'}}>
-                  {this.state.tempo_data ? <TempoChart data={this.state.tempo_data} /> : ' '}
-                </CardContent>
-              </Card>
-            </div>
-            <div className="col-md-5" style={{padding: '10px'}}>
-            <CardHeader title="Genre" style={{background:'#35968e'}}/>
-              <Card>
-                <CardContent className='playlist-card' style={{height: '100%'}}>
-                  {this.state.feel_data ? <FeelChart data={this.state.feel_data} /> : ' '}
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-          <br></br>
+          <Grid container spacing={2}
+            direction="row"
+            justify="space-between"
+            alignItems="flex-start"
+          >
+            <Grid item lg={4} md={4} xs={12}>
+              <Paper elevation={3} className={classes.paper}>
+                {this.state.feel_data ? <FeelChart data={this.state.feel_data} /> : ' '}
+              </Paper>
+            </Grid>
+            <Grid item lg={4} md={4} xs={12}>
+              <Paper elevation={3} className={classes.paper}>
 
-          <div className="row h-100 justify-content-center">
-            <div className="col-md-5">
-            <h5>Lyrics</h5>
-              {this.state.lyric_data ? <LyricCloud words={this.state.lyrics_data} /> : ' '}
-            </div>
-            <div className="col-md-5">
-            <h5></h5>
-            </div>
-          </div>
-  			</div>
+              </Paper>
+            </Grid>
+            <Grid item lg={4} md={4} xs={12}>
+              <Paper elevation={3} className={classes.paper}>
+
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
+        </div>
   			)}
+
+        // Return Loader if not all data is here
+
         else {
           return(
             <div>
@@ -209,4 +268,8 @@ class Analysis extends React.Component {
 
 }
 
-export default Analysis
+Analysis.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Analysis);

@@ -1,6 +1,8 @@
 import React from 'react';
 import './css/Playlist.css';
 import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types';
 import { createMuiTheme } from '@material-ui/core/styles';
 import styled, {ThemeProvider} from 'styled-components';
 import grey from '@material-ui/core/colors/grey';
