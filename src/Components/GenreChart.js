@@ -1,6 +1,6 @@
 import React from 'react';
 import './css/GenreChart.css';
-import { Radar } from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2';
 
 class GenreChart extends React.Component{
 
@@ -21,12 +21,7 @@ class GenreChart extends React.Component{
                     fontColor: "white",
                     fontSize: 12
                 }
-          },
-          scale: {
-          gridLines: {
-            color: 'white'
           }
-        }
            }
   			   }
   		}
@@ -34,15 +29,15 @@ class GenreChart extends React.Component{
   		componentDidMount() {
 			this.setState({data: {labels: Object.keys(this.props.data), 
 								    datasets:[
-								              {label:'Genre Data',data:Object.values(this.props.data), backgroundColor:'rgba(135, 245, 251, 0.8)'}]
+								              {label:'Genre Data',data:Object.values(this.props.data), backgroundColor:['rgba(135, 245, 251, 0.8)','#EC91D8','#02111B','#E6FAFC','#3A506B']}]
 									}})
   		}
 
   		render() {
   			return(
   				<div>
-  					<Radar data={this.state.data} 
-                   options={this.state.options}
+  					<Doughnut data={this.state.data} 
+                   //options={this.state.options}
 
             />
   				</div>

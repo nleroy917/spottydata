@@ -40,7 +40,14 @@ const styles = theme => ({
   },
   paper: {
     background: '#212529'
+  },
+  paper_title: {
+    color: '#fff'
+  },
+  paper_div: {
+    padding: '20px'
   }
+
 });
 
 const title_theme = createMuiTheme()
@@ -74,9 +81,11 @@ class Analysis extends React.Component {
     			name: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).name,
           playlist: null,
     			key_data: null,
+          top_key: null,
 		        genre_data: null,
 		        feel_data: null,
             tempo_data: null,
+            tempo_avg: null,
             lyrics_data: null
 
     		}
@@ -145,6 +154,17 @@ class Analysis extends React.Component {
               }
             }
 
+            // Calculate psuedo-average tempo
+            var tempo_avg = 0
+            var sum = 0
+            for(let i = 0; i<data.tempo.x.length; i++){
+              tempo_avg += (data.tempo.x[i]*data.tempo.y[i])
+              sum += data.tempo.y[i]
+            }
+            tempo_avg /= sum
+            console.log(tempo_avg)
+
+            this.setState({tempo_avg:Math.round(tempo_avg)})
             this.setState({key_data: data.keys})
             this.setState({genre_data: genres_sliced})
             this.setState({feel_data: data.feel})
@@ -206,6 +226,49 @@ class Analysis extends React.Component {
             </Grid>
           </Grid>
           <hr style={{'border-color':'#212529'}}></hr>
+
+
+          <Grid container spacing={2}
+            direction="row"
+            justify="space-between"
+            alignItems="flex-start"
+          >
+            <Grid item lg={3} xs={6}>
+              <Paper elevation={3} className={classes.paper}>
+                <div className={classes.paper_div}>
+                  <h6 align="left" className={classes.paper_title}>Total Tracks</h6>
+                  <h1 align="left" className={classes.paper_title}>{this.state.playlist.tracks.total}</h1>
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item lg={3} xs={6}>
+              <Paper elevation={3} className={classes.paper}>
+                <div className={classes.paper_div}>
+                 <h6 align="left" className={classes.paper_title}>Followers</h6>
+                 <h1 align="left" className={classes.paper_title}>{this.state.playlist.followers.total}</h1>
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item lg={3} xs={6}>
+              <Paper elevation={3} className={classes.paper}>
+                <div className={classes.paper_div}>
+                <h6 align="left" className={classes.paper_title}>Average Tempo</h6>
+                <h1 align="left" className={classes.paper_title}>{this.state.tempo_avg} bpm</h1>
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item lg={3} xs={6}>
+              <Paper elevation={3} className={classes.paper}>
+                <div className={classes.paper_div}>
+                  <h6 align="left" className={classes.paper_title}>Favorite Key</h6>
+                  <h1 align="left" className={classes.paper_title}>C#</h1>
+                </div>
+              </Paper>
+            </Grid>
+          </Grid>
+
+          <br></br>
+
           <Grid container spacing={2}
             direction="row"
             justify="space-between"
@@ -213,21 +276,32 @@ class Analysis extends React.Component {
           >
             <Grid item lg={4} xs={12}>
               <Paper elevation={3} className={classes.paper}>
+              <div className="container" className={classes.paper_div}>
+                <h6 align="left" className={classes.paper_title}> Keys</h6>
   				      {this.state.key_data ? <KeyChart data={this.state.key_data} /> : ' '}
+              </div>
               </Paper>
             </Grid>
             <Grid item lg={4} xs={12}>
               <Paper elevation={3} className={classes.paper}>
+              <div className="container" className={classes.paper_div}>
+                <h6 align="left" className={classes.paper_title}> Genres</h6>
                 {this.state.genre_data ? <GenreChart data={this.state.genre_data} /> : ' '}
+              </div>
               </Paper>
             </Grid>
             <Grid item lg={4} xs={12}>
               <Paper elevation={3} className={classes.paper}>
+              <div className="container" className={classes.paper_div}>
+                <h6 align="left" className={classes.paper_title}> Tempo</h6>
                 {this.state.tempo_data ? <TempoChart data={this.state.tempo_data} /> : ' '}
+              </div>
               </Paper>
             </Grid>
           </Grid>
+
           <br></br>
+
           <Grid container spacing={2}
             direction="row"
             justify="space-between"
@@ -235,7 +309,10 @@ class Analysis extends React.Component {
           >
             <Grid item lg={4} md={4} xs={12}>
               <Paper elevation={3} className={classes.paper}>
-                {this.state.feel_data ? <FeelChart data={this.state.feel_data} /> : ' '}
+                <div className={classes.paper}>
+                    <h6 align="left" className={classes.paper_title}> Feel</h6>
+                  {this.state.feel_data ? <FeelChart data={this.state.feel_data} /> : ' '}
+                </div>
               </Paper>
             </Grid>
             <Grid item lg={4} md={4} xs={12}>
