@@ -5,6 +5,7 @@ import KeyChart from '../Components/KeyChart'
 import GenreChart from '../Components/GenreChart'
 import FeelChart from '../Components/FeelChart'
 import TempoChart from '../Components/TempoChart'
+import DurationChart from '../Components/DurationChart'
 import LyricCloud from '../Components/LyricCloud'
 import loading_gif from '../images/loading.gif'
 
@@ -32,7 +33,7 @@ const querystring = require('querystring');
 const axios = require('axios').default;
 
 const URL_BASE = 'https://spottydata-api.herokuapp.com/'
-//const URL_BASE = 'http://127.0.0.1:5000/'
+// const URL_BASE = 'http://127.0.0.1:5000/'
 
 const styles = theme => ({
   playlist_image: {
@@ -51,6 +52,7 @@ const styles = theme => ({
 });
 
 const title_theme = createMuiTheme()
+
 title_theme.typography.h3 = {
   fontSize: '1.2rem',
   '@media (min-width:600px)': {
@@ -60,6 +62,7 @@ title_theme.typography.h3 = {
     fontSize: '2.4rem',
   },
 };
+
 title_theme.typography.h5 = {
   fontSize: '1.2rem',
   '@media (min-width:600px)': {
@@ -69,6 +72,15 @@ title_theme.typography.h5 = {
     fontSize: '2.4rem',
   },
 };
+
+const button_theme = createMuiTheme({
+  palette: {
+    primary: {main: '#87F5FB'},
+  },
+  status: {
+    danger: 'orange',
+  },
+});
 
 
 class Analysis extends React.Component {
@@ -82,7 +94,7 @@ class Analysis extends React.Component {
     			name: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).name,
           playlist: null,
     			key_data: null,
-          top_key: null,
+          fav_key: null,
 		        genre_data: null,
 		        feel_data: null,
             tempo_data: null,
@@ -163,13 +175,24 @@ class Analysis extends React.Component {
               sum += data.tempo.y[i]
             }
             tempo_avg /= sum
-            console.log(tempo_avg)
+
+            var major_key_max = Object.keys(data.keys.major).reduce((a, b) => data.keys.major[a] > data.keys.major[b] ? a : b);
+            var minor_key_max = Object.keys(data.keys.minor).reduce((a, b) => data.keys.minor[a] > data.keys.minor[b] ? a : b);
+
+            //console.log(major_key_max)
+            //console.log(minor_key_max)
+
+            if(data.keys.major[major_key_max] >= data.keys.minor[minor_key_max]) {
+              this.setState({fav_key: `${major_key_max} major`})
+            } else
+              this.setState({fav_key: `${minor_key_max} minor`})
 
             this.setState({tempo_avg:Math.round(tempo_avg)})
             this.setState({key_data: data.keys})
             this.setState({genre_data: genres_sliced})
             this.setState({feel_data: data.feel})
             this.setState({tempo_data: data.tempo})
+            this.setState({duration_data: data.duration})
           }
             }
 
@@ -189,14 +212,11 @@ class Analysis extends React.Component {
           }
         }
 
-
-
-
   		render() {
 
         const { classes } = this.props;
 
-        if(this.state.key_data && this.state.genre_data && this.state.feel_data && this.state.tempo_data) {
+        if(this.state.key_data && this.state.genre_data && this.state.feel_data && this.state.tempo_data && this.state.duration_data) {
   			return (
         <div>
         <br></br>
@@ -231,10 +251,14 @@ class Analysis extends React.Component {
                 justify="space-between"
                 alignItems="center"
               >
-                <Grid item>
-                  <Button href={`${process.env.REACT_APP_BASE_URL}`}>New Playlist</Button>
-                  <Button href="#">About Analysis</Button>
-                </Grid>
+                <ThemeProvider theme={button_theme}>
+                  <Grid item>
+                      <Button variant="outlined" color="primary" href={`${process.env.REACT_APP_BASE_URL}`}>Home</Button>
+                  </Grid>
+                  <Grid item>
+                    <Button variant="outlined" color="primary" href="#">About Analysis</Button>
+                  </Grid>
+                </ThemeProvider>
               </Grid>
             </Grid>
           </Grid>
@@ -274,7 +298,7 @@ class Analysis extends React.Component {
               <Paper elevation={3} className={classes.paper}>
                 <div className={classes.paper_div}>
                   <h6 align="left" className={classes.paper_title}>Favorite Key</h6>
-                  <h1 align="left" className={classes.paper_title}>C#</h1>
+                  <h1 align="left" className={classes.paper_title}>{this.state.fav_key}</h1>
                 </div>
               </Paper>
             </Grid>
@@ -330,7 +354,10 @@ class Analysis extends React.Component {
             </Grid>
             <Grid item lg={4} md={4} xs={12}>
               <Paper elevation={3} className={classes.paper}>
-
+                <div className="container" className={classes.paper_div}>
+                  <h4 align="left" className={classes.paper_title}> Duration</h4>
+                  {this.state.duration_data ? <DurationChart data={this.state.duration_data} /> : ' '}
+                </div>
               </Paper>
             </Grid>
             <Grid item lg={4} md={4} xs={12}>

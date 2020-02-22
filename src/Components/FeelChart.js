@@ -10,27 +10,34 @@ class FeelChart extends React.Component{
     		this.state = {
     			data: null,
           options: { 
-                scale:{
+              scale:{
                 pointLabels:{
                    fontColor: "white",
-                   fontSize:12
+                   fontSize:1
                 },
             } ,
             legend: {
                 labels: {
                     fontColor: "white",
-                    fontSize: 12
+                    fontSize: 10
                 }
         },
-        scale: {
-          gridLines: {
-            color: 'white',
-            fontColor: 'white'
-          }
-        }
-  			   }
-          }
+          plugins: {
+             datalabels: {
+                display: true
+             }
+          },
+          scale: {
+            gridLines: {
+              color: 'white',
+              fontColor: 'white'
+            },
+
+        },
+        labels: { fontColor: "#fff" }
+      }
   		}
+    }
 
   		componentDidMount() {
 			this.setState({data: {labels: Object.keys(this.props.data), 

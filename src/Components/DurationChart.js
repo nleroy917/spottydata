@@ -1,8 +1,8 @@
 import React from 'react';
-import './css/KeyChart.css';
+import './css/DurationChart.css';
 import { Line } from 'react-chartjs-2';
 
-class TempoChart extends React.Component{
+class DurationChart extends React.Component{
 
 		  constructor(props) {
     		super(props);
@@ -14,7 +14,7 @@ class TempoChart extends React.Component{
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Tempo (bpm)',
+                                labelString: 'Duration (seconds)',
                                 fontColor:'#E6FAFC',
                                 fontSize:14
                             },
@@ -51,7 +51,7 @@ class TempoChart extends React.Component{
 
   			this.setState({data: {labels: this.props.data.x, 
                             datasets:[
-                                      {label:'Tempo',data:this.props.data.y, backgroundColor:'rgba(135, 245, 251, 0.8)', pointradius:'0'}]
+                                      {label:'Duration',data:this.props.data.y, backgroundColor:'#EC91D8', pointradius:'0'}]
                       }})
       }
 
@@ -69,4 +69,4 @@ class TempoChart extends React.Component{
 }
 
 
-export default TempoChart
+export default DurationChart
