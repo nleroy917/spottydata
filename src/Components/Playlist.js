@@ -38,15 +38,17 @@ class Playlist extends React.Component{
       		name: props.name,
       		img_link: props.img_link,
       		access_token: props.token,
+          authCode: props.authCode,
       		id: props.id,
           desc: props.desc
     		};
 
   		}
 
-  	generateURL(access_token,playlist_id,name) {
+  	generateURL(access_token,playlist_id,name,authCode) {
   			let payload = {
   				access_token: access_token,
+          code: authCode,
   				id: playlist_id,
           name: name
   			}
@@ -61,7 +63,7 @@ class Playlist extends React.Component{
   	render() {
 
   			return (
-          <a href={this.generateURL(this.state.access_token,this.state.id,this.state.name)}>
+          <a href={this.generateURL(this.state.access_token,this.state.id,this.state.name,this.state.authCode)}>
             <ThemeProvider theme={card_theme}>
                   <Card>
                     <CardActionArea>

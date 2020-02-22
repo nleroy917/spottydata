@@ -76,6 +76,7 @@ class Analysis extends React.Component {
 		  constructor(props) {
     		super(props);
     		this.state = {
+          authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code,
     			accessToken: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).access_token,
     			id: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).id,
     			name: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).name,
@@ -96,7 +97,7 @@ class Analysis extends React.Component {
   			//console.log(this.state.accessToken)
          this.fetchPlaylist()
   			 this.fetchAnalysis()
-         this.fetchLyrics()
+        // this.fetchLyrics()
   		}
 
       fetchPlaylist = async () => {
@@ -204,25 +205,37 @@ class Analysis extends React.Component {
                 direction="row"
                 justify="space-between"
                 alignItems="flex-start"
+                justify="center"
           >
-            <Grid item lg={2}> 
+            <Grid item lg={2} xs={3}> 
               <Card className={classes.playlist_image}>
                 <CardActionArea>
                   <CardMedia
                     style = {{ height: 'auto', width: "max", paddingTop: '100%'}}
                     image={this.state.playlist.images[0].url}
-                    title="Image title"
+                    title={this.state.playlist.name}
+                    justify="center"
                   />
                 </CardActionArea>
               </Card>
             </Grid>
-            <Grid item lg={8}>
+            <Grid item lg={8} xs={9}>
               <ThemeProvider theme={title_theme}>
                 <Typography variant={'h3'} align={'left'}>{this.state.playlist.name}</Typography>
                 <Typography variant={'h5'} align={'left'}>A Playlist by {this.state.playlist.owner.id}</Typography>
               </ThemeProvider>
             </Grid>
-            <Grid item lg={2}>
+            <Grid item lg={2} xs={12} alignItems="center">
+              <Grid container spacing={3}
+                direction="column"
+                justify="space-between"
+                alignItems="center"
+              >
+                <Grid item>
+                  <Button href={`${process.env.REACT_APP_BASE_URL}`}>New Playlist</Button>
+                  <Button href="#">About Analysis</Button>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
           <hr style={{'border-color':'#212529'}}></hr>
@@ -277,7 +290,7 @@ class Analysis extends React.Component {
             <Grid item lg={4} xs={12}>
               <Paper elevation={3} className={classes.paper}>
               <div className="container" className={classes.paper_div}>
-                <h6 align="left" className={classes.paper_title}> Keys</h6>
+                <h4 align="left" className={classes.paper_title}> Keys</h4>
   				      {this.state.key_data ? <KeyChart data={this.state.key_data} /> : ' '}
               </div>
               </Paper>
@@ -285,7 +298,7 @@ class Analysis extends React.Component {
             <Grid item lg={4} xs={12}>
               <Paper elevation={3} className={classes.paper}>
               <div className="container" className={classes.paper_div}>
-                <h6 align="left" className={classes.paper_title}> Genres</h6>
+                <h4 align="left" className={classes.paper_title}> Genres</h4>
                 {this.state.genre_data ? <GenreChart data={this.state.genre_data} /> : ' '}
               </div>
               </Paper>
@@ -293,7 +306,7 @@ class Analysis extends React.Component {
             <Grid item lg={4} xs={12}>
               <Paper elevation={3} className={classes.paper}>
               <div className="container" className={classes.paper_div}>
-                <h6 align="left" className={classes.paper_title}> Tempo</h6>
+                <h4 align="left" className={classes.paper_title}> Tempo</h4>
                 {this.state.tempo_data ? <TempoChart data={this.state.tempo_data} /> : ' '}
               </div>
               </Paper>
@@ -309,8 +322,8 @@ class Analysis extends React.Component {
           >
             <Grid item lg={4} md={4} xs={12}>
               <Paper elevation={3} className={classes.paper}>
-                <div className={classes.paper}>
-                    <h6 align="left" className={classes.paper_title}> Feel</h6>
+                <div className="container" className={classes.paper_div}>
+                  <h4 align="left" className={classes.paper_title}> Feel</h4>
                   {this.state.feel_data ? <FeelChart data={this.state.feel_data} /> : ' '}
                 </div>
               </Paper>

@@ -1,6 +1,7 @@
 import React from 'react';
 import './css/GenreChart.css';
 import { Doughnut } from 'react-chartjs-2';
+import 'chart.piecelabel.js';
 
 class GenreChart extends React.Component{
 
@@ -10,17 +11,20 @@ class GenreChart extends React.Component{
     		this.state = {
     			data: null,
           options: { 
-                scale:{
-                pointLabels:{
-                   fontColor: "white",
-                   fontSize:12
-                },
-            } ,
             legend: {
                 labels: {
                     fontColor: "white",
                     fontSize: 12
                 }
+          } ,
+          pieceLabel: {
+             render: 'label',
+             fontColor: '#fff'
+          },
+          plugins: {
+             datalabels: {
+                display: true
+             }
           }
            }
   			   }
@@ -37,7 +41,7 @@ class GenreChart extends React.Component{
   			return(
   				<div>
   					<Doughnut data={this.state.data} 
-                   //options={this.state.options}
+                   options={this.state.options}
 
             />
   				</div>

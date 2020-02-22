@@ -26,8 +26,6 @@ class Playlists extends React.Component{
       		chunked_playlists: null
 
     		};
-
-    		bake_cookie('authCode', this.state.authCode);
   		}
 
   		componentDidMount() {
@@ -51,7 +49,7 @@ class Playlists extends React.Component{
 
 			const body = {
 				grant_type: 'authorization_code',
-				code: read_cookie('authCode') ? read_cookie('authCode') : this.state.authCode,
+				code: this.state.authCode,
 				redirect_uri: this.state.redirect_uri
 			}
 
@@ -61,6 +59,7 @@ class Playlists extends React.Component{
 				//console.log(response)
 				const data = await response.data
 				this.setState({accessToken: data.access_token})
+				bake_cookie('access_token', this.state.access_token);
 				this.fetchName()
 
 				return data.access_token
@@ -98,8 +97,6 @@ class Playlists extends React.Component{
 		    	// console.log(data)
 		    	this.setState({playlists: data})
 		    	this.setState({chunked_playlists: this.chunkPlaylists(data,3)})
-
-
 			}	
 		}
 
@@ -143,7 +140,7 @@ class Playlists extends React.Component{
 				{chunk.map((playlist,key) => {
 					return (
 						<div className="col-md-4 card-col">
-							<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : {blank_image}} id={playlist.id} token={this.state.accessToken} desc={playlist.description}/>
+							<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : {blank_image}} id={playlist.id} token={this.state.accessToken} desc={playlist.description} authCode={this.state.authCode}/>
 						</div>
 					);
 				})}
