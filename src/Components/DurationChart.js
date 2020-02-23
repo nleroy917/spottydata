@@ -14,7 +14,7 @@ class DurationChart extends React.Component{
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Duration (seconds)',
+                                labelString: 'Duration (min)',
                                 fontColor:'#E6FAFC',
                                 fontSize:14
                             },
@@ -42,7 +42,8 @@ class DurationChart extends React.Component{
             legend: {
             labels: {
                 fontColor: "white"
-            }
+            },
+            display:false
         },
   			   }}
   		}
@@ -51,7 +52,7 @@ class DurationChart extends React.Component{
 
   			this.setState({data: {labels: this.props.data.x, 
                             datasets:[
-                                      {label:'Duration',data:this.props.data.y, backgroundColor:'#EC91D8', pointradius:'0'}]
+                                      {label:'Duration',data:this.props.data.y, backgroundColor:'rgba(236, 145, 216, 0.4)', pointradius:0, borderColor: 'rgba(236, 145, 216, 1)',borderWidth:0,pointRadius:0}]
                       }})
       }
 

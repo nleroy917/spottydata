@@ -20,7 +20,8 @@ class FeelChart extends React.Component{
                 labels: {
                     fontColor: "white",
                     fontSize: 10
-                }
+                },
+                display: false
         },
           plugins: {
              datalabels: {
@@ -42,7 +43,7 @@ class FeelChart extends React.Component{
   		componentDidMount() {
 			this.setState({data: {labels: Object.keys(this.props.data), 
 								    datasets:[
-								              {label:'Feel Data',data:Object.values(this.props.data),backgroundColor:'rgba(236, 145, 216, 0.8)'}]
+								              {label:'Feel Data',data:Object.values(this.props.data),backgroundColor:'rgba(236, 145, 216, 0.9)'}]
 									}})
   		}
 

@@ -42,8 +42,10 @@ class TempoChart extends React.Component{
             legend: {
             labels: {
                 fontColor: "white"
-            }
+            },
+            display: false
         },
+        point: {radius: 0}
   			   }}
   		}
 
@@ -51,7 +53,7 @@ class TempoChart extends React.Component{
 
   			this.setState({data: {labels: this.props.data.x, 
                             datasets:[
-                                      {label:'Tempo',data:this.props.data.y, backgroundColor:'rgba(135, 245, 251, 0.8)', pointradius:'0'}]
+                                      {label:'Tempo',data:this.props.data.y, backgroundColor:'rgba(135, 245, 251, 0.4)', borderColor:'rgba(135, 245, 251, 1)',borderWidth:0,pointRadius: 0}]
                       }})
       }
 
@@ -61,6 +63,7 @@ class TempoChart extends React.Component{
 					<Line
 						data={this.state.data}
 						options={this.state.options}
+            dot={false}
 				 />
   				</div>
   				);

@@ -33,7 +33,7 @@ class GenreChart extends React.Component{
   		componentDidMount() {
 			this.setState({data: {labels: Object.keys(this.props.data), 
 								    datasets:[
-								              {label:'Genre Data',data:Object.values(this.props.data), backgroundColor:['rgba(135, 245, 251, 0.8)','#EC91D8','#02111B','#E6FAFC','#3A506B']}]
+								              {label:'Genre Data',data:Object.values(this.props.data), backgroundColor:['#87f5fb','#EC91D8','#02111B','#E6FAFC','#3A506B']}]
 									}})
   		}
 

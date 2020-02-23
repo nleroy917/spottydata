@@ -7,6 +7,7 @@ import FeelChart from '../Components/FeelChart'
 import TempoChart from '../Components/TempoChart'
 import DurationChart from '../Components/DurationChart'
 import LyricCloud from '../Components/LyricCloud'
+import Loader from '../Components/Loader'
 import loading_gif from '../images/loading.gif'
 
 // Load in the materials-ui components
@@ -32,8 +33,8 @@ import styled, {ThemeProvider} from 'styled-components';
 const querystring = require('querystring');
 const axios = require('axios').default;
 
-const URL_BASE = 'https://spottydata-api.herokuapp.com/'
-// const URL_BASE = 'http://127.0.0.1:5000/'
+//const URL_BASE = 'https://spottydata-api.herokuapp.com/'
+const URL_BASE = 'http://127.0.0.1:5000/'
 
 const styles = theme => ({
   playlist_image: {
@@ -109,7 +110,7 @@ class Analysis extends React.Component {
   			//console.log(this.state.accessToken)
          this.fetchPlaylist()
   			 this.fetchAnalysis()
-        // this.fetchLyrics()
+         this.fetchLyrics()
   		}
 
       fetchPlaylist = async () => {
@@ -124,7 +125,7 @@ class Analysis extends React.Component {
               //console.log(response)
               const data = await response.data
               this.setState({playlist: data})
-              console.log(this.state.playlist)
+              //console.log(this.state.playlist)
         }
       }
 
@@ -207,7 +208,8 @@ class Analysis extends React.Component {
               //console.log(response) 
               const data = await response.data
               this.setState({lyrics_data: data})
-              console.log(this.state.lyrics_data)
+              this.setState({fav_lyric: data[0].text})
+              //console.log(this.state.lyrics_data)
 
           }
         }
@@ -227,15 +229,17 @@ class Analysis extends React.Component {
                 alignItems="flex-start"
                 justify="center"
           >
-            <Grid item lg={2} xs={3}> 
+            <Grid item lg={2} xs={3}>
               <Card className={classes.playlist_image}>
                 <CardActionArea>
-                  <CardMedia
-                    style = {{ height: 'auto', width: "max", paddingTop: '100%'}}
-                    image={this.state.playlist.images[0].url}
-                    title={this.state.playlist.name}
-                    justify="center"
-                  />
+                  <a href={this.state.playlist.external_urls.spotify}>
+                    <CardMedia
+                      style = {{ height: 'auto', width: "max", paddingTop: '100%'}}
+                      image={this.state.playlist.images[0].url}
+                      title={this.state.playlist.name}
+                      justify="center"
+                    />
+                  </a>
                 </CardActionArea>
               </Card>
             </Grid>
@@ -311,7 +315,7 @@ class Analysis extends React.Component {
             justify="space-between"
             alignItems="flex-start"
           >
-            <Grid item lg={4} xs={12}>
+            <Grid item lg={4} s={6} xs={12}>
               <Paper elevation={3} className={classes.paper}>
               <div className="container" className={classes.paper_div}>
                 <h4 align="left" className={classes.paper_title}> Keys</h4>
@@ -319,7 +323,7 @@ class Analysis extends React.Component {
               </div>
               </Paper>
             </Grid>
-            <Grid item lg={4} xs={12}>
+            <Grid item lg={4} s={6} xs={12}>
               <Paper elevation={3} className={classes.paper}>
               <div className="container" className={classes.paper_div}>
                 <h4 align="left" className={classes.paper_title}> Genres</h4>
@@ -327,7 +331,7 @@ class Analysis extends React.Component {
               </div>
               </Paper>
             </Grid>
-            <Grid item lg={4} xs={12}>
+            <Grid item lg={4} s={6} xs={12}>
               <Paper elevation={3} className={classes.paper}>
               <div className="container" className={classes.paper_div}>
                 <h4 align="left" className={classes.paper_title}> Tempo</h4>
@@ -344,7 +348,7 @@ class Analysis extends React.Component {
             justify="space-between"
             alignItems="flex-start"
           >
-            <Grid item lg={4} md={4} xs={12}>
+            <Grid item lg={4} md={4} s={6} xs={12}>
               <Paper elevation={3} className={classes.paper}>
                 <div className="container" className={classes.paper_div}>
                   <h4 align="left" className={classes.paper_title}> Feel</h4>
@@ -352,7 +356,7 @@ class Analysis extends React.Component {
                 </div>
               </Paper>
             </Grid>
-            <Grid item lg={4} md={4} xs={12}>
+            <Grid item lg={4} md={4} s={6} xs={12}>
               <Paper elevation={3} className={classes.paper}>
                 <div className="container" className={classes.paper_div}>
                   <h4 align="left" className={classes.paper_title}> Duration</h4>
@@ -360,13 +364,33 @@ class Analysis extends React.Component {
                 </div>
               </Paper>
             </Grid>
-            <Grid item lg={4} md={4} xs={12}>
+            <Grid item lg={4} md={4} s={6} xs={12}>
               <Paper elevation={3} className={classes.paper}>
 
               </Paper>
             </Grid>
           </Grid>
+          <br></br>
+          <Grid container spacing={2}
+            direction="row"
+            justify="space-between"
+            alignItems="flex-start"
+          >
+          <Grid item lg={8} md={8} s={6} xs={12}>
+            <Paper elevation={3} className={classes.paper}>
+              <div className="container" className={classes.paper_div}>
+                <h4 align="left" className={classes.paper_title}>Lyrics</h4>
+                  {this.state.lyrics_data ? 
+                    <LyricCloud data={this.state.lyrics_data}></LyricCloud> : 
+                    <Loader image={loading_gif} message="Analyzing Lyrics.. This one takes awhile...." img_dimensions={{height:200,width:200}}></Loader> 
+                  }
+                  {this.state.lyrics_data ? <h5 align="left" className={classes.paper_title}>Favorite Lyric: "{this.state.fav_lyric}"</h5> : ' '}
+              </div>
+            </Paper>
+          </Grid>  
+          </Grid>
         </Container>
+        <br></br>
         </div>
   			)}
 
@@ -374,11 +398,7 @@ class Analysis extends React.Component {
 
         else {
           return(
-            <div>
-              <img className="img-fluid" src={loading_gif} />
-              <h3>Analyzing...</h3>
-              <p>Can take up to 20 seconds for large playlists</p>
-            </div>
+            <Loader image={loading_gif} message="Analyzing... should only be a few seconds..."></Loader>
             )
         }
   		}
