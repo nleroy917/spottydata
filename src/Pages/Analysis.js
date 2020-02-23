@@ -33,8 +33,8 @@ import styled, {ThemeProvider} from 'styled-components';
 const querystring = require('querystring');
 const axios = require('axios').default;
 
-//const URL_BASE = 'https://spottydata-api.herokuapp.com/'
-const URL_BASE = 'http://127.0.0.1:5000/'
+const URL_BASE = 'https://spottydata-api.herokuapp.com/'
+//const URL_BASE = 'http://127.0.0.1:5000/'
 
 const styles = theme => ({
   playlist_image: {
