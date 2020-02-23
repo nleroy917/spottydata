@@ -30,6 +30,9 @@ import PropTypes from 'prop-types';
 import { createMuiTheme } from '@material-ui/core/styles';
 import styled, {ThemeProvider} from 'styled-components';
 
+// Import Vibrant.js
+import * as Vibrant from 'node-vibrant'
+
 const querystring = require('querystring');
 const axios = require('axios').default;
 
@@ -100,7 +103,8 @@ class Analysis extends React.Component {
 		        feel_data: null,
             tempo_data: null,
             tempo_avg: null,
-            lyrics_data: null
+            lyrics_data: null,
+            palette: null
 
     		}
 
@@ -111,7 +115,12 @@ class Analysis extends React.Component {
          this.fetchPlaylist()
   			 this.fetchAnalysis()
          this.fetchLyrics()
+
   		}
+
+      componentWillUnmount() {
+        document.body.style.background = "#2e2f32";
+      }
 
       fetchPlaylist = async () => {
           const headers = {
@@ -126,7 +135,20 @@ class Analysis extends React.Component {
               const data = await response.data
               this.setState({playlist: data})
               //console.log(this.state.playlist)
+              this.getVibrant()
         }
+      }
+
+      getVibrant = () => {
+        Vibrant.from(this.state.playlist.images[0].url).getPalette()
+               .then((palette) => {
+                console.log(palette)
+                document.body.style.backgroundImage = `radial-gradient(ellipse at top,rgba(${palette.Vibrant.r},${palette.Vibrant.g},${palette.Vibrant.b},0.5),
+                                                                                      rgba(${palette.Muted.r},${palette.Muted.g},${palette.Muted.b},0.4),
+                                                                                      
+                                                                                      #2e2f32)`
+                this.setState({palette: palette})})
+
       }
 
 
@@ -218,7 +240,7 @@ class Analysis extends React.Component {
 
         const { classes } = this.props;
 
-        if(this.state.key_data && this.state.genre_data && this.state.feel_data && this.state.tempo_data && this.state.duration_data) {
+        if(this.state.key_data && this.state.genre_data && this.state.feel_data && this.state.tempo_data && this.state.duration_data && this.state.palette) {
   			return (
         <div>
         <br></br>
@@ -257,10 +279,7 @@ class Analysis extends React.Component {
               >
                 <ThemeProvider theme={button_theme}>
                   <Grid item>
-                      <Button variant="outlined" color="primary" href={`${process.env.REACT_APP_BASE_URL}`}>Home</Button>
-                  </Grid>
-                  <Grid item>
-                    <Button variant="outlined" color="primary" href="#">About Analysis</Button>
+                      <a className="btn-lg btn-light" href={`${process.env.REACT_APP_BASE_URL}`}>Home</a>
                   </Grid>
                 </ThemeProvider>
               </Grid>
