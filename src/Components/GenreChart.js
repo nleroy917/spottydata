@@ -19,7 +19,8 @@ class GenreChart extends React.Component{
           } ,
           pieceLabel: {
              render: 'label',
-             fontColor: '#fff'
+             fontColor: '#000',
+             fontSize:6
           },
           plugins: {
              datalabels: {
