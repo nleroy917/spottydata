@@ -1,6 +1,7 @@
 // load core react + custom components
 import React from 'react';
 import './css/Analysis.css';
+import ChartContainer from '../Components/ChartContainer'
 import KeyChart from '../Components/KeyChart'
 import GenreChart from '../Components/GenreChart'
 import FeelChart from '../Components/FeelChart'
@@ -143,10 +144,10 @@ class Analysis extends React.Component {
         Vibrant.from(this.state.playlist.images[0].url).getPalette()
                .then((palette) => {
                 console.log(palette)
-                document.body.style.backgroundImage = `radial-gradient(ellipse at top,rgba(${palette.Vibrant.r},${palette.Vibrant.g},${palette.Vibrant.b},0.5),
-                                                                                      rgba(${palette.Muted.r},${palette.Muted.g},${palette.Muted.b},0.4),
+                //document.body.style.backgroundImage = `radial-gradient(ellipse at top,rgba(${palette.Vibrant.r},${palette.Vibrant.g},${palette.Vibrant.b},0.5),
+                                                                                      //rgba(${palette.Muted.r},${palette.Muted.g},${palette.Muted.b},0.4),
                                                                                       
-                                                                                      #2e2f32)`
+                                                                                      //#2e2f32)`
                 this.setState({palette: palette})})
 
       }
@@ -267,8 +268,8 @@ class Analysis extends React.Component {
             </Grid>
             <Grid item lg={8} xs={9}>
               <ThemeProvider theme={title_theme}>
-                <Typography variant={'h3'} align={'left'}>{this.state.playlist.name}</Typography>
-                <Typography variant={'h5'} align={'left'}>A Playlist by {this.state.playlist.owner.id}</Typography>
+                <Typography variant={'h3'} align={'left'} style={{fontWeight: 400}}>{this.state.playlist.name}</Typography>
+                <Typography variant={'h5'} align={'left'} style={{fontWeight: 100}}>A Playlist by {this.state.playlist.owner.id}</Typography>
               </ThemeProvider>
             </Grid>
             <Grid item lg={2} xs={12} alignItems="center">
@@ -335,28 +336,19 @@ class Analysis extends React.Component {
             alignItems="flex-start"
           >
             <Grid item lg={4} s={6} xs={12}>
-              <Paper elevation={3} className={classes.paper}>
-              <div className="container" className={classes.paper_div}>
-                <h4 align="left" className={classes.paper_title}> Keys</h4>
-  				      {this.state.key_data ? <KeyChart data={this.state.key_data} /> : ' '}
-              </div>
-              </Paper>
+              <ChartContainer title="Keys">
+                {this.state.key_data ? <KeyChart data={this.state.key_data} /> : ' '}
+              </ChartContainer>
             </Grid>
             <Grid item lg={4} s={6} xs={12}>
-              <Paper elevation={3} className={classes.paper}>
-              <div className="container" className={classes.paper_div}>
-                <h4 align="left" className={classes.paper_title}> Genres</h4>
+              <ChartContainer title="Genres">
                 {this.state.genre_data ? <GenreChart data={this.state.genre_data} /> : ' '}
-              </div>
-              </Paper>
+              </ChartContainer>
             </Grid>
             <Grid item lg={4} s={6} xs={12}>
-              <Paper elevation={3} className={classes.paper}>
-              <div className="container" className={classes.paper_div}>
-                <h4 align="left" className={classes.paper_title}> Tempo</h4>
+               <ChartContainer title="Tempo">
                 {this.state.tempo_data ? <TempoChart data={this.state.tempo_data} /> : ' '}
-              </div>
-              </Paper>
+              </ChartContainer>
             </Grid>
           </Grid>
 
@@ -368,20 +360,14 @@ class Analysis extends React.Component {
             alignItems="flex-start"
           >
             <Grid item lg={4} md={4} s={6} xs={12}>
-              <Paper elevation={3} className={classes.paper}>
-                <div className="container" className={classes.paper_div}>
-                  <h4 align="left" className={classes.paper_title}> Feel</h4>
-                  {this.state.feel_data ? <FeelChart data={this.state.feel_data} /> : ' '}
-                </div>
-              </Paper>
+              <ChartContainer title="Playlist Feel">
+                {this.state.feel_data ? <FeelChart data={this.state.feel_data} /> : ' '}
+              </ChartContainer>
             </Grid>
             <Grid item lg={4} md={4} s={6} xs={12}>
-              <Paper elevation={3} className={classes.paper}>
-                <div className="container" className={classes.paper_div}>
-                  <h4 align="left" className={classes.paper_title}> Duration</h4>
-                  {this.state.duration_data ? <DurationChart data={this.state.duration_data} /> : ' '}
-                </div>
-              </Paper>
+              <ChartContainer title="Duration">
+                {this.state.duration_data ? <DurationChart data={this.state.duration_data} /> : ' '}
+              </ChartContainer>
             </Grid>
             <Grid item lg={4} md={4} s={6} xs={12}>
               <Paper elevation={3} className={classes.paper}>
@@ -396,16 +382,13 @@ class Analysis extends React.Component {
             alignItems="flex-start"
           >
           <Grid item lg={8} md={8} s={6} xs={12}>
-            <Paper elevation={3} className={classes.paper}>
-              <div className="container" className={classes.paper_div}>
-                <h4 align="left" className={classes.paper_title}>Lyrics</h4>
+              <ChartContainer title="lyrics">
                   {this.state.lyrics_data ? 
                     <LyricCloud data={this.state.lyrics_data}></LyricCloud> : 
                     <Loader image={loading_gif} message="Analyzing Lyrics.. This one takes awhile...." img_dimensions={{height:200,width:200}}></Loader> 
                   }
                   {this.state.lyrics_data ? <h5 align="left" className={classes.paper_title}>Favorite Lyric: "{this.state.fav_lyric}"</h5> : ' '}
-              </div>
-            </Paper>
+              </ChartContainer>
           </Grid>  
           </Grid>
         </Container>
