@@ -1,13 +1,75 @@
 import React from 'react';
 import './css/Playlists.css';
-import Playlist from '../Components/Playlist'
 import blank_image from '../images/blank_playlist.png'
 import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
+
+// Load custom components
+import Playlist from '../Components/Playlist'
+import Loader from '../Components/Loader'
+import loading_gif from '../images/loading.gif'
+
+//Load Material UI
+// Load in the materials-ui components
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader'
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
+// Load styling
+import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types';
+import { createMuiTheme } from '@material-ui/core/styles';
+import styled, {ThemeProvider} from 'styled-components';
 
 const axios = require('axios').default;
 const querystring = require('querystring');
 
-const cookie_key = 'authCode';
+
+const styles = theme => ({
+  profile_image: {
+    overflow: 'hidden',
+  },
+  paper: {
+    background: '#212529'
+  },
+  paper_title: {
+    color: '#fff'
+  },
+  paper_div: {
+    padding: '20px'
+  }
+
+});
+
+const title_theme = createMuiTheme()
+
+title_theme.typography.h3 = {
+  fontSize: '1.2rem',
+  '@media (min-width:600px)': {
+    fontSize: '1.5rem',
+  },
+  [title_theme.breakpoints.up('md')]: {
+    fontSize: '2.4rem',
+  },
+};
+
+title_theme.typography.h5 = {
+  fontSize: '1.2rem',
+  '@media (min-width:600px)': {
+    fontSize: '1.5rem',
+  },
+  [title_theme.breakpoints.up('md')]: {
+    fontSize: '2.4rem',
+  },
+};
 
 class Playlists extends React.Component{
 
@@ -76,8 +138,7 @@ class Playlists extends React.Component{
 			if(response.status === 200) {
 		    	//console.log(response) 
 		    	const data = await response.data
-		    	this.setState({user: data.display_name})
-		    	this.setState({user_id: data.id})
+		    	this.setState({user: data})
 		    	this.fetchPlaylists()
 			}
 
@@ -90,11 +151,11 @@ class Playlists extends React.Component{
 			}
 			//console.log('token: ' + this.state.accessToken)
 
-			const response = await axios.get('https://spottydata-api.herokuapp.com/' + this.state.user_id + '/playlists',{headers})
+			const response = await axios.get('https://spottydata-api.herokuapp.com/' + this.state.user.id + '/playlists',{headers})
 			if(response.status === 200) {
 		    	//console.log(response);
 		    	const data = await response.data
-		    	// console.log(data)
+		    	console.log(data)
 		    	this.setState({playlists: data})
 		    	this.setState({chunked_playlists: this.chunkPlaylists(data,3)})
 			}	
@@ -128,28 +189,68 @@ class Playlists extends React.Component{
 		}
 
 		render() {
-		
+
+		const { classes } = this.props
+
+		if(this.state.playlists){
 		return (
-		<div className="container">
-			<div className="row heading-row justify-content-center">
-				<h2 className="font-weight-bold playlists-heading welcome-heading">Welcome {this.state.user ? this.state.user.charAt(0).toUpperCase() + this.state.user.slice(1) : ' '}! Please select a playlist to analyze.</h2>
-			</div>
-		{this.state.chunked_playlists ? this.state.chunked_playlists.map((chunk) => {
-		return(
-			<div className="row card-row">
-				{chunk.map((playlist,key) => {
-					return (
-						<div className="col-md-4 card-col">
-							<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : {blank_image}} id={playlist.id} token={this.state.accessToken} desc={playlist.description} authCode={this.state.authCode}/>
-						</div>
-					);
-				})}
-			</div>)
+		<div>
+        <br></br>
+        <Container>
+          <Grid container spacing={3}
+                direction="row"
+                justify="space-between"
+                alignItems="flex-start"
+                justify="center"
+          >
+            <Grid item lg={2} xs={3}>
+              <Card className={classes.profile_image}>
+                <CardActionArea>
+                  <a href={this.state.user.external_urls.spotify}>
+                    <CardMedia
+                      style = {{ height: 'auto', width: "max", paddingTop: '100%'}}
+                      image={this.state.user.images[0].url}
+                      title={this.state.user.display_name}
+                      justify="center"
+                    />
+                  </a>
+                </CardActionArea>
+              </Card>
+            </Grid>
+            <Grid item lg={8} xs={9}>
+              <ThemeProvider theme={title_theme}>
+                <Typography variant={'h3'} align={'left'} style={{fontWeight: 400}}>Welcome {this.state.user.display_name}!</Typography>
+                <Typography variant={'h5'} align={'left'} style={{fontWeight: 100}}>Please select a playlist to continue.</Typography>
+              </ThemeProvider>
+            </Grid>
+          </Grid>
+          <hr style={{'border-color':'#212529'}}></hr>
+          <div className="justify-content-center">
+				{this.state.chunked_playlists ? this.state.chunked_playlists.map((chunk) => {
+				return(
+					<div className="justify-content-center row card-row">
+						{chunk.map((playlist,key) => {
+							return (
+								<div className="col-md-3 card-col">
+									<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : {blank_image}} id={playlist.id} token={this.state.accessToken} desc={playlist.description} authCode={this.state.authCode}/>
+								</div>
+							);
+						})}
+					</div>)
 			}) : ' '}
 		</div>
-				);
+		</Container>
+        <br></br>
+        </div>
+				);}
+		else{
+			return(<Loader img={loading_gif} message="Analyzing... should only be a few seconds..."/>);
+		}
 		}
 }
 
+Playlists.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
-export default Playlists
+export default withStyles(styles)(Playlists);
