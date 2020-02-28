@@ -37,8 +37,8 @@ import * as Vibrant from 'node-vibrant'
 const querystring = require('querystring');
 const axios = require('axios').default;
 
-const URL_BASE = 'https://spottydata-api.herokuapp.com/'
-//const URL_BASE = 'http://127.0.0.1:5000/'
+//const URL_BASE = 'https://spottydata-api.herokuapp.com/'
+const URL_BASE = 'http://127.0.0.1:5000/'
 
 const styles = theme => ({
   playlist_image: {
@@ -269,7 +269,7 @@ class Analysis extends React.Component {
             <Grid item lg={8} xs={9}>
               <ThemeProvider theme={title_theme}>
                 <Typography variant={'h3'} align={'left'} style={{fontWeight: 400}}>{this.state.playlist.name}</Typography>
-                <Typography variant={'h5'} align={'left'} style={{fontWeight: 100}}>A Playlist by {this.state.playlist.owner.id}</Typography>
+                <Typography variant={'h5'} align={'left'} style={{fontWeight: 100}}>{this.state.playlist.description}</Typography>
               </ThemeProvider>
             </Grid>
             <Grid item lg={2} xs={12} alignItems="center">
@@ -313,8 +313,8 @@ class Analysis extends React.Component {
             <Grid item lg={3} xs={6}>
               <Paper elevation={3} className={classes.paper}>
                 <div className={classes.paper_div}>
-                <h6 align="left" className={classes.paper_title}>Average Tempo</h6>
-                <h1 align="left" className={classes.paper_title}>{this.state.tempo_avg} bpm</h1>
+                <h6 align="left" className={classes.paper_title}>Playlist Owner</h6>
+                <h1 align="left" className={classes.paper_title}>{this.state.playlist.owner.id}</h1>
                 </div>
               </Paper>
             </Grid>

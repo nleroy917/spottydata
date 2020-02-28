@@ -244,7 +244,7 @@ class Playlists extends React.Component{
         </div>
 				);}
 		else{
-			return(<Loader img={loading_gif} message="Analyzing... should only be a few seconds..."/>);
+			return(<Loader image={loading_gif} message="Fetching Playlists"/>);
 		}
 		}
 }
