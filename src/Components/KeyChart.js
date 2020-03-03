@@ -12,6 +12,7 @@ class KeyChart extends React.Component{
 
     		this.state = {
     			data: null,
+          palette: this.props.palette,
           options: {scales: {
                         xAxes: [{
                             display: true,
@@ -54,8 +55,8 @@ class KeyChart extends React.Component{
 
   			this.setState({data: {labels: ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'], 
                             datasets:[
-                                      {label:'Major',data:Object.values(this.props.data.major),backgroundColor:'rgba(135, 245, 251, 0.8)'},
-                                      {label:'Minor',data:Object.values(this.props.data.minor),backgroundColor:'rgba(236, 145, 216, 0.8)'}]
+                                      {label:'Major',data:Object.values(this.props.data.major),backgroundColor: this.state.palette.Vibrant.hex},
+                                      {label:'Minor',data:Object.values(this.props.data.minor),backgroundColor: this.state.palette.LightVibrant.hex}]
                       }})
       }
 

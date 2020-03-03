@@ -10,17 +10,21 @@ class GenreChart extends React.Component{
 
     		this.state = {
     			data: null,
+          palette: this.props.palette,
           options: { 
             legend: {
+              position: "left",
                 labels: {
                     fontColor: "white",
-                    fontSize: 12
+                    fontSize: window.innerWidth < 600 ? 10 : 12,
+                    position: "left",
+                    padding: window.innerWidth < 600 ? 8 : 10
                 }
           } ,
           pieceLabel: {
              render: 'label',
              fontColor: '#000',
-             fontSize:6
+             fontSize: 10
           },
           plugins: {
              datalabels: {
@@ -34,7 +38,11 @@ class GenreChart extends React.Component{
   		componentDidMount() {
 			this.setState({data: {labels: Object.keys(this.props.data), 
 								    datasets:[
-								              {label:'Genre Data',data:Object.values(this.props.data), backgroundColor:['#87f5fb','#EC91D8','#02111B','#E6FAFC','#3A506B']}]
+								              {label:'Genre Data',data:Object.values(this.props.data), backgroundColor:[this.state.palette.Vibrant.hex,
+                                                                                                        this.state.palette.LightVibrant.hex,
+                                                                                                        this.state.palette.Muted.hex,
+                                                                                                        this.state.palette.DarkVibrant.hex,
+                                                                                                        this.state.palette.LightMuted.hex]}]
 									}})
   		}
 
@@ -51,3 +59,4 @@ class GenreChart extends React.Component{
   	}
 
   	export default GenreChart;
+

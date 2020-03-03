@@ -45,7 +45,8 @@ const styles = theme => ({
     overflow: 'hidden',
   },
   paper: {
-    background: '#212529'
+    background: '#212529',
+    height: "100%"
   },
   paper_title: {
     color: '#fff'
@@ -87,6 +88,16 @@ const button_theme = createMuiTheme({
   },
 });
 
+// Find nth Index function
+function nthIndex(str, pat, n){
+    var L= str.length, i= -1;
+    while(n-- && i++<L){
+        i= str.indexOf(pat, i);
+        if (i < 0) break;
+    }
+    return i;
+}
+
 
 class Analysis extends React.Component {
 
@@ -105,7 +116,8 @@ class Analysis extends React.Component {
             tempo_data: null,
             tempo_avg: null,
             lyrics_data: null,
-            palette: null
+            palette: null,
+            last_update: null
 
     		}
 
@@ -217,6 +229,7 @@ class Analysis extends React.Component {
             this.setState({feel_data: data.feel})
             this.setState({tempo_data: data.tempo})
             this.setState({duration_data: data.duration})
+            this.setState({last_update: data.last_update})
           }
             }
 
@@ -241,7 +254,7 @@ class Analysis extends React.Component {
 
         const { classes } = this.props;
 
-        if(this.state.key_data && this.state.genre_data && this.state.feel_data && this.state.tempo_data && this.state.duration_data && this.state.palette) {
+        if(this.state.key_data && this.state.genre_data && this.state.feel_data && this.state.tempo_data && this.state.duration_data && this.state.palette && this.state.last_update) {
   			return (
         <div>
         <br></br>
@@ -292,7 +305,8 @@ class Analysis extends React.Component {
           <Grid container spacing={2}
             direction="row"
             justify="space-between"
-            alignItems="flex-start"
+            alignItems="stretch"
+
           >
             <Grid item lg={3} xs={6}>
               <Paper elevation={3} className={classes.paper}>
@@ -318,11 +332,11 @@ class Analysis extends React.Component {
                 </div>
               </Paper>
             </Grid>
-            <Grid item lg={3} xs={6}>
+            <Grid item lg={3} xs={6} align="stretch">
               <Paper elevation={3} className={classes.paper}>
                 <div className={classes.paper_div}>
-                  <h6 align="left" className={classes.paper_title}>Favorite Key</h6>
-                  <h1 align="left" className={classes.paper_title}>{this.state.fav_key}</h1>
+                  <h6 align="left" className={classes.paper_title}>Last Updated</h6>
+                  <h2 align="left" className={classes.paper_title}>{this.state.last_update.slice(0,nthIndex(this.state.last_update,' ',4))}</h2>
                 </div>
               </Paper>
             </Grid>
@@ -337,17 +351,17 @@ class Analysis extends React.Component {
           >
             <Grid item lg={4} s={6} xs={12}>
               <ChartContainer title="Keys">
-                {this.state.key_data ? <KeyChart data={this.state.key_data} /> : ' '}
+                {this.state.key_data ? <KeyChart data={this.state.key_data} palette={this.state.palette}/> : ' '}
               </ChartContainer>
             </Grid>
             <Grid item lg={4} s={6} xs={12}>
               <ChartContainer title="Genres">
-                {this.state.genre_data ? <GenreChart data={this.state.genre_data} /> : ' '}
+                {this.state.genre_data ? <GenreChart data={this.state.genre_data} palette={this.state.palette} palette={this.state.palette}/> : ' '}
               </ChartContainer>
             </Grid>
             <Grid item lg={4} s={6} xs={12}>
                <ChartContainer title="Tempo">
-                {this.state.tempo_data ? <TempoChart data={this.state.tempo_data} /> : ' '}
+                {this.state.tempo_data ? <TempoChart data={this.state.tempo_data} palette={this.state.palette}/> : ' '}
               </ChartContainer>
             </Grid>
           </Grid>
@@ -361,30 +375,49 @@ class Analysis extends React.Component {
           >
             <Grid item lg={4} md={4} s={6} xs={12}>
               <ChartContainer title="Playlist Feel">
-                {this.state.feel_data ? <FeelChart data={this.state.feel_data} /> : ' '}
+                {this.state.feel_data ? <FeelChart data={this.state.feel_data} palette={this.state.palette}/> : ' '}
               </ChartContainer>
             </Grid>
             <Grid item lg={4} md={4} s={6} xs={12}>
               <ChartContainer title="Duration">
-                {this.state.duration_data ? <DurationChart data={this.state.duration_data} /> : ' '}
+                {this.state.duration_data ? <DurationChart data={this.state.duration_data} palette={this.state.palette} /> : ' '}
               </ChartContainer>
             </Grid>
             <Grid item lg={4} md={4} s={6} xs={12}>
-              <Paper elevation={3} className={classes.paper}>
-
-              </Paper>
+                <Grid container spacing={2}
+                  direction="column"
+                  justify="center"
+                  alignItems="stretch"
+                >
+                  <Grid item>
+                    <Paper elevation={3} className={classes.paper}>
+                      <div className={classes.paper_div}>
+                        <h6 align="left" className={classes.paper_title}>Favorite Key</h6>
+                        <h2 align="left" className={classes.paper_title}>{this.state.fav_key}</h2>
+                      </div>
+                    </Paper>
+                  </Grid>
+                  <Grid item>
+                    <Paper elevation={3} className={classes.paper}>
+                      <div className={classes.paper_div}>
+                        <h6 align="left" className={classes.paper_title}>Average Tempo</h6>
+                        <h2 align="left" className={classes.paper_title}>{this.state.tempo_avg}</h2>
+                      </div>
+                    </Paper>
+                  </Grid>
+                </Grid>
             </Grid>
           </Grid>
           <br></br>
           <Grid container spacing={2}
             direction="row"
-            justify="space-between"
-            alignItems="flex-start"
+            justify="center"
+            alignItems="center"
           >
           <Grid item lg={8} md={8} s={6} xs={12}>
               <ChartContainer title="lyrics">
                   {this.state.lyrics_data ? 
-                    <LyricCloud data={this.state.lyrics_data}></LyricCloud> : 
+                    <LyricCloud data={this.state.lyrics_data} palette={this.state.palette}/> : 
                     <Loader image={loading_gif} message="Analyzing Lyrics.. This one takes awhile...." img_dimensions={{height:200,width:200}}></Loader> 
                   }
                   {this.state.lyrics_data ? <h5 align="left" className={classes.paper_title}>Favorite Lyric: "{this.state.fav_lyric}"</h5> : ' '}

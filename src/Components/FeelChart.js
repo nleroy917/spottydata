@@ -9,6 +9,7 @@ class FeelChart extends React.Component{
 
     		this.state = {
     			data: null,
+          palette: this.props.palette,
           options: { 
               scale:{
                 pointLabels:{
@@ -43,7 +44,7 @@ class FeelChart extends React.Component{
   		componentDidMount() {
 			this.setState({data: {labels: Object.keys(this.props.data), 
 								    datasets:[
-								              {label:'Feel Data',data:Object.values(this.props.data),backgroundColor:'rgba(236, 145, 216, 0.9)'}]
+								              {label:'Feel Data',data:Object.values(this.props.data),backgroundColor:`rgba(${this.state.palette.Vibrant.r}, ${this.state.palette.Vibrant.g}, ${this.state.palette.Vibrant.b}, 0.9)`}]
 									}})
   		}
 

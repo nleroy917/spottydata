@@ -9,9 +9,13 @@ class LyricCloud extends React.Component{
 
     		this.state = {
     			words: props.data,
+          palette: this.props.palette,
           options: {
             fontFamily: 'roboto',
-            colors: ['#87f5fb','#EC91D8','#E6FAFC','#3A506B'],
+            colors: [this.props.palette.Vibrant.hex,
+                      this.props.palette.LightVibrant.hex,
+                      this.props.palette.Muted.hex,
+                      this.props.palette.LightMuted.hex],
             fontSizes: [10,60],
             rotations: 2,
             rotationAngles: [0, 90],

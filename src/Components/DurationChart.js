@@ -9,6 +9,7 @@ class DurationChart extends React.Component{
 
     		this.state = {
     			data: null,
+          palette: this.props.palette,
     			options: {scales: {
                         xAxes: [{
                             display: true,
@@ -52,7 +53,9 @@ class DurationChart extends React.Component{
 
   			this.setState({data: {labels: this.props.data.x, 
                             datasets:[
-                                      {label:'Duration',data:this.props.data.y, backgroundColor:'rgba(236, 145, 216, 0.4)', pointradius:0, borderColor: 'rgba(236, 145, 216, 1)',borderWidth:0,pointRadius:0}]
+                                      {label:'Duration',data:this.props.data.y, backgroundColor:`rgba(${this.state.palette.LightVibrant.r}, ${this.state.palette.LightVibrant.g}, ${this.state.palette.LightVibrant.b}, 0.4)`, 
+                                                                                borderColor:`rgba(${this.state.palette.LightVibrant.r}, ${this.state.palette.LightVibrant.g}, ${this.state.palette.LightVibrant.b}, 1)`, 
+                                                                                borderWidth:0,pointRadius: 0}]
                       }})
       }
 

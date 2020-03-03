@@ -9,6 +9,7 @@ class TempoChart extends React.Component{
 
     		this.state = {
     			data: null,
+          palette: this.props.palette,
     			options: {scales: {
                         xAxes: [{
                             display: true,
@@ -53,7 +54,7 @@ class TempoChart extends React.Component{
 
   			this.setState({data: {labels: this.props.data.x, 
                             datasets:[
-                                      {label:'Tempo',data:this.props.data.y, backgroundColor:'rgba(135, 245, 251, 0.4)', borderColor:'rgba(135, 245, 251, 1)',borderWidth:0,pointRadius: 0}]
+                                      {label:'Tempo',data:this.props.data.y, backgroundColor:`rgba(${this.state.palette.Vibrant.r}, ${this.state.palette.Vibrant.g}, ${this.state.palette.Vibrant.b}, 0.4)`, borderColor:`rgba(${this.state.palette.Vibrant.r}, ${this.state.palette.Vibrant.g}, ${this.state.palette.Vibrant.b}, 1)`,borderWidth:0,pointRadius: 0}]
                       }})
       }
 
