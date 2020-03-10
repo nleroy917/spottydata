@@ -23,6 +23,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 // Load styling
+import FadeIn from 'react-fade-in';
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
@@ -232,7 +233,9 @@ class Playlists extends React.Component{
 						{chunk.map((playlist,key) => {
 							return (
 								<div className="col-md-3 card-col">
-									<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : {blank_image}} id={playlist.id} token={this.state.accessToken} desc={playlist.description} authCode={this.state.authCode}/>
+									<FadeIn transitionDuration={1000}>
+										<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : {blank_image}} id={playlist.id} token={this.state.accessToken} desc={playlist.description} authCode={this.state.authCode}/>
+									</FadeIn>
 								</div>
 							);
 						})}
