@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'universal-cookie';
 import './css/Playlists.css';
 import blank_image from '../images/blank_playlist.png'
 import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
@@ -30,8 +31,10 @@ import PropTypes from 'prop-types';
 import { createMuiTheme } from '@material-ui/core/styles';
 import styled, {ThemeProvider} from 'styled-components';
 
+// Set axios, querystring, and cookies objects
 const axios = require('axios').default;
 const querystring = require('querystring');
+const cookies = new Cookies();
 
 
 const styles = theme => ({
@@ -95,44 +98,62 @@ class Playlists extends React.Component{
   			//console.log(this.state.client_secret)
   			this.fetchAuthCode()
   			this.setState({authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code},() => {this.fetchAccessToken()})
-  			console.log(this.state.authCode)
+  			//console.log(this.state.authCode)
   		}
 
   		fetchAuthCode = () => {
+  			/*
+  			The auth code is only good ONCE. Once it is used to get an access token from spotify, it must be regenerated to get another access token.
+
+  			Thus, it should be found here from the querystring, then we call the fetchAccessToken() function and never look at auth code again until 
+  			application is reloaded.
+  			*/
   			var authCode = querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code
   			this.setState({authCode: authCode},() => {this.fetchAccessToken()})
   		}
 
 		fetchAccessToken = async () => {
-			//console.log('Basic ' + btoa(this.state.client_id + ':' + this.state.client_secret))
-			const headers = {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'Authorization': 'Basic ' + btoa(this.state.client_id + ':' + this.state.client_secret)
-			}
+			/*
+			The access token should be found, set, and stored as a cookie for later use - if the access token can be found as a cookie...
+			dont even try to go thru the process of getting another one - since the auth code is no longer valid.
+			*/
 
-			const body = {
-				grant_type: 'authorization_code',
-				code: this.state.authCode,
-				redirect_uri: this.state.redirect_uri
-			}
+			if (cookies.get('accessToken')) {
+				//console.log(cookies.get('accessToken'))
+				this.setState({accessToken: cookies.get('accessToken')})
+				this.fetchName(cookies.get('accessToken'))
 
-			const response = await axios.post('https://accounts.spotify.com/api/token',querystring.stringify(body),{headers: headers})
+			} else {
+				const headers = {
+					'Content-Type': 'application/x-www-form-urlencoded',
+					'Authorization': 'Basic ' + btoa(this.state.client_id + ':' + this.state.client_secret)
+				}
 
-			if(response.status === 200) {
-				//console.log(response)
-				const data = await response.data
-				this.setState({accessToken: data.access_token})
-				bake_cookie('access_token', this.state.access_token);
-				this.fetchName()
+				const body = {
+					grant_type: 'authorization_code',
+					code: this.state.authCode,
+					redirect_uri: this.state.redirect_uri
+				}
 
-				return data.access_token
+				const response = await axios.post('https://accounts.spotify.com/api/token',querystring.stringify(body),{headers: headers})
+
+				if(response.status === 200) {
+					//console.log(response)
+					const data = await response.data
+					this.setState({accessToken: data.access_token})
+					cookies.set('accessToken',data.access_token,{ path: '/' })
+					this.fetchName(this.state.accessToken)
+
+					return data.access_token
+				}
 			}
 		}
 
-		fetchName = async () => {
+		fetchName = async (access_token) => {
+			//console.log(access_token)
 			const headers = {
 				'Content-Type': 'application/json',
-				'Authorization': 'Bearer ' + this.state.accessToken
+				'Authorization': 'Bearer ' + access_token
 			}
 
 			const response = await axios.get('https://api.spotify.com/v1/me',{headers})
@@ -156,7 +177,7 @@ class Playlists extends React.Component{
 			if(response.status === 200) {
 		    	//console.log(response);
 		    	const data = await response.data
-		    	console.log(data)
+		    	//console.log(data)
 		    	this.setState({playlists: data})
 		    	this.setState({chunked_playlists: this.chunkPlaylists(data,3)})
 			}	
