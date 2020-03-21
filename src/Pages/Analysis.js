@@ -293,7 +293,7 @@ class Analysis extends React.Component {
               >
                 <ThemeProvider theme={button_theme}>
                   <Grid item>
-                      <a className="btn-lg btn-light" href={`${process.env.REACT_APP_BASE_URL}`}>Home</a>
+                      <a className="btn-lg btn-light" href={`${process.env.REACT_APP_REDIRECT_URI}`}>Analyze Another</a>
                   </Grid>
                 </ThemeProvider>
               </Grid>
