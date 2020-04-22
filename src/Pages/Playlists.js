@@ -7,7 +7,7 @@ import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 // Load custom components
 import Playlist from '../Components/Playlist'
 import Loader from '../Components/Loader'
-import loading_gif from '../images/loading.gif'
+import loading_gif from '../images/loading_bars.gif'
 
 //Load Material UI
 // Load in the materials-ui components
