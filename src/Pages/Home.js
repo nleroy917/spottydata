@@ -24,8 +24,9 @@ return(
 	        <br></br>
 	        <p className="lead">This site will analyze the songs in your Spotify playlists and display the data to you</p>
 	        <br></br>
-	  		<a className="btn-lg btn-light" href={authorize_url}>Let's Go</a>
-			<a className="btn-lg btn-light" href="https://paypal.me/nathanleroy?locale.x=en_US">Buy me a coffee ☕</a>
+	  		<a className="btn-lg btn-light" style={{marginRight: '5px', marginLeft: '5px'}}href={authorize_url}>Let's Go</a>
+			<a className="btn-lg btn-light" style={{marginRight: '5px', marginLeft: '5px'}}href="https://paypal.me/nathanleroy?locale.x=en_US">Buy me a coffee ☕</a>
+			<a className="btn-lg btn-light" style={{marginRight: '5px', marginLeft: '5px'}}href="https://github.com/NLeRoy917/spottydata">GitHub 🚀</a>
 	      </div>
 	    </div>
 	  </div>
