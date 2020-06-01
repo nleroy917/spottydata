@@ -2,6 +2,7 @@ import React from 'react';
 import Cookies from 'universal-cookie';
 import './css/Playlists.css';
 import blank_image from '../images/blank_playlist.png'
+import blank_profile from '../images/blank_profile.png'
 import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 
 // Load custom components
@@ -95,7 +96,6 @@ class Playlists extends React.Component{
   		}
 
   		componentDidMount() {
-  			//console.log(this.state.client_secret)
   			this.fetchAuthCode()
   			this.setState({authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code},() => {this.fetchAccessToken()})
   			//console.log(this.state.authCode)
@@ -228,7 +228,7 @@ class Playlists extends React.Component{
             <Grid item lg={2} xs={3}>
               <Card className={classes.profile_image}>
                 <CardActionArea>
-                  <a href={this.state.user.external_urls.spotify}>
+                  <a href={this.state.user.external_urls.spotify ? this.state.user.external_urls.spotify : blank_profile}>
                     <CardMedia
                       style = {{ height: 'auto', width: "max", paddingTop: '100%'}}
                       image={this.state.user.images[0].url}
