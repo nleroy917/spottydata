@@ -23,7 +23,7 @@
     "react-scripts": "3.3.0",
     "react-wordcloud": "^1.1.1",
     "sfcookies": "^1.0.2",
-    "styled-components": "^5.0.1",
+    "styled-components": "^5.1.1",
     "styled-theming": "^2.2.0",
     "tsutils": "^3.17.1",
     "universal-cookie": "^4.0.3"
