@@ -228,10 +228,10 @@ class Playlists extends React.Component{
             <Grid item lg={2} xs={3}>
               <Card className={classes.profile_image}>
                 <CardActionArea>
-                  <a href={this.state.user.external_urls.spotify ? this.state.user.external_urls.spotify : blank_profile}>
+                  <a href={this.state.user.external_urls.spotify}>
                     <CardMedia
                       style = {{ height: 'auto', width: "max", paddingTop: '100%'}}
-                      image={this.state.user.images[0].url}
+                      image={this.state.user.images[0].url ? this.state.user.images[0].url : blank_profile}
                       title={this.state.user.display_name}
                       justify="center"
                     />
