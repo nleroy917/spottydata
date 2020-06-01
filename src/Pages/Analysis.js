@@ -9,7 +9,7 @@ import TempoChart from '../Components/TempoChart'
 import DurationChart from '../Components/DurationChart'
 import LyricCloud from '../Components/LyricCloud'
 import Loader from '../Components/Loader'
-import loading_gif from '../images/loading_bars.gif'
+import loading_gif from '../images/loading.gif'
 
 // Load in the materials-ui components
 import Container from '@material-ui/core/Container';
