@@ -2,14 +2,21 @@
   height: 100vh;
   min-height: 500px;
   background-size: cover;
-  background-position: center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-repeat: no-repeat;
-  background: #2e2f32;
+  background: url('../../images/landing.jpg');
   color: #E6FAFC;
 }
 
 .home-background {
   width: 100vw;
   height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
 }
 
