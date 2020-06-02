@@ -22,7 +22,7 @@ class Loader extends React.Component{
   		render() {
   			return (
 	            <div>
-	              <img className="img-fluid" src={this.state.image} style={this.state.img_dimensions}/>
+	              <img className="img-fluid" src={this.state.image} style={this.state.img_dimensions} alt="Page is loading"/>
 	              <h5 style={{color:'#fff'}}>{this.state.message}</h5>
 	            </div>
   				);

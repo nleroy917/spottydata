@@ -16,6 +16,10 @@ class FeelChart extends React.Component{
                    fontColor: "white",
                    fontSize:1
                 },
+                gridLines: {
+                  color: 'white',
+                  fontColor: 'white'
+                },
             } ,
             legend: {
                 labels: {
@@ -29,13 +33,6 @@ class FeelChart extends React.Component{
                 display: true
              }
           },
-          scale: {
-            gridLines: {
-              color: 'white',
-              fontColor: 'white'
-            },
-
-        },
         labels: { fontColor: "#fff" }
       }
   		}

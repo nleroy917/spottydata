@@ -2,9 +2,6 @@ import React from 'react';
 import './css/KeyChart.css';
 import { Bar } from 'react-chartjs-2';
 
-// Change default color
-import { defaults } from 'react-chartjs-2';
-
 class KeyChart extends React.Component{
 
 		  constructor(props) {

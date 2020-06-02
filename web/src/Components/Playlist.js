@@ -1,18 +1,12 @@
 import React from 'react';
 import './css/Playlist.css';
-import { makeStyles } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/styles';
-import PropTypes from 'prop-types';
 import { createMuiTheme } from '@material-ui/core/styles';
-import styled, {ThemeProvider} from 'styled-components';
-import grey from '@material-ui/core/colors/grey';
+import {ThemeProvider} from 'styled-components';
 
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 

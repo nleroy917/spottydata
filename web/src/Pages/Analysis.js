@@ -17,19 +17,14 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader'
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 // Load styling
-import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import { createMuiTheme } from '@material-ui/core/styles';
-import styled, {ThemeProvider} from 'styled-components';
+import {ThemeProvider} from 'styled-components';
 
 // Import Vibrant.js
 import * as Vibrant from 'node-vibrant'
@@ -263,7 +258,6 @@ class Analysis extends React.Component {
                 direction="row"
                 justify="space-between"
                 alignItems="flex-start"
-                justify="center"
           >
             <Grid item lg={2} xs={3}>
               <Card className={classes.playlist_image}>
@@ -285,7 +279,7 @@ class Analysis extends React.Component {
                 <Typography variant={'h5'} align={'left'} style={{fontWeight: 100}}>{this.state.playlist.description}</Typography>
               </ThemeProvider>
             </Grid>
-            <Grid item lg={2} xs={12} alignItems="center">
+            <Grid item lg={2} xs={12}>
               <Grid container spacing={3}
                 direction="column"
                 justify="space-between"
@@ -299,7 +293,7 @@ class Analysis extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-          <hr style={{'border-color':'#212529'}}></hr>
+          <hr style={{'borderColor':'#212529'}}></hr>
 
 
           <Grid container spacing={2}
@@ -356,7 +350,7 @@ class Analysis extends React.Component {
             </Grid>
             <Grid item lg={4} s={6} xs={12}>
               <ChartContainer title="Genres">
-                {this.state.genre_data ? <GenreChart data={this.state.genre_data} palette={this.state.palette} palette={this.state.palette}/> : ' '}
+                {this.state.genre_data ? <GenreChart data={this.state.genre_data} palette={this.state.palette}/> : ' '}
               </ChartContainer>
             </Grid>
             <Grid item lg={4} s={6} xs={12}>

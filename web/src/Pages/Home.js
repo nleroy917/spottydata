@@ -79,10 +79,10 @@ return(
               <NewButton variant="outlined">Lets Go</NewButton>
             </ButtonWrapper>
 			<ButtonWrapper href="https://paypal.me/nathanleroy?locale.x=en_US">
-              <NewButton variant="outlined">Buy me a coffee ☕</NewButton>
+              <NewButton variant="outlined">Buy me a coffee <span>&nbsp;&nbsp;☕</span></NewButton>
             </ButtonWrapper>
 			<ButtonWrapper href="https://github.com/NLeRoy917/spottydata">
-              <NewButton variant="outlined">GitHub  🚀</NewButton>
+              <NewButton variant="outlined">GitHub  <span> &nbsp;&nbsp;&nbsp;🚀</span></NewButton>
             </ButtonWrapper>
 	      </div>
 	    </div>

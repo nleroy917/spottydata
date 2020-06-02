@@ -3,7 +3,6 @@ import Cookies from 'universal-cookie';
 import './css/Playlists.css';
 import blank_image from '../images/blank_playlist.png'
 import blank_profile from '../images/blank_profile.png'
-import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 
 // Load custom components
 import Playlist from '../Components/Playlist'
@@ -14,23 +13,17 @@ import loading_gif from '../images/loading.gif'
 // Load in the materials-ui components
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader'
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 // Load styling
 import FadeIn from 'react-fade-in';
-import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import { createMuiTheme } from '@material-ui/core/styles';
-import styled, {ThemeProvider} from 'styled-components';
+import {ThemeProvider} from 'styled-components';
 
 // Set axios, querystring, and cookies objects
 const axios = require('axios').default;
@@ -99,7 +92,35 @@ class Playlists extends React.Component{
   			this.fetchAuthCode()
   			this.setState({authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code},() => {this.fetchAccessToken()})
   			//console.log(this.state.authCode)
-  		}
+		  }
+		  
+		refreshToken = async () => {
+			console.log('Refreshing token')
+			const headers = {
+				'Content-Type': 'application/x-www-form-urlencoded',
+				'Authorization': 'Basic ' + btoa(this.state.client_id + ':' + this.state.client_secret)
+			}
+
+			const body = {
+				grant_type: 'refresh_token',
+				refresh_token: cookies.get('refreshToken')
+			}
+
+			const response = await axios.post('https://accounts.spotify.com/api/token', querystring.stringify(body), {headers: headers})
+			if(response.status === 200) {
+				console.log('Access token refreshed')
+				const data = await response.data
+
+				this.setState({refreshToken: data.refresh_token})
+				this.setState({expiresIn: data.expires_in})
+				this.setState({accessToken: data.access_token})
+
+				cookies.set('refreshToken',data.refresh_token,{path: '/'})
+				cookies.set('expiresIn',data.expires_in,{path: '/'})
+				cookies.set('accessToken',data.access_token,{ path: '/' })
+			}
+
+		}
 
   		fetchAuthCode = () => {
   			/*
@@ -114,12 +135,12 @@ class Playlists extends React.Component{
 
 		fetchAccessToken = async () => {
 			/*
-			The access token should be found, set, and stored as a cookie for later use - if the access token can be found as a cookie...
-			dont even try to go thru the process of getting another one - since the auth code is no longer valid.
+			The access token and refresh token should be found, set, and stored as a cookie for later use - if the refresh token can be found as a cookie...
+			dont even try to go thru the process of getting another one - since the auth code is no longer valid - simply refresh access code and continue.
 			*/
 
 			if (cookies.get('accessToken')) {
-				//console.log(cookies.get('accessToken'))
+				//console.log(cookies.get('accessToken')
 				this.setState({accessToken: cookies.get('accessToken')})
 				this.fetchName(cookies.get('accessToken'))
 
@@ -140,7 +161,12 @@ class Playlists extends React.Component{
 				if(response.status === 200) {
 					//console.log(response)
 					const data = await response.data
+					this.setState({refreshToken: data.refresh_token})
+					this.setState({expiresIn: data.expires_in})
 					this.setState({accessToken: data.access_token})
+
+					cookies.set('refreshToken',data.refresh_token,{path: '/'})
+					cookies.set('expiresIn',data.expires_in,{path: '/'})
 					cookies.set('accessToken',data.access_token,{ path: '/' })
 					this.fetchName(this.state.accessToken)
 
@@ -162,6 +188,10 @@ class Playlists extends React.Component{
 		    	const data = await response.data
 		    	this.setState({user: data})
 		    	this.fetchPlaylists()
+			} else if(response.status === 401) {
+				/* This indicates a bad access token probably... need to refresh*/
+				this.refreshToken()
+				this.fetchName()
 			}
 
 		}
@@ -223,7 +253,6 @@ class Playlists extends React.Component{
                 direction="row"
                 justify="space-between"
                 alignItems="flex-start"
-                justify="center"
           >
             <Grid item lg={2} xs={3}>
               <Card className={classes.profile_image}>
@@ -246,14 +275,14 @@ class Playlists extends React.Component{
               </ThemeProvider>
             </Grid>
           </Grid>
-          <hr style={{'border-color':'#212529'}}></hr>
+          <hr style={{'borderColor':'#212529'}}></hr>
           <div className="justify-content-center">
-				{this.state.chunked_playlists ? this.state.chunked_playlists.map((chunk) => {
+				{this.state.chunked_playlists ? this.state.chunked_playlists.map((chunk,key) => {
 				return(
-					<div className="justify-content-center row card-row">
+					<div className="justify-content-center row card-row" key={key}>
 						{chunk.map((playlist,key) => {
 							return (
-								<div className="col-md-3 card-col">
+								<div className="col-md-3 card-col" key={key}>
 									<FadeIn transitionDuration={1000}>
 										<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : {blank_image}} id={playlist.id} token={this.state.accessToken} desc={playlist.description} authCode={this.state.authCode}/>
 									</FadeIn>
