@@ -29,7 +29,9 @@ const ButtonWrapper = styled.a`
 const NewButton = styled(Button)`
   && {
 	@media (max-width: 768px) {
-    margin:15px;
+	margin:15px;
+	width: 60vw;
+	height: 60px;
   }
 	margin: 30px;
 	color: inherit;
@@ -71,7 +73,7 @@ return(
 	      <div className="col-12 text-center">
 	        <LandingText variant="h2">Welcome to SpottyData</LandingText>
 	        <br></br>
-	        <p className="lead">This site will analyze the songs in your Spotify playlists and display the data to you</p>
+	        <p className="lead">This site will analyze the songs in your Spotify playlists and display the data to you.</p>
 	        <br></br>
 			<ButtonWrapper href={authorize_url}>
               <NewButton variant="outlined">Lets Go</NewButton>
@@ -82,9 +84,6 @@ return(
 			<ButtonWrapper href="https://github.com/NLeRoy917/spottydata">
               <NewButton variant="outlined">GitHub  🚀</NewButton>
             </ButtonWrapper>
-	  		{/* <a className="btn-lg btn-light" style={{marginRight: '5px', marginLeft: '5px'}}href={authorize_url}>Let's Go</a>
-			<a className="btn-lg btn-light" style={{marginRight: '5px', marginLeft: '5px'}}href="https://paypal.me/nathanleroy?locale.x=en_US">Buy me a coffee ☕</a>
-			<a className="btn-lg btn-light" style={{marginRight: '5px', marginLeft: '5px'}}href="https://github.com/NLeRoy917/spottydata">GitHub 🚀</a> */}
 	      </div>
 	    </div>
 	  </div>
