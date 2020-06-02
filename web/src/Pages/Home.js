@@ -74,6 +74,7 @@ const authorize_url = base_url + querystring.stringify(payload)
 const Home = () => {
 
 return(
+	<>
 	<header className="masthead home-background">
 	  <div className="container h-100">
 	    <div className="row h-100 align-items-center">
@@ -97,6 +98,8 @@ return(
 	    </div>
 	  </div>
 	</header>
+	
+	</>
 )
 }
 

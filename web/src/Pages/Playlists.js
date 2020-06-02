@@ -235,8 +235,8 @@ class Playlists extends React.Component{
 				}
 			} catch(err){
 				this.setState({accessTokenError: true})
-				cookies.delete('accessToken')
-				cookies.delete('refreshToken')
+				cookies.remove('accessToken')
+				cookies.remove('refreshToken')
 			}
 			}
 		}
@@ -324,8 +324,10 @@ class Playlists extends React.Component{
         <Container>
           <Grid container spacing={3}
                 direction="row"
-                justify="space-between"
+                justify="center"
                 alignItems="flex-start"
+				style={{width: '100%'}}
+				spacing={10}
           >
             <Grid item lg={2} xs={3}>
               <Card className={classes.profile_image}>
@@ -343,8 +345,17 @@ class Playlists extends React.Component{
             </Grid>
             <Grid item lg={8} xs={9}>
               <ThemeProvider theme={title_theme}>
+			  <div style={{textAlign: 'left !important'}}>
                 <Typography variant={'h3'} align={'left'} style={{fontWeight: 400}}>Welcome {this.state.user.display_name}!</Typography>
                 <Typography variant={'h5'} align={'left'} style={{fontWeight: 100}}>Please select a playlist to continue.</Typography>
+			  </div>
+			  <div  style={{textAlign: 'left', width: '100%'}}>
+			  <ButtonWrapper>
+				  <NewButton href={process.env.REACT_APP_BASE_URL}>
+					  Home
+				  </NewButton>
+			  </ButtonWrapper>
+			  </div>
               </ThemeProvider>
             </Grid>
           </Grid>
