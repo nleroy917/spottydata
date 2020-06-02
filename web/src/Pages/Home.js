@@ -50,6 +50,13 @@ const NewButton = styled(Button)`
   }
 `
 
+const CookieNotice = styled(Typography)`
+
+  color: black !important;
+  font-weight: 400 !important;
+
+`
+
 const querystring = require('querystring');
 const base_url =  'https://accounts.spotify.com/authorize?'
 const payload = {
@@ -84,6 +91,8 @@ return(
 			<ButtonWrapper href="https://github.com/NLeRoy917/spottydata">
               <NewButton variant="outlined">GitHub  <span> &nbsp;&nbsp;&nbsp;🚀</span></NewButton>
             </ButtonWrapper>
+			<br></br>
+			<CookieNotice variant="h6">If having trouble with playlists or tracks never loading... Delete your cookies for the site and retry!</CookieNotice>
 	      </div>
 	    </div>
 	  </div>
