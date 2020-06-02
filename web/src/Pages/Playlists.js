@@ -1,5 +1,6 @@
 import React from 'react';
 import Cookies from 'universal-cookie';
+import styled from 'styled-components'
 import './css/Playlists.css';
 import blank_image from '../images/blank_playlist.png'
 import blank_profile from '../images/blank_profile.png'
@@ -17,6 +18,7 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 // Load styling
 import FadeIn from 'react-fade-in';
@@ -30,6 +32,44 @@ const axios = require('axios').default;
 const querystring = require('querystring');
 const cookies = new Cookies();
 
+const ButtonWrapper = styled.a`
+    color: inherit;
+    height:100%;
+    text-decoration: none;
+    &:focus {
+        text-decoration: none;
+    }
+    &:active {
+        text-decoration: none;
+	}
+	&:hover {
+        text-decoration: none;
+    }
+`
+
+const NewButton = styled(Button)`
+  && {
+	@media (max-width: 768px) {
+	margin:15px;
+	width: 60vw;
+	height: 60px;
+  }
+	margin: 30px;
+	color: inherit;
+	width: 150px;
+	height: 50px;
+	border-radius: 0px;
+	border: solid 1px white;
+	box-shadow: 4px 4px;
+	&:hover {
+		color: white;
+		transform: translate(1px,1px);
+		opacity: 0.7;
+		text-decoration: none;
+		box-shadow: 2px 2px;
+    }
+  }
+`
 
 const styles = theme => ({
   profile_image: {
@@ -90,14 +130,14 @@ class Playlists extends React.Component{
 
   		componentDidMount() {
   			this.fetchAuthCode()
-  			this.setState({authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code},() => {this.fetchAccessToken()})
+  			this.setState({authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code})
   			//console.log(this.state.authCode)
 		  }
 		  
 		refreshToken = async () => {
-			console.log('Refreshing token')
+			//console.log('Refreshing token')
+			//console.log(cookies.get('refreshToken'))
 			const headers = {
-				'Content-Type': 'application/x-www-form-urlencoded',
 				'Authorization': 'Basic ' + btoa(this.state.client_id + ':' + this.state.client_secret)
 			}
 
@@ -105,20 +145,33 @@ class Playlists extends React.Component{
 				grant_type: 'refresh_token',
 				refresh_token: cookies.get('refreshToken')
 			}
-
+			try {
 			const response = await axios.post('https://accounts.spotify.com/api/token', querystring.stringify(body), {headers: headers})
 			if(response.status === 200) {
-				console.log('Access token refreshed')
+				//console.log('Access token refreshed')
 				const data = await response.data
+				//console.log(data)
 
-				this.setState({refreshToken: data.refresh_token})
+				if(data.refresh_token !== undefined){
+					this.setState({refreshToken: data.refresh_token})
+				}
 				this.setState({expiresIn: data.expires_in})
 				this.setState({accessToken: data.access_token})
 
-				cookies.set('refreshToken',data.refresh_token,{path: '/'})
-				cookies.set('expiresIn',data.expires_in,{path: '/'})
-				cookies.set('accessToken',data.access_token,{ path: '/' })
+				if(data.refresh_token !== undefined){
+					cookies.set('refreshToken',data.refresh_token,{path: '/'})
+				} else {
+					cookies.remove('refreshToken')
+				}
+
+				cookies.set('expiresIn',data.expires_in,{path: '/', expires: new Date(Date.now()+ data.expires_in*1000)})
+				cookies.set('accessToken',data.access_token,{ path: '/', expires: new Date(Date.now()+ data.expires_in*1000)})
+
+				this.fetchName(this.state.accessToken)
 			}
+		} catch(err) {
+			this.setState({accessTokenError: true})
+		}
 
 		}
 
@@ -140,11 +193,17 @@ class Playlists extends React.Component{
 			*/
 
 			if (cookies.get('accessToken')) {
-				//console.log(cookies.get('accessToken')
+				//console.log(cookies.get('accessToken'))
 				this.setState({accessToken: cookies.get('accessToken')})
 				this.fetchName(cookies.get('accessToken'))
 
+			} else if(cookies.get('refreshToken')){
+				//console.log('refresh token found in cookies')
+				this.refreshToken()
+
 			} else {
+
+				//console.log('No access token or refresh token found in cookies')
 				const headers = {
 					'Content-Type': 'application/x-www-form-urlencoded',
 					'Authorization': 'Basic ' + btoa(this.state.client_id + ':' + this.state.client_secret)
@@ -155,9 +214,9 @@ class Playlists extends React.Component{
 					code: this.state.authCode,
 					redirect_uri: this.state.redirect_uri
 				}
-
+				try{
 				const response = await axios.post('https://accounts.spotify.com/api/token',querystring.stringify(body),{headers: headers})
-
+				
 				if(response.status === 200) {
 					//console.log(response)
 					const data = await response.data
@@ -166,12 +225,15 @@ class Playlists extends React.Component{
 					this.setState({accessToken: data.access_token})
 
 					cookies.set('refreshToken',data.refresh_token,{path: '/'})
-					cookies.set('expiresIn',data.expires_in,{path: '/'})
-					cookies.set('accessToken',data.access_token,{ path: '/' })
+					cookies.set('expiresIn',data.expires_in,{path: '/', expires: new Date(Date.now()+ data.expires_in*1000)})
+					cookies.set('accessToken',data.access_token,{ path: '/', expires: new Date(Date.now()+ data.expires_in*1000)})
 					this.fetchName(this.state.accessToken)
 
 					return data.access_token
 				}
+			} catch(err){
+				this.setState({accessTokenError: true})
+			}
 			}
 		}
 
@@ -182,17 +244,19 @@ class Playlists extends React.Component{
 				'Authorization': 'Bearer ' + access_token
 			}
 
+			try{
 			const response = await axios.get('https://api.spotify.com/v1/me',{headers})
+			
 			if(response.status === 200) {
 		    	//console.log(response) 
 		    	const data = await response.data
 		    	this.setState({user: data})
 		    	this.fetchPlaylists()
-			} else if(response.status === 401) {
+			}
+		} catch(response) {
 				/* This indicates a bad access token probably... need to refresh*/
 				this.refreshToken()
-				this.fetchName()
-			}
+		}
 
 		}
 
@@ -296,6 +360,18 @@ class Playlists extends React.Component{
         <br></br>
         </div>
 				);}
+		else if(this.state.accessTokenError) {
+			return(
+			<div>
+			<br>
+			</br>
+			<br></br>
+			<Typography variant="h4">Token Error :( Please go back to the home page</Typography>
+			<ButtonWrapper href={process.env.REACT_APP_BASE_URL}>
+              <NewButton variant="outlined"><span> Take me back! </span></NewButton>
+            </ButtonWrapper>
+			</div>)
+		}
 		else{
 			return(<Loader image={loading_gif} message="Fetching Playlists..."/>);
 		}
