@@ -279,7 +279,7 @@ class Playlists extends React.Component{
 		} catch(err) {
 			cookies.remove('acccessToken')
 			cookies.remove('refreshToken')
-		}
+			}
 		}
 
 		chunkPlaylists(playlists,cols) {
