@@ -1,6 +1,7 @@
 import React from 'react';
 import Cookies from 'universal-cookie';
 import styled from 'styled-components'
+import {isMobile} from 'react-device-detect'
 import './css/Playlists.css';
 import blank_image from '../images/blank_playlist.png'
 import blank_profile from '../images/blank_profile.png'
@@ -322,36 +323,31 @@ class Playlists extends React.Component{
 		<div>
         <br></br>
         <Container>
-          <Grid container spacing={3}
+          <Grid container
                 direction="row"
                 justify="center"
-                alignItems="flex-start"
-				style={{width: '100%'}}
+                alignItems={isMobile ? "center" : "flex-start"}
+				style={{width: '100%', textAlignLast: 'center', margin: isMobile ? 0 : ''}}
 				spacing={10}
           >
-            <Grid item lg={2} xs={3}>
-              <Card className={classes.profile_image}>
-                <CardActionArea>
+            <Grid item lg={3} xs={12} style={{padding: isMobile ? 5 : ''}}>
                   <a href={this.state.user.external_urls.spotify}>
-                    <CardMedia
-                      style = {{ height: 'auto', width: "max", paddingTop: '100%'}}
-                      image={this.state.user.images[0] ? this.state.user.images[0].url : blank_profile}
-                      title={this.state.user.display_name}
-                      justify="center"
-                    />
+				  <img
+				  	  style={{width: '75%', maxWidth: '300px'}}
+                      src={this.state.user.images[0] ? this.state.user.images[0].url : blank_profile}
+                      alt={this.state.user.display_name}
+                  />
                   </a>
-                </CardActionArea>
-              </Card>
             </Grid>
-            <Grid item lg={8} xs={9}>
+            <Grid item lg={8} xs={12} style={{width:'100%', padding: isMobile ? 5 : ''}}>
               <ThemeProvider theme={title_theme}>
 			  <div style={{textAlign: 'left !important'}}>
-                <Typography variant={'h3'} align={'left'} style={{fontWeight: 400}}>Welcome {this.state.user.display_name}!</Typography>
-                <Typography variant={'h5'} align={'left'} style={{fontWeight: 100}}>Please select a playlist to continue.</Typography>
+                <Typography variant={isMobile ? 'h5' : 'h3'} align={'left'} style={{fontWeight: 400}}>Welcome {this.state.user.display_name}!</Typography>
+                <Typography variant={isMobile ? 'body1' : 'h5'} align={'left'} style={{fontWeight: 100}}>Please select a playlist to continue.</Typography>
 			  </div>
 			  <div  style={{textAlign: 'left', width: '100%'}}>
-			  <ButtonWrapper>
-				  <NewButton href={process.env.REACT_APP_BASE_URL}>
+			  <ButtonWrapper >
+				  <NewButton style={{marginLeft: '0'}} href={process.env.REACT_APP_BASE_URL}>
 					  Home
 				  </NewButton>
 			  </ButtonWrapper>
