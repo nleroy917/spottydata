@@ -276,7 +276,7 @@ class Playlists extends React.Component{
 		    	this.setState({playlists: data})
 		    	this.setState({chunked_playlists: this.chunkPlaylists(data,3)})
 			}
-		} catch(err) {
+			} catch(err) {
 			cookies.remove('acccessToken')
 			cookies.remove('refreshToken')
 			}

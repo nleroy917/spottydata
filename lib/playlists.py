@@ -47,7 +47,7 @@ def add_to_playlist(playlist_id,track_uris,auth_header):
 
 def get_tracks(playlist_id,auth_header):
 
-    for i in range(100):
+    for i in range(10):
         response = requests.get('https://api.spotify.com/v1/playlists/{}/tracks'.format(playlist_id),
                                 headers=auth_header)
         if response.status_code == 200:

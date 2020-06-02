@@ -14,7 +14,7 @@ class FeelChart extends React.Component{
               scale:{
                 pointLabels:{
                    fontColor: "white",
-                   fontSize:1
+                   fontSize:10
                 },
                 gridLines: {
                   color: 'white',
