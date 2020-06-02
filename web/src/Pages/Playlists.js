@@ -171,6 +171,8 @@ class Playlists extends React.Component{
 			}
 		} catch(err) {
 			this.setState({accessTokenError: true})
+			cookies.delete('accessToken')
+			cookies.delete('refreshToken')
 		}
 
 		}
