@@ -260,7 +260,7 @@ class Playlists extends React.Component{
                   <a href={this.state.user.external_urls.spotify}>
                     <CardMedia
                       style = {{ height: 'auto', width: "max", paddingTop: '100%'}}
-                      image={this.state.user.images[0].url ? this.state.user.images[0].url : blank_profile}
+                      image={this.state.user.images[0] ? this.state.user.images[0].url : blank_profile}
                       title={this.state.user.display_name}
                       justify="center"
                     />
