@@ -1,5 +1,6 @@
 // load core react + custom components
 import React from 'react';
+import styled from 'styled-components'
 import './css/Analysis.css';
 import ChartContainer from '../Components/ChartContainer'
 import KeyChart from '../Components/KeyChart'
@@ -19,6 +20,7 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 // Load styling
 import { withStyles } from '@material-ui/styles';
@@ -34,6 +36,45 @@ const axios = require('axios').default;
 
 const URL_BASE = 'https://spottydata-api.herokuapp.com/'
 //const URL_BASE = 'http://127.0.0.1:5000/'
+
+const ButtonWrapper = styled.a`
+    color: inherit;
+    height:100%;
+    text-decoration: none;
+    &:focus {
+        text-decoration: none;
+    }
+    &:active {
+        text-decoration: none;
+	}
+	&:hover {
+        text-decoration: none;
+    }
+`
+
+const NewButton = styled(Button)`
+  && {
+	@media (max-width: 768px) {
+	margin:15px;
+	width: 60vw;
+	height: 60px;
+  }
+	margin: 30px;
+	color: inherit;
+	width: 150px;
+	height: 50px;
+	border-radius: 0px;
+	border: solid 1px white;
+	box-shadow: 4px 4px;
+	&:hover {
+		color: white;
+		transform: translate(1px,1px);
+		opacity: 0.7;
+		text-decoration: none;
+		box-shadow: 2px 2px;
+    }
+  }
+`
 
 const styles = theme => ({
   playlist_image: {
@@ -282,12 +323,22 @@ class Analysis extends React.Component {
             <Grid item lg={2} xs={12}>
               <Grid container spacing={3}
                 direction="column"
-                justify="space-between"
+                justify="center"
                 alignItems="center"
               >
                 <ThemeProvider theme={button_theme}>
                   <Grid item>
-                      <a className="btn-lg btn-light" href={`${process.env.REACT_APP_REDIRECT_URI}`}>Analyze Another</a>
+                  <ButtonWrapper>
+                    <NewButton href={`${process.env.REACT_APP_REDIRECT_URI}`}>
+                      Analyze Another
+                    </NewButton>
+                  </ButtonWrapper>
+                  <ButtonWrapper>
+                    <NewButton href={`${process.env.REACT_APP_BASE_URL}`}>
+                      Home
+                    </NewButton>
+                  </ButtonWrapper>
+                      {/* //<a className="btn-lg btn-light" href={`${process.env.REACT_APP_REDIRECT_URI}`}>Analyze Another</a> */}
                   </Grid>
                 </ThemeProvider>
               </Grid>
