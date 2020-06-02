@@ -12,10 +12,6 @@ const LandingText = styled(Typography)`
 `
 
 const ButtonWrapper = styled.a`
-	margin-left: 20px;
-	margin-right: 20px;
-	margin-top: 20px;
-	margin-bottom: 20px;
     color: inherit;
     height:100%;
     text-decoration: none;
@@ -32,7 +28,10 @@ const ButtonWrapper = styled.a`
 
 const NewButton = styled(Button)`
   && {
-	margin: 10px;
+	@media (max-width: 768px) {
+    margin:15px;
+  }
+	margin: 30px;
 	color: inherit;
 	width: 150px;
 	height: 50px;
