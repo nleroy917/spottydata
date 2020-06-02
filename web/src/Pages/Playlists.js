@@ -127,7 +127,7 @@ class Playlists extends React.Component{
 
     		};
   		}
-
+		
   		componentDidMount() {
   			this.fetchAuthCode()
   			this.setState({authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code})
@@ -267,6 +267,7 @@ class Playlists extends React.Component{
 			}
 			//console.log('token: ' + this.state.accessToken)
 
+			try {
 			const response = await axios.get('https://spottydata-api.herokuapp.com/' + this.state.user.id + '/playlists',{headers})
 			if(response.status === 200) {
 		    	//console.log(response);
@@ -274,7 +275,11 @@ class Playlists extends React.Component{
 		    	//console.log(data)
 		    	this.setState({playlists: data})
 		    	this.setState({chunked_playlists: this.chunkPlaylists(data,3)})
-			}	
+			}
+		} catch(err) {
+			cookies.remove('acccessToken')
+			cookies.remove('refreshToken')
+		}
 		}
 
 		chunkPlaylists(playlists,cols) {
