@@ -22,6 +22,7 @@
     "react-fade-in": "^0.1.8",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
+    "react-typist": "^2.0.5",
     "react-wordcloud": "^1.1.1",
     "sfcookies": "^1.0.2",
     "styled-components": "^5.1.1",

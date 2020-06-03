@@ -1,6 +1,10 @@
 import React from 'react';
-import './css/Layout.css';
 import styled from 'styled-components'
+
+import Typist from 'react-typist';
+import './css/Typist.css'
+
+import Layout from '../Components/Layout'
 
 import {
 Typography,
@@ -8,13 +12,35 @@ Button,
 Grid
 } from '@material-ui/core';
 
-const Layout = styled.div`
-	padding-left: 100px;
-	padding-right: 100px;
+const AnalysisText = styled.p`
+	font-size:1.32rem;
+	display: inline;
+`
+
+const Footer = styled.footer`
+	margin-left:200px;
+	margin-right:200px;
+	opacity: 0.9;
 	@media (max-width: 768px) {
-		padding: 10px;
+		margin:5px;
+		font-size: 0.7rem;
   }
 
+`
+
+const FooterLink = styled.a`
+	color: inherit;
+    height:100%;
+    text-decoration: none;
+    &:focus {
+        text-decoration: none;
+    }
+    &:active {
+        text-decoration: none;
+	}
+	&:hover {
+        text-decoration: none;
+    }
 `
 
 const LandingText = styled(Typography)`
@@ -86,7 +112,7 @@ const Home = () => {
 
 return(
 	<>
-	<Layout className="masthead home-background">
+	<Layout>
 	<Grid container
 		direction="column"
 		justify="center"
@@ -94,26 +120,62 @@ return(
 		style={{width: '100%', height:'90vh'}}
 	>
 	<Grid item>
-	        <LandingText variant="h2">Welcome to SpottyData</LandingText>
-	        <br></br>
-	        <p className="lead">This site will analyze the songs in your Spotify playlists and display the data to you.</p>
-	        <br></br>
-			<ButtonWrapper href={authorize_url}>
+	  <LandingText variant="h2">Welcome to SpottyData</LandingText>
+	      <br></br>
+		  <span>
+	        
+			<Typist
+			avgTypingDelay={70}
+        	startDelay={1000}
+        	cursor={{blink:true,hideWhenDone: true,hideWhenDoneDelay: 1000,}}
+			>
+					<AnalysisText className="lead">Analyze your playlist's:</AnalysisText>
+				<Typist.Delay ms={500} />
+					<AnalysisText>&nbsp;Tempo</AnalysisText>
+				<Typist.Delay ms={500} />
+				<Typist.Backspace count={5} delay={200}/>
+				<Typist.Delay ms={500} />
+					<AnalysisText>&nbsp;Modality</AnalysisText>
+				<Typist.Delay ms={500} />
+				<Typist.Backspace count={8} delay={200}/>
+				<Typist.Delay ms={500} />
+					<AnalysisText>&nbsp;Lyrics</AnalysisText>
+				<Typist.Delay ms={500} />
+				<Typist.Backspace count={8} delay={200}/>
+				<Typist.Delay ms={500} />
+					<AnalysisText><em>&nbsp;Anything</em></AnalysisText>
+			</Typist>
+		  </span>
+	        <ButtonWrapper href={authorize_url}>
               <NewButton variant="outlined">Lets Go</NewButton>
             </ButtonWrapper>
-			<ButtonWrapper href="https://paypal.me/nathanleroy?locale.x=en_US">
-              <NewButton variant="outlined">Buy me a coffee <span>&nbsp;&nbsp;☕</span></NewButton>
-            </ButtonWrapper>
 			<ButtonWrapper href="https://github.com/NLeRoy917/spottydata">
-              <NewButton variant="outlined">GitHub  <span> &nbsp;&nbsp;&nbsp;🚀</span></NewButton>
+              <NewButton variant="outlined">GitHub  <span style={{fontSize: '1.3rem'}}> &nbsp;&nbsp;&nbsp;🚀</span></NewButton>
             </ButtonWrapper>
-			<br></br>
-			<br></br>
-			<CookieNotice variant="h6"><em>If having trouble with playlists or tracks never loading... Delete your cookies for the site and retry!</em></CookieNotice>
+	        <ButtonWrapper href="https://paypal.me/nathanleroy?locale.x=en_US">
+              <NewButton variant="outlined">Buy me a coffee <span style={{fontSize: '1.5rem'}}>&nbsp;&nbsp;☕</span></NewButton>
+            </ButtonWrapper>
+	      <br></br>
+	    <br></br>
 		</Grid>
 	</Grid>
+	<Footer>
+	  <Grid container
+	  	direction="row"
+		justify="space-between"
+		alignItems="center"
+		style={{width: '100%'}}
+		>
+			<Grid item>
+				Created by <FooterLink href="https://twitter.com/NathanJLeRoy">Nathan LeRoy</FooterLink>
+			</Grid>
+			<Grid item>
+				© 2020
+			</Grid>
+
+		</Grid>
+	</Footer>
 	</Layout>
-	
 	</>
 )
 }
