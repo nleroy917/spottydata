@@ -2,7 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Heroku](https://heroku-badge.herokuapp.com/?app=spottydata)
 ![SpottyData](./static/imgs/spotty_header.png)
-This is a website that attempts to push my original [Spotify Playlist Analyzer Python Project](https://github.com/NLeRoy917/spotify-playlist-analyzer) to the web. It lets you choose a playlis and then analyze many of the musical elements like: Tempo, Duration, Modality, Genres, etc. Powered by Flask and React, it simply interfaces the Spotify API to provide you with the most interesting and clean data.
+This is a website that attempts to push my original [Spotify Playlist Analyzer Python Project](https://github.com/NLeRoy917/spotify-playlist-analyzer) to the web. It lets you choose a playlist, and then analyze many of the musical elements like: Tempo, Duration, Modality, Genres, etc. Powered by Flask and React, it simply interfaces the Spotify API to provide you with the most interesting and clean data.
 
 [Link to current production build](https://spottydata.com)
 
