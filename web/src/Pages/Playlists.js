@@ -324,10 +324,10 @@ class Playlists extends React.Component{
         <br></br>
         <Container>
           <Grid container
-                direction="row"
+                direction={isMobile ? "column" : "row"}
                 justify="center"
                 alignItems={isMobile ? "center" : "flex-start"}
-				style={{width: '100%', textAlignLast: 'center', margin: isMobile ? 0 : ''}}
+				style={{width: '100%', margin: isMobile ? 0 : ''}}
 				spacing={10}
           >
             <Grid item lg={3} xs={12} style={{padding: isMobile ? 5 : ''}}>
@@ -339,13 +339,13 @@ class Playlists extends React.Component{
                   />
                   </a>
             </Grid>
-            <Grid item lg={8} xs={12} style={{width:'100%', padding: isMobile ? 5 : ''}}>
+            <Grid container justify={isMobile ? "center" : "flex-start"} item lg={8} xs={12} style={{width:'100%', padding: isMobile ? 5 : ''}}>
               <ThemeProvider theme={title_theme}>
 			  <div style={{textAlign: 'left !important'}}>
-                <Typography variant={isMobile ? 'h5' : 'h3'} align={'left'} style={{fontWeight: 400}}>Welcome {this.state.user.display_name}!</Typography>
-                <Typography variant={isMobile ? 'body1' : 'h5'} align={'left'} style={{fontWeight: 100}}>Please select a playlist to continue.</Typography>
+                <Typography variant={isMobile ? 'h5' : 'h3'} align={'left'} style={{fontWeight: 400, textAlign: isMobile ? 'center !important' : 'left !important'}}>Welcome {this.state.user.display_name}!</Typography>
+                <Typography variant={isMobile ? 'body1' : 'h5'} align={'left'} style={{fontWeight: 100, textAlign: isMobile ? 'center !important' : 'left !important'}}>Please select a playlist to continue.</Typography>
 			  </div>
-			  <div  style={{textAlign: 'left', width: '100%'}}>
+			  <div  style={{textAlign: isMobile ? 'center':'left', width: '100%'}}>
 			  <ButtonWrapper >
 				  <NewButton style={{marginLeft: '0'}} href={process.env.REACT_APP_BASE_URL}>
 					  Home
