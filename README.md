@@ -1,4 +1,5 @@
 # SpottyData.com
+![SpottyData](./static/imgs/spotty_header.png)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Heroku](https://heroku-badge.herokuapp.com/?app=spottydata)
 ---
