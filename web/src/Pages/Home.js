@@ -50,7 +50,7 @@ const LandingText = styled(Typography)`
 const ButtonWrapper = styled.a`
     color: inherit;
     height:100%;
-    text-decoration: none;
+    text-decoration: none !important;
     &:focus {
         text-decoration: none;
     }
@@ -129,21 +129,21 @@ return(
         	startDelay={1000}
         	cursor={{blink:true,hideWhenDone: true,hideWhenDoneDelay: 1000,}}
 			>
-					<AnalysisText className="lead">Analyze your playlist's:</AnalysisText>
+					<AnalysisText className="lead">Analyze your playlist:</AnalysisText>
 				<Typist.Delay ms={500} />
-					<AnalysisText>&nbsp;Tempo</AnalysisText>
+					<AnalysisText>&nbsp;Tempo.</AnalysisText>
 				<Typist.Delay ms={500} />
-				<Typist.Backspace count={5} delay={200}/>
+				<Typist.Backspace count={6} delay={200}/>
 				<Typist.Delay ms={500} />
-					<AnalysisText>&nbsp;Modality</AnalysisText>
+					<AnalysisText>&nbsp;Modality.</AnalysisText>
 				<Typist.Delay ms={500} />
-				<Typist.Backspace count={8} delay={200}/>
+				<Typist.Backspace count={9} delay={200}/>
 				<Typist.Delay ms={500} />
-					<AnalysisText>&nbsp;Lyrics</AnalysisText>
+					<AnalysisText>&nbsp;Lyrics.</AnalysisText>
 				<Typist.Delay ms={500} />
-				<Typist.Backspace count={8} delay={200}/>
+				<Typist.Backspace count={9} delay={200}/>
 				<Typist.Delay ms={500} />
-					<AnalysisText><em>&nbsp;Anything</em></AnalysisText>
+					<AnalysisText><em>&nbsp;For free.</em></AnalysisText>
 			</Typist>
 		  </span>
 	        <ButtonWrapper href={authorize_url}>
@@ -164,15 +164,17 @@ return(
 	  	direction="row"
 		justify="space-between"
 		alignItems="center"
-		style={{width: '100%'}}
+		style={{width: '100%', textAlign: 'center'}}
 		>
-			<Grid item>
+			<Grid item lg={4} xs={12} style={{width: '100%'}}>
 				Created by <FooterLink href="https://twitter.com/NathanJLeRoy">Nathan LeRoy</FooterLink>
 			</Grid>
-			<Grid item>
+			<Grid item lg={4} xs={12} style={{width: '100%'}}>
 				© 2020
 			</Grid>
-
+			<Grid item lg={4} xs={12} style={{width: '100%'}}>
+				<FooterLink href="https://github.com/NLeRoy917/spottydata/issues">Report an issue</FooterLink>
+			</Grid>
 		</Grid>
 	</Footer>
 	</Layout>
