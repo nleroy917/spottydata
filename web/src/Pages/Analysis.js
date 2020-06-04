@@ -34,8 +34,7 @@ import * as Vibrant from 'node-vibrant'
 const querystring = require('querystring');
 const axios = require('axios').default;
 
-const URL_BASE = 'https://spottydata-api.herokuapp.com/'
-//const URL_BASE = 'http://127.0.0.1:5000/'
+const URL_BASE = process.env.REACT_APP_API_URL
 
 const ButtonWrapper = styled.a`
     color: inherit;
