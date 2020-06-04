@@ -4,7 +4,7 @@ class Spotify():
     '''
     A class that interfaces the Spotify API utilizing the library spotipy
     '''
-
+    
     def __init__(self,access_token, client_id=None, client_secret=None):
         self._spotify = spotipy.Spotify(auth=access_token)
 
