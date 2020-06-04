@@ -124,7 +124,7 @@ class Playlists extends React.Component{
       		user: null,
       		user_id: null,
       		playlists: null,
-      		chunked_playlists: null
+			chunked_playlists: null,
 
     		};
   		}
@@ -383,6 +383,7 @@ class Playlists extends React.Component{
 			</br>
 			<br></br>
 			<Typography variant="h4">Token Error :( Please go back to the home page</Typography>
+				<Typography variant="body1">If error persists, try clearing your browser cache and removing cookies for the site.</Typography>
 			<ButtonWrapper href={process.env.REACT_APP_BASE_URL}>
               <NewButton variant="outlined"><span> Take me back! </span></NewButton>
             </ButtonWrapper>
