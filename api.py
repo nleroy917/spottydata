@@ -6,11 +6,11 @@ CLIENT_ID=os.getenv('CLIENT_ID')
 CLIENT_SECRET=os.getenv('CLIENT_SECRET')
 GENIUS_API_SECRET=os.getenv('GENIUS_ACCESS_TOKEN')
 
-import spotipy
+# Import spotify interface + utils libraries
+from lib.Spotify import Spotify
+from lib.Utils import Utils
+utils = Utils()
 
-# Import custom libraries
-from lib.playlists import *
-from lib.track_analysis import *
 from lib.lyrics import *
 
 # import flask
@@ -30,50 +30,47 @@ from dateutil import parser
 @app.route('/')
 def api_base():
 
-	#return_string = '''\nWelcome to the spottydata API. Please see <a href="https://github.com/NLeRoy917/playlist-analyzer-api">the github repo <a> for details.\n'''
-
 	return render_template("base.html")
 
 # Testing route/main route
 @app.route('/test')
 def api_base_test():
 
-	return_string = '''\nBARNABAS A BUM FR\n'''
+	return_string = '''\nroute open for testing\n'''
 
 	return return_string
 
 # Get playlists for a specific user
 @app.route('/<username>/playlists', methods=['GET'])
 def playlists_get(username):
-	
-	access_token = request.headers['access_token']
-	spotify_header = {'Authorization': 'Bearer ' + access_token}
-	playlists = get_playlists(username,spotify_header)
-	playlist_json = json.dumps(playlists)
 
-	return playlist_json
+	access_token = request.headers['access_token']
+	spotify = Spotify(access_token)
+	playlists = spotify.get_playlists()
+	del spotify
+
+	return jsonify(playlists['items'])
 
 # testing route to load test the API for getting tracks
 @app.route('/playlists/<playlist_id>/tracks', methods=['GET'])
 def tracks_get(playlist_id):
 	
 	access_token = request.headers['access_token']
-	spotify_header = {'Authorization': 'Bearer ' + access_token}
+	spotify = Spotify(access_token)
+	tracks = spotify.get_playlist_tracks(playlist_id)['items']
+	del spotify
 
-	tracks = get_tracks(playlist_id,spotify_header)
-	#print(tracks)
-
-	return jsonify(tracks)
+	return jsonify(tracks['items'])
 
 @app.route('/<playlist_id>/analysis/lyrics', methods=['GET'])
 def lyrics_analysis(playlist_id):
 
 	# Get access token from the headers and generate spotify's required header
 	access_token = request.headers['access_token']
-	spotify_header = {'Authorization': 'Bearer ' + access_token}
-
-	# Extract the tracks from the playlist
-	tracks = get_tracks(playlist_id,spotify_header)
+	spotify = Spotify(access_token)
+	tracks = spotify.get_playlist_tracks(playlist_id)['items']
+	del spotify
+ 
 	tracks = [x['track'] for x in tracks]
 
 	cnt = 0
@@ -85,7 +82,7 @@ def lyrics_analysis(playlist_id):
 		if cnt >= max_songs:
 			break
 		#print('Track {}/{}'.format(cnt,len(tracks)))
-		lyrics = get_lyrics_new(track)
+		lyrics = get_lyrics(track)
 		if not lyrics:
 			continue
 		words = parse_lyrics(lyrics)
@@ -114,9 +111,9 @@ def playlist_recs(playlist_id):
 
 	# Get access token from the headers and generate spotify's required header
 	access_token = request.headers['access_token']
-	spotify_header = {'Authorization': 'Bearer ' + access_token}
-
-	recs = get_recs(playlist_id,spotify_header)
+	spotify = Spotify(access_token)
+	recs = spotify.get_recommendations()
+	del spotify
 
 	return jsonify(recs)
 
@@ -124,24 +121,25 @@ def playlist_recs(playlist_id):
 @app.route('/<playlist_id>/analysis', methods=['GET'])
 def full_analysis(playlist_id):
 
-	# Get access token from the headers and generate spotify's required header
+	# Get access token from the headers and init Spotify objectg
 	access_token = request.headers['access_token']
-	spotify_header = {'Authorization': 'Bearer ' + access_token}
+	spotify = Spotify(access_token)
 
-	# Extract the tracks from the playlist adn get last updated track
-	tracks = get_tracks(playlist_id,spotify_header)
+	# get tracks from playlist id
+	tracks = spotify.get_playlist_tracks(playlist_id)['items']
+
+	# get the date of the most recently added track to the playlist
+	# convert that date from iso to conventional date format
 	last_update_iso = tracks[0]['added_at']
-
 	last_update = parser.isoparse(last_update_iso)
 
-	#print(tracks[0])
+	# extract track objects
 	tracks = [x['track'] for x in tracks]
 
 	# extract the track ids
 	track_ids = []
 	artist_ids = []
 	for track in tracks:
-		#print(track)
 		try:
 			track_ids.append(track['id'])
 			artist_ids.append(track['artists'][0]['id'])
@@ -149,152 +147,12 @@ def full_analysis(playlist_id):
 			continue
 
 	# get analysis for each track
-	analysis_list = get_multi_track_data(track_ids,spotify_header)
+	# get artists for each track
+	analysis_list = spotify.get_features(track_ids)
+	artist_list = spotify.get_artists(artist_ids)
 
-	# get artists
-	artist_list = get_artists(artist_ids,spotify_header)
-
-	# Init key object
-	key_data = {'minor': {'A':0,
-						'A#':0,
-						'B':0,
-						'C':0,
-						'C#':0,
-						'D':0,
-						'D#':0,
-						'E':0,
-						'F':0,
-						'F#':0,
-						'G':0,
-						'G#':0},
-
-				'major': {'A':0,
-						'A#':0,
-						'B':0,
-						'C':0,
-						'C#':0,
-						'D':0,
-						'D#':0,
-						'E':0,
-						'F':0,
-						'F#':0,
-						'G':0,
-						'G#':0}
-				}
-
-	# Init feel data
-	feel_data = {
-			  "acousticness" : 0,
-			  "danceability" : 0,
-			  "energy" : 0,
-			  "instrumentalness" : 0,
-			  "liveness" : 0,
-			  "speechiness" : 0
-			}
-
-	genre_data = {}
-
-	tempo_store = []
-	tempo_data = {}
-	duration_store = []
-	dutation_data = {}
-
-	i = 1
-
-
-	#print(len(analysis_list))
-	#print(len(tracks))
-	#print(len(artist_list))
-
-
-	# Iterate and parse data
-	for analysis,track,artist in zip(analysis_list,tracks,artist_list):
-
-		#print(analysis)
-		#print(track)
-		#print(artist)
-
-
-		print('analysis {}/{}'.format(i,len(tracks)))
-		# Get the analysis for the track ONCE
-		i += 1
-
-		## STORE KEY DATA ##
-		# Some songs may not have a key or mode, so catch key_not_exist error and pass 
-		# (this would occur for a track that is a podcast or local file)
-		try:
-			if analysis['mode'] == 0:
-				key_data['minor'][int_to_key(analysis['key'])] += 1
-			elif analysis['mode'] == 1:
-				key_data['major'][int_to_key(analysis['key'])] += 1
-			else:
-				continue
-		except:
-			pass
-
-		## STORE FEEL DATA ##
-		try:
-			feel_data['acousticness'] += analysis['acousticness']
-			feel_data['danceability'] += analysis['danceability']
-			feel_data['energy'] += analysis['energy']
-			feel_data['instrumentalness'] += analysis['instrumentalness']
-			feel_data['liveness'] += analysis['liveness']
-			feel_data['speechiness'] += analysis['speechiness']
-
-		except:
-			pass
-
-
-		## STORE GENRE DATA ##
-		try:
-
-			# Get Artist data + genres
-			genres = artist['genres']
-
-			# Append artist genres to the genre dictionary
-			for genre in genres:
-
-				# check that the genre exists in the dictionary
-				if genre not in genre_data:
-					genre_data[genre] = 1
-				else:
-					genre_data[genre] += 1
-		except:
-			pass
-
-		## STORE TEMPO DATA ##
-		try:
-			#analyze track and store tempo
-			tempo_store.append(float(analysis['tempo']))
-		except:
-			pass
-
-		## STORE DURATION DATA ##
-		try:
-			duration_store.append(float(analysis['duration_ms'])/1000/60)
-		except:
-			pass
-
-
-	## POST PROCESSING ##
-
-	# Divide the sum by the number of tracks
-	for key in feel_data:
-		feel_data[key] /= (i-1)
-		feel_data[key] *= 100
-
-	# create hist object from array of data
-	tempo_density = generate_density(tempo_store)
-	duration_density = generate_density(duration_store,float=True)
-
-	# populate payload | dont forget to convert numpy arrays to lists
-	tempo_data={'x': tempo_density.x,
-				'y': tempo_density.y}
-
-	duration_data ={'x': duration_density.x,
-					'y': duration_density.y}
-
-
+	key_data, feel_data, genre_data, tempo_data, duration_data = utils.analyze_playlist(analysis_list,tracks,artist_list)
+ 
 	payload = {}
 	payload['keys'] = key_data
 	payload['feel'] = feel_data
@@ -302,6 +160,8 @@ def full_analysis(playlist_id):
 	payload['tempo'] = tempo_data
 	payload['duration'] = duration_data
 	payload['last_update'] = last_update
+ 
+	del spotify
 
 	return jsonify(payload)
 
