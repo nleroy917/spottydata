@@ -33,6 +33,8 @@ const axios = require('axios').default;
 const querystring = require('querystring');
 const cookies = new Cookies();
 
+const API_URL = process.env.REACT_APP_API_URL
+
 const ButtonWrapper = styled.a`
     color: inherit;
     height:100%;
@@ -273,7 +275,7 @@ class Playlists extends React.Component{
 			//console.log('token: ' + this.state.accessToken)
 
 			try {
-			const response = await axios.get('https://spottydata-api.herokuapp.com/' + this.state.user.id + '/playlists',{headers})
+			const response = await axios.get(API_URL + this.state.user.id + '/playlists',{headers})
 			if(response.status === 200) {
 		    	//console.log(response);
 		    	const data = await response.data
