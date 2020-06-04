@@ -2,3 +2,4 @@ testing/
 .DS_Store
 .env
 venv/
+.vscode/
