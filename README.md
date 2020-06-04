@@ -15,8 +15,12 @@ To use SpottyData, simply go to the most recent [production build](https://spott
 The Spotify API requires [OAuth 2.0 authentication](https://oauth.net/articles/authentication/) to get access to user data. This means that I need the user to not only request access, but log-in using their standard credentials to obtain a temporary token for which I can use to read your data. SpottyData, however, **only requests access to read your public and private playlists** - that's it. Specifically, I require the `playlist-read-private` and `playlist-read-collaborative` scopes. You can read more about these [here](https://developer.spotify.com/documentation/general/guides/scopes/). You can revoke SpottyData's access to your playlist data at anytime by [logging in to Spotify](https://support.spotify.com/us/using_spotify/features/revoke-access-from-3rd-party-app/#:~:text=Remove%20access,remove%20and%20click%20REMOVE%20ACCESS.) and removing access altogether.
 
 ## Screenshots
+**My Spotify Wrapped 2019**
 
-TODO
+![SpotifyWrapped2019](./static/imgs/sw2019.png)
+
+**New Music Friday**
+![NewMusicFriday](./static/imgs/nmf.png)
 
 ## Development
 
