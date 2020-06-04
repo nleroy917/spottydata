@@ -12,7 +12,6 @@ from lib.playlists import *
 
 import time
 import string
-from configparser import SafeConfigParser
 import numpy as np
 import lyricsgenius
 import requests
