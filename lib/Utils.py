@@ -2,7 +2,8 @@ import numpy as np
 
 class Utils():
     '''
-    Class that provides a few utility functions to work with some of the data recieved
+    Class that provides a few utility functions to work with some of the data recieved fromn spotify
+    in addition to providing analysis methods.
     '''
             
     def __init__(self):
@@ -10,28 +11,46 @@ class Utils():
     
     def generate_density(self,array,float=False):
         '''
-        This function will create a psuedo-density plot. Since Chart.js doesnt have these, I am forced to generate my own. I
+        Creates a psuedo-density plot. Since Chart.js doesnt have these, I am forced to generate my own. I
         create a histogram with equal bin widths, then map it to a line chart. With proper smoothing on the front-end
         it looks exactly like a density plot.
         '''
         class Hist:
             '''
-            Simple histogram class
+            Simple histogram class to interface the numpy histogram creation method. Pass
+            in an array, and you can generate bins and counts for that data.
             '''
             def __init__(self):
                 self.counts = []
                 self.bins = []
 
             def create(self,array): 
+                '''
+                Generate counts and bins from an array of data. These can be accessed from the counts and bins
+                attributes
+                '''
             	# generate the counts and bins
             	# note that length(self.bins) = length(self.counts) + 1
-            	self.counts, self.bins = np.histogram(array)
+                self.counts, self.bins = np.histogram(array)
         
-        class Density:  
+        class Density:
+            '''
+            Density plot chart data generator. Density plots are a visually-appealing way to display
+            distribution data. The JavaScript library used to make charts does not have this, so I emulated it using
+            data for a line chart.
+            
+            Initialize the Density() object, and create it with a histogram object.
+            '''
             def __init__(self):
                 self.x = []
-                self.y =[]  
-            def create(self,hist):  
+                self.y =[]
+
+            def create(self,hist):
+                '''
+                Create density chart from histogram distribution. The bins are mapped to an array of length n-1 using
+                their midpoints. Then a final 2 bins are added by adding one more bin length to the end and the
+                begining.
+                '''
                 bins = hist.bins.tolist()
                 counts = hist.counts.tolist()
                 bins_mid = [0]*(len(bins)-1)    
@@ -58,11 +77,15 @@ class Utils():
         hist.create(array)  
         # create density plot from the histogram
         density = Density()
-        density.create(hist)    
+        density.create(hist)
+          
         return density
 
     def analyze_playlist(self,analysis_list,tracks,artist_list):
-        
+        '''
+        This is the method that conducts the analysis for all the tracks in a playlist. It requires the analysis list,
+        the track list, and the artist list. It gathers data on each songs key, feel, genre, tempo, and duration.
+        '''
         # Init key object
         key_data = {'minor': {'A':0,
         					'A#':0,
@@ -177,43 +200,48 @@ class Utils():
         return key_data, feel_data, genre_data, tempo_data, duration_data
     
     def int_to_key(self,key_int):
-
-	    if key_int == 0:
-	    	key = 'C'
-	    elif key_int == 1:
-	    	key = 'C#'
-	    elif key_int == 2:
-	    	key = 'D'
-	    elif key_int == 3:
-	    	key = 'D#'
-	    elif key_int == 4:
-	    	key = 'E'
-	    elif key_int == 5:
-	    	key = 'F'
-	    elif key_int == 6:
-	    	key = 'F#'
-	    elif key_int == 7:
-	    	key = 'G'
-	    elif key_int == 8:
-	    	key = 'G#'
-	    elif key_int == 9:
-	    	key = 'A'
-	    elif key_int == 10 or key_int == 't':
-	    	key = 'A#'
-	    elif key_int == 11 or key_int == 'e':
-	    	key = 'B'
-	    else:
-	    	key = 'no_key'
-
-	    return key
+        '''
+        Convert a integer key value to the actual key. Spotify only provides the integer value,
+        so the actual key must be hard-coded in.
+        '''
+        if key_int == 0:
+        	key = 'C'
+        elif key_int == 1:
+        	key = 'C#'
+        elif key_int == 2:
+        	key = 'D'
+        elif key_int == 3:
+        	key = 'D#'
+        elif key_int == 4:
+        	key = 'E'
+        elif key_int == 5:
+        	key = 'F'
+        elif key_int == 6:
+        	key = 'F#'
+        elif key_int == 7:
+        	key = 'G'
+        elif key_int == 8:
+        	key = 'G#'
+        elif key_int == 9:
+        	key = 'A'
+        elif key_int == 10 or key_int == 't':
+        	key = 'A#'
+        elif key_int == 11 or key_int == 'e':
+        	key = 'B'
+        else:
+        	key = 'no_key'
+         
+        return key
     
     def int_to_mode(self,mode_int):
+        '''
+        convert the mode integer to minor or major
+        '''
+        if mode_int == 0:
+        	mode = 'Minor'
+        elif mode_int == 1:
+        	mode = 'Major'
+        else:
+        	mode = 'No Mode'
 
-	    if mode_int == 0:
-	    	mode = 'Minor'
-	    elif mode_int == 1:
-	    	mode = 'Major'
-	    else:
-	    	mode = 'No Mode'
-
-	    return mode
+        return mode
