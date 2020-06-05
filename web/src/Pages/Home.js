@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components'
 
 import Typist from 'react-typist';
@@ -86,12 +86,55 @@ const NewButton = styled(Button)`
   }
 `
 
+const TypistWrapper = styled.div`
+	min-height: 50px;
+
+`
+
 const CookieNotice = styled(Typography)`
 
   color: white !important;
   font-weight: 400 !important;
   opacity: 0.6;
   font-size: 1rem !important;
+`
+
+const HoverAlertWrapper = styled.div`
+	min-height: 50 px;
+`
+
+const HoverAlert = styled.p`
+	font-size: 1.5rem;
+	text-transform: none;
+	opacity: 1;
+	animation: fadeIn ease s;
+	-webkit-animation: fadeIn ease 1s;
+
+
+	@keyframes fadeIn {
+	0% {opacity:0;}
+	100% {opacity:1;}
+	}
+
+	@-moz-keyframes fadeIn {
+	0% {opacity:0;}
+	100% {opacity:1;}
+	}
+
+	@-webkit-keyframes fadeIn {
+	0% {opacity:0;}
+	100% {opacity:1;}
+	}
+
+	@-o-keyframes fadeIn {
+	0% {opacity:0;}
+	100% {opacity:1;}
+	}
+
+	@-ms-keyframes fadeIn {
+	0% {opacity:0;}
+	100% {opacity:1;}
+}
 `
 
 const querystring = require('querystring');
@@ -109,10 +152,29 @@ const authorize_url = base_url + querystring.stringify(payload)
 
 
 const Home = () => {
+	const [letsGo, setLetsGo] = useState(false)
+	const [gitHub, setGitHub] = useState(false)
+	const [donate, setDonate] = useState(false)
+
+const letsGoHoverChange = () => {
+
+	setLetsGo(!letsGo)
+}
+
+const gitHubHoverChange = () => {
+
+	setGitHub(!gitHub)
+}
+
+const donateHoverChange = () => {
+
+	setDonate(!donate)
+}
 
 return(
 	<>
 	<Layout>
+	<br></br>
 	<Grid container
 		direction="column"
 		justify="center"
@@ -122,14 +184,13 @@ return(
 	<Grid item>
 	  <LandingText variant="h2">Welcome to SpottyData</LandingText>
 	      <br></br>
-		  <span>
-	        
+		  <TypistWrapper>
 			<Typist
 			avgTypingDelay={70}
         	startDelay={1000}
         	cursor={{blink:true,hideWhenDone: true,hideWhenDoneDelay: 1000,}}
 			>
-					<AnalysisText className="lead">Analyze your playlist:</AnalysisText>
+			<AnalysisText className="lead">Analyze your playlist:</AnalysisText>
 				<Typist.Delay ms={500} />
 					<AnalysisText>&nbsp;Tempo.</AnalysisText>
 				<Typist.Delay ms={500} />
@@ -145,16 +206,22 @@ return(
 				<Typist.Delay ms={500} />
 					<AnalysisText><em>&nbsp;For free.</em></AnalysisText>
 			</Typist>
-		  </span>
-	        <ButtonWrapper href={authorize_url}>
+		  </TypistWrapper>
+	        <ButtonWrapper onMouseEnter={() => {letsGoHoverChange()}} onMouseLeave={() => letsGoHoverChange()} href={authorize_url}>
               <NewButton variant="outlined">Lets Go</NewButton>
             </ButtonWrapper>
-			<ButtonWrapper href="https://github.com/NLeRoy917/spottydata">
-              <NewButton variant="outlined">GitHub  <span style={{fontSize: '1.3rem'}}> &nbsp;&nbsp;&nbsp;🚀</span></NewButton>
+			<ButtonWrapper onMouseEnter={() => {gitHubHoverChange()}} onMouseLeave={() => gitHubHoverChange()} href="https://github.com/NLeRoy917/spottydata">
+              <NewButton variant="outlined">GitHub</NewButton>
             </ButtonWrapper>
-	        <ButtonWrapper href="https://paypal.me/nathanleroy?locale.x=en_US">
-              <NewButton variant="outlined">Buy me a coffee <span style={{fontSize: '1.5rem'}}>&nbsp;&nbsp;☕</span></NewButton>
+	        <ButtonWrapper onMouseEnter={() => {donateHoverChange()}} onMouseLeave={() => donateHoverChange()} href="https://paypal.me/nathanleroy?locale.x=en_US">
+              <NewButton variant="outlined">Donate</NewButton>
             </ButtonWrapper>
+			<HoverAlertWrapper style={{minHeight: '75px'}}>
+			<br></br>
+			{letsGo ? <HoverAlert>Analyze a playlist. <span style={{fontSize: '1.3rem'}}> &nbsp;&nbsp;➡️</span></HoverAlert> : ''}
+			{gitHub ? <HoverAlert>View source on GitHub <span style={{fontSize: '1.3rem'}}> &nbsp;&nbsp;&nbsp;🚀</span></HoverAlert> : ''}
+			{donate ? <HoverAlert>$5 pays for one week of server time <span style={{fontSize: '1.5rem'}}>&nbsp;&nbsp;💻</span></HoverAlert> : ''}
+			</HoverAlertWrapper>
 	      <br></br>
 	    <br></br>
 		</Grid>
