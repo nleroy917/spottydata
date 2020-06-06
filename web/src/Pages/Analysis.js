@@ -1,5 +1,6 @@
 // load core react + custom components
 import React from 'react';
+import { isMobile } from 'react-device-detect'
 import styled from 'styled-components'
 import './css/Analysis.css';
 import ChartContainer from '../Components/ChartContainer'
@@ -11,7 +12,7 @@ import DurationChart from '../Components/DurationChart'
 import LyricCloud from '../Components/LyricCloud'
 import Loader from '../Components/Loader'
 import loading_gif from '../images/loading.gif'
-
+import TempoPulse from '../Components/TempoPulse';
 // Load in the materials-ui components
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -73,6 +74,23 @@ const NewButton = styled(Button)`
 		box-shadow: 2px 2px;
     }
   }
+`
+
+const PlaylistDescription = styled(Typography)`
+    font-size: 1.5 rem;
+`
+
+const KeySignature = styled.img`
+  height: 100px;
+  width: 120px;
+`
+
+const PlaylistOwner = styled.h1`
+
+  font-size: 1.8em;
+  word-wrap: break-word;
+  text-align: left;
+
 `
 
 const styles = theme => ({
@@ -255,8 +273,10 @@ class Analysis extends React.Component {
 
             if(data.keys.major[major_key_max] >= data.keys.minor[minor_key_max]) {
               this.setState({fav_key: `${major_key_max} major`})
+              this.getKeySignatureImg()
             } else
               this.setState({fav_key: `${minor_key_max} minor`})
+              this.getKeySignatureImg()
 
             this.setState({tempo_avg:Math.round(tempo_avg)})
             this.setState({key_data: data.keys})
@@ -284,6 +304,85 @@ class Analysis extends React.Component {
 
           }
         }
+      
+        getKeySignatureImg = () => {
+          switch(this.state.fav_key) {
+            case 'A major':
+              this.setState({key_img: require('../images/chords_imgs/amaj.png')})
+              break
+            case 'A minor':
+              this.setState({key_img: require('../images/chords_imgs/amin.png')})
+              break
+            case 'A# major':
+              this.setState({key_img: require('../images/chords_imgs/asmaj.png')})
+              break
+            case 'A# minor':
+              this.setState({key_img: require('../images/chords_imgs/asmin.png')})
+              break
+            case 'B major':
+              this.setState({key_img: require('../images/chords_imgs/bmaj.png')})
+              break
+            case 'B minor':
+              this.setState({key_img: require('../images/chords_imgs/bmin.png')})
+              break
+            case 'C major':
+              this.setState({key_img: require('../images/chords_imgs/amin.png')})
+              break
+            case 'C minor':
+              this.setState({key_img: require('../images/chords_imgs/cmin.png')})
+              break
+            case 'C# major':
+              this.setState({key_img: require('../images/chords_imgs/csmaj.png')})
+              break;
+            case 'C# minor':
+              this.setState({key_img: require('../images/chords_imgs/csmin.png')})
+              break
+            case 'D major':
+              this.setState({key_img: require('../images/chords_imgs/dmaj.png')})
+              break
+            case 'D minor':
+              this.setState({key_img: require('../images/chords_imgs/dmin.png')})
+              break
+            case 'D# major':
+              this.setState({key_img: require('../images/chords_imgs/dsmaj.png')})
+              break
+            case 'D# minor':
+              this.setState({key_img: require('../images/chords_imgs/dsmin.png')})
+              break
+            case 'E major':
+              this.setState({key_img: require('../images/chords_imgs/emaj.png')})
+              break
+            case 'E minor':
+              this.setState({key_img: require('../images/chords_imgs/emin.png')})
+              break
+            case 'F major':
+              this.setState({key_img: require('../images/chords_imgs/fmaj.png')})
+              break
+            case 'F minor':
+              this.setState({key_img: require('../images/chords_imgs/fmin.png')})
+              break
+            case 'F# major':
+              this.setState({key_img: require('../images/chords_imgs/fsmaj.png')})
+              break
+            case 'F# minor':
+              this.setState({key_img: require('../images/chords_imgs/fsmin.png')})
+              break
+            case 'G major':
+              this.setState({key_img: require('../images/chords_imgs/gmaj.png')})
+              break
+            case 'G minor':
+              this.setState({key_img: require('../images/chords_imgs/gmin.png')})
+              break
+            case 'G# major':
+              this.setState({key_img: require('../images/chords_imgs/gsmaj.png')})
+              break
+            case 'G# minor':
+              this.setState({key_img: require('../images/chords_imgs/gsmin.png')})
+              break
+            
+            
+          }
+        }
 
   		render() {
 
@@ -296,10 +395,10 @@ class Analysis extends React.Component {
         <Container>
           <Grid container spacing={3}
                 direction="row"
-                justify="space-between"
+                justify="center"
                 alignItems="flex-start"
           >
-            <Grid item lg={2} xs={3}>
+            <Grid item lg={2} xs={3} style={{height: '100%'}}>
               <Card className={classes.playlist_image}>
                 <CardActionArea>
                   <a href={this.state.playlist.external_urls.spotify}>
@@ -316,7 +415,7 @@ class Analysis extends React.Component {
             <Grid item lg={8} xs={9}>
               <ThemeProvider theme={title_theme}>
                 <Typography variant={'h3'} align={'left'} style={{fontWeight: 400}}>{this.state.playlist.name}</Typography>
-                <Typography variant={'h5'} align={'left'} style={{fontWeight: 100}}>{this.state.playlist.description}</Typography>
+                <PlaylistDescription variant={isMobile ? 'body1' : 'h5'} align={'left'} style={{fontWeight: 100}}>{this.state.playlist.description}</PlaylistDescription>
               </ThemeProvider>
             </Grid>
             <Grid item lg={2} xs={12}>
@@ -372,7 +471,7 @@ class Analysis extends React.Component {
               <Paper elevation={3} className={classes.paper}>
                 <div className={classes.paper_div}>
                 <h6 align="left" className={classes.paper_title}>Playlist Owner</h6>
-                <h1 align="left" className={classes.paper_title}>{this.state.playlist.owner.id}</h1>
+                <PlaylistOwner align="left" className={classes.paper_title}>{this.state.playlist.owner.id}</PlaylistOwner>
                 </div>
               </Paper>
             </Grid>
@@ -415,19 +514,19 @@ class Analysis extends React.Component {
           <Grid container spacing={2}
             direction="row"
             justify="space-between"
-            alignItems="flex-start"
+            alignItems="stretch"
           >
-            <Grid item lg={4} md={4} s={6} xs={12}>
-              <ChartContainer title="Playlist Feel">
+            <Grid item lg={4} md={4} s={6} xs={12} style={{height: '100%'}}>
+              <ChartContainer title="Playlist Feel" style={{height: '100%'}}>
                 {this.state.feel_data ? <FeelChart data={this.state.feel_data} palette={this.state.palette}/> : ' '}
               </ChartContainer>
             </Grid>
             <Grid item lg={4} md={4} s={6} xs={12}>
-              <ChartContainer title="Duration">
+              <ChartContainer title="Duration" style={{height: '100%'}}>
                 {this.state.duration_data ? <DurationChart data={this.state.duration_data} palette={this.state.palette} /> : ' '}
               </ChartContainer>
             </Grid>
-            <Grid item lg={4} md={4} s={6} xs={12}>
+            <Grid item lg={4} md={4} s={6} xs={12} style={{height: '100%'}}>
                 <Grid container spacing={2}
                   direction="column"
                   justify="center"
@@ -437,7 +536,14 @@ class Analysis extends React.Component {
                     <Paper elevation={3} className={classes.paper}>
                       <div className={classes.paper_div}>
                         <h6 align="left" className={classes.paper_title}>Favorite Key</h6>
-                        <h2 align="left" className={classes.paper_title}>{this.state.fav_key}</h2>
+                        <Grid container direction="row" justify="space-between" alignItems="center" style={{width: '100%'}}>
+                          <Grid item>
+                            <h2 align="left" className={classes.paper_title}>{this.state.fav_key}</h2>
+                          </Grid>
+                          <Grid item>
+                            <KeySignature src={this.state.key_img} />
+                          </Grid>
+                        </Grid>
                       </div>
                     </Paper>
                   </Grid>
@@ -445,7 +551,14 @@ class Analysis extends React.Component {
                     <Paper elevation={3} className={classes.paper}>
                       <div className={classes.paper_div}>
                         <h6 align="left" className={classes.paper_title}>Average Tempo</h6>
-                        <h2 align="left" className={classes.paper_title}>{this.state.tempo_avg}</h2>
+                        <Grid container direction="row" justify="space-between" alignItems="center" style={{width: '85%'}}>
+                          <Grid item>
+                          <h2 align="left" className={classes.paper_title}>{this.state.tempo_avg}</h2>
+                          </Grid>
+                          <Grid item>
+                            <TempoPulse bpm={this.state.tempo_avg} color={this.state.palette.Vibrant.hex} />
+                          </Grid>
+                        </Grid>
                       </div>
                     </Paper>
                   </Grid>

@@ -218,7 +218,7 @@ return(
             </ButtonWrapper>
 			<HoverAlertWrapper style={{minHeight: '75px'}}>
 			<br></br>
-			{letsGo ? <HoverAlert>Analyze a playlist. <span style={{fontSize: '1.3rem'}}> &nbsp;&nbsp;➡️</span></HoverAlert> : ''}
+			{letsGo ? <HoverAlert>Analyze a playlist <span style={{fontSize: '1.3rem'}}> &nbsp;&nbsp;➡️</span></HoverAlert> : ''}
 			{gitHub ? <HoverAlert>View source on GitHub <span style={{fontSize: '1.3rem'}}> &nbsp;&nbsp;&nbsp;🚀</span></HoverAlert> : ''}
 			{donate ? <HoverAlert>$5 pays for one week of server time <span style={{fontSize: '1.5rem'}}>&nbsp;&nbsp;💻</span></HoverAlert> : ''}
 			</HoverAlertWrapper>

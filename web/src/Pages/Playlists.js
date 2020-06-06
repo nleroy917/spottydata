@@ -329,10 +329,10 @@ class Playlists extends React.Component{
                 direction={isMobile ? "column" : "row"}
                 justify="center"
                 alignItems={isMobile ? "center" : "flex-start"}
-				style={{width: '100%', margin: isMobile ? 0 : ''}}
+				style={{width: '100%', minHeight: '100%',margin: isMobile ? 0 : ''}}
 				spacing={10}
           >
-            <Grid item lg={3} xs={12} style={{padding: isMobile ? 5 : ''}}>
+            <Grid item lg={3} xs={12} style={{height:'100%', padding: isMobile ? 5 : ''}}>
                   <a href={this.state.user.external_urls.spotify}>
 				  <img
 				  	  style={{width: '75%', maxWidth: '300px'}}
@@ -341,23 +341,29 @@ class Playlists extends React.Component{
                   />
                   </a>
             </Grid>
-            <Grid container justify={isMobile ? "center" : "flex-start"} item lg={8} xs={12} style={{width:'100%', padding: isMobile ? 5 : ''}}>
+            <Grid container justify={isMobile ? "center" : "flex-start"} item lg={5} xs={12} style={{height: '100%',padding: isMobile ? 5 : ''}}>
               <ThemeProvider theme={title_theme}>
 			  <div style={{textAlign: 'left !important'}}>
-                <Typography variant={isMobile ? 'h5' : 'h3'} align={'left'} style={{fontWeight: 400, textAlign: isMobile ? 'center !important' : 'left !important'}}>Welcome {this.state.user.display_name}!</Typography>
-                <Typography variant={isMobile ? 'body1' : 'h5'} align={'left'} style={{fontWeight: 100, textAlign: isMobile ? 'center !important' : 'left !important'}}>Please select a playlist to continue.</Typography>
+                <Typography variant={isMobile ? 'h5' : 'h3'} align={'left'} style={{fontWeight: 400, textAlign: isMobile ? 'center !important' : 'left !important'}}>
+					Welcome {this.state.user.display_name}!
+				</Typography>
+                <Typography variant={isMobile ? 'body1' : 'h5'} align={'left'} style={{fontWeight: 100, textAlign: isMobile ? 'center !important' : 'left !important'}}>
+					Please select a playlist to continue.
+				</Typography>
 			  </div>
-			  <div  style={{textAlign: isMobile ? 'center':'left', width: '100%'}}>
+			  </ThemeProvider>
+			</Grid>
+			<Grid container justify={isMobile ? "center" : "flex-start"} item lg={3} xs={12} style={{height: '100%',width:'100%', padding: isMobile ? 5 : ''}}>
+			<div  style={{textAlign: isMobile ? 'center':'left', width: '100%'}}>
 			  <ButtonWrapper >
 				  <NewButton style={{marginLeft: '0'}} href={process.env.REACT_APP_BASE_URL}>
-					  Home
+					  Back
 				  </NewButton>
 			  </ButtonWrapper>
 			  </div>
-              </ThemeProvider>
             </Grid>
           </Grid>
-          <hr style={{'borderColor':'#212529'}}></hr>
+
           <div className="justify-content-center">
 				{this.state.chunked_playlists ? this.state.chunked_playlists.map((chunk,key) => {
 				return(
