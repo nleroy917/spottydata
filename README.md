@@ -24,7 +24,7 @@ The Spotify API requires [OAuth 2.0 authentication](https://oauth.net/articles/a
 
 ## Development
 
-In the web/ directory, you can run:
+In the `web/` directory, you can run:
 
 ### `npm start`
 
