@@ -126,11 +126,10 @@ class Utils():
         tempo_store = []
         tempo_data = {}
         duration_store = []
-        i = 1
+        i = 0
         
         # Iterate and parse data
         for analysis,artist in zip(analysis_list,artist_list): 
-        	print('analysis {}/{}'.format(i,len(tracks)))
         	# Get the analysis for the track ONCE
         	i += 1  
         	## STORE KEY DATA ##
@@ -196,7 +195,9 @@ class Utils():
         			'y': tempo_density.y}   
         duration_data ={'x': duration_density.x,
         				'y': duration_density.y}
-     
+
+        print('We were able to analyze {}/{} tracks'.format(i,len(tracks)))
+        
         return key_data, feel_data, genre_data, tempo_data, duration_data
     
     def int_to_key(self,key_int):

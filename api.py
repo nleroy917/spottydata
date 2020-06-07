@@ -57,7 +57,7 @@ def tracks_get(playlist_id):
 	
 	access_token = request.headers['access_token']
 	spotify = Spotify(access_token)
-	tracks = spotify.get_playlist_tracks(playlist_id)['items']
+	tracks = spotify._get_playlist_tracks(playlist_id)['items']
 	del spotify
 
 	return jsonify(tracks['items'])
@@ -68,7 +68,7 @@ def lyrics_analysis(playlist_id):
 	# Get access token from the headers and generate spotify's required header
 	access_token = request.headers['access_token']
 	spotify = Spotify(access_token)
-	tracks = spotify.get_playlist_tracks(playlist_id)['items']
+	tracks = spotify._get_playlist_tracks(playlist_id)['items']
 	del spotify
  
 	tracks = [x['track'] for x in tracks]
@@ -125,33 +125,13 @@ def full_analysis(playlist_id):
 	access_token = request.headers['access_token']
 	spotify = Spotify(access_token)
 
-	# get tracks from playlist id
-	tracks = spotify.get_playlist_tracks(playlist_id)['items']
-
-	# get the date of the most recently added track to the playlist
-	# convert that date from iso to conventional date format
-	last_update_iso = tracks[0]['added_at']
+	tracks, analysis_list, artist_list, last_update_iso = spotify.get_playlist_items(playlist_id)
+	
+	# get most recently added date
 	last_update = parser.isoparse(last_update_iso)
 
-	# extract track objects
-	tracks = [x['track'] for x in tracks]
-
-	# extract the track ids
-	track_ids = []
-	artist_ids = []
-	for track in tracks:
-		try:
-			track_ids.append(track['id'])
-			artist_ids.append(track['artists'][0]['id'])
-		except:
-			continue
-
-	# get analysis for each track
-	# get artists for each track
-	analysis_list = spotify.get_features(track_ids)
-	artist_list = spotify.get_artists(artist_ids)
-
 	key_data, feel_data, genre_data, tempo_data, duration_data = utils.analyze_playlist(analysis_list,tracks,artist_list)
+
  
 	payload = {}
 	payload['keys'] = key_data
