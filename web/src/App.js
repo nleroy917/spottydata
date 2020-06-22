@@ -18,8 +18,8 @@ const App = () => {
     <Router>
     <div className="App">
       <Switch>
-        <Route path="/about/" component={About}>
-        </Route>
+        {/* <Route path="/about/" component={About}>
+        </Route> */}
         <Route path="/playlists/" component={Playlists}>
         </Route>
         <Route path="/analysis/" component={Analysis}>
