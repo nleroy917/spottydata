@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import os
+import random
 
 load_dotenv()
 CLIENT_ID=os.getenv('CLIENT_ID')
@@ -74,7 +75,10 @@ def lyrics_analysis(playlist_id):
 	tracks = [x['track'] for x in tracks]
 
 	cnt = 0
-	max_songs=10
+
+	# select random sample of songs 
+	max_songs=20
+	tracks = random.sample(tracks,k=max_songs)
 
 	lyrics_count = {}
 

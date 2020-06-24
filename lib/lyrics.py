@@ -11,6 +11,26 @@ import string
 import requests
 
 LYRICS_API = 'https://api.lyrics.ovh/v1/'
+WEAK_WORDS = [
+	'i',
+	'the',
+	'that',
+	'to',
+	'it',
+	'a',
+	'for',
+	'so',
+	'and',
+	'in',
+	'some',
+	'with',
+	'this',
+	'of',
+	'on',
+	'but',
+	'do',
+	'at',
+]
 
 def get_lyrics(track):
 
@@ -43,6 +63,8 @@ def parse_lyrics(lyrics):
 
 		words = cleaned_line.split(' ')
 		for word in words:
+			if word.lower() in WEAK_WORDS:
+				continue
 			if word == '':
 				continue
 			if 'u\2005' in word:

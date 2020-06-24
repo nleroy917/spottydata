@@ -572,7 +572,7 @@ class Analysis extends React.Component {
             alignItems="center"
           >
           <Grid item lg={8} md={8} s={6} xs={12}>
-              <ChartContainer title="lyrics">
+              <ChartContainer title="Lyrics">
                   {this.state.lyrics_data ? 
                     <LyricCloud data={this.state.lyrics_data} palette={this.state.palette}/> : 
                     <Loader image={loading_gif} message="Analyzing Lyrics.. This one takes awhile...." img_dimensions={{height:200,width:200}}></Loader> 
