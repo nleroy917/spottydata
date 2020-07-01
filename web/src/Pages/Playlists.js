@@ -136,6 +136,12 @@ class Playlists extends React.Component{
   			this.setState({authCode: querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code})
   			//console.log(this.state.authCode)
 		  }
+		
+		clearCookies = () => {
+			cookies.remove('accessToken')
+			cookies.remove('refreshToken')
+			cookies.remove('userName')
+		}
 		  
 		refreshToken = async () => {
 			//console.log('Refreshing token')
@@ -255,9 +261,11 @@ class Playlists extends React.Component{
 			const response = await axios.get('https://api.spotify.com/v1/me',{headers})
 			
 			if(response.status === 200) {
-		    	//console.log(response) 
+				//console.log(response) 
+				
 		    	const data = await response.data
-		    	this.setState({user: data})
+				this.setState({user: data})
+				cookies.set('userName',data.display_name,{path: '/'})
 		    	this.fetchPlaylists()
 			}
 		} catch(response) {
