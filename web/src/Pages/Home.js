@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'
+import { isMobile } from 'react-device-detect';
 
 import Typist from 'react-typist';
 import './css/Typist.css'
@@ -23,6 +24,7 @@ const Footer = styled.footer`
 	opacity: 0.9;
 	@media (max-width: 768px) {
 		margin:5px;
+		paddin-bottom:10px;
 		font-size: 0.7rem;
   }
 
@@ -179,7 +181,7 @@ return(
 		direction="column"
 		justify="center"
 		alignItems="center"
-		style={{width: '100%', height:'90vh'}}
+		style={{width: '100%', height: isMobile ? '80vh' : '90vh'}}
 	>
 	<Grid item>
 	  <LandingText variant="h2">Welcome to SpottyData</LandingText>
@@ -216,14 +218,18 @@ return(
 	        <ButtonWrapper onMouseEnter={() => {donateHoverChange()}} onMouseLeave={() => donateHoverChange()} href="https://paypal.me/nathanleroy?locale.x=en_US">
               <NewButton variant="outlined">Donate</NewButton>
             </ButtonWrapper>
+			{isMobile ? '' : 
 			<HoverAlertWrapper style={{minHeight: '75px'}}>
 			<br></br>
+			<div>
 			{letsGo ? <HoverAlert>Analyze a playlist <span style={{fontSize: '1.3rem'}}> &nbsp;&nbsp;➡️</span></HoverAlert> : ''}
 			{gitHub ? <HoverAlert>View source on GitHub <span style={{fontSize: '1.3rem'}}> &nbsp;&nbsp;&nbsp;🚀</span></HoverAlert> : ''}
 			{donate ? <HoverAlert>$5 pays for one week of server time <span style={{fontSize: '1.5rem'}}>&nbsp;&nbsp;💻</span></HoverAlert> : ''}
+			</div>
 			</HoverAlertWrapper>
+			}
 	      <br></br>
-	    <br></br>
+
 		</Grid>
 	</Grid>
 	<Footer>
@@ -233,13 +239,13 @@ return(
 		alignItems="center"
 		style={{width: '100%', textAlign: 'center'}}
 		>
-			<Grid item lg={4} xs={12} style={{width: '100%'}}>
+			<Grid item lg={4} xs={11} style={{width: '100%'}}>
 				Created by <FooterLink href="https://twitter.com/NathanJLeRoy">Nathan LeRoy</FooterLink>
 			</Grid>
-			<Grid item lg={4} xs={12} style={{width: '100%'}}>
+			<Grid item lg={4} xs={11} style={{width: '100%'}}>
 				© 2020
 			</Grid>
-			<Grid item lg={4} xs={12} style={{width: '100%'}}>
+			<Grid item lg={4} xs={11} style={{width: '100%'}}>
 				<FooterLink href="https://github.com/NLeRoy917/spottydata/issues">Report an issue</FooterLink>
 			</Grid>
 		</Grid>
