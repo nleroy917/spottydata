@@ -48,9 +48,15 @@ def playlists_get(username):
 	access_token = request.headers['access_token']
 	spotify = Spotify(access_token)
 	playlists = spotify.get_playlists()
+	playlists_filtered = []
+	for playlist in playlists['items']:
+		if playlist['tracks']['total'] == 0:
+			continue
+		else:
+			playlists_filtered.append(playlist)
 	del spotify
 
-	return jsonify(playlists['items'])
+	return jsonify(playlists_filtered)
 
 # testing route to load test the API for getting tracks
 @app.route('/playlists/<playlist_id>/tracks', methods=['GET'])
