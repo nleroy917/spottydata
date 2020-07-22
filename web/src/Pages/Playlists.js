@@ -30,6 +30,7 @@ const axios = require('axios').default;
 const querystring = require('querystring');
 const cookies = new Cookies();
 
+
 const API_URL = process.env.REACT_APP_API_URL
 
 const ButtonWrapper = styled.a`
@@ -375,9 +376,17 @@ class Playlists extends React.Component{
 					<div className="justify-content-center row card-row" key={key}>
 						{chunk.map((playlist,key) => {
 							return (
-								<div className="col-md-3 card-col" key={key}>
+								<div className="col-md-4 col-lg-3 col-xl-3 card-col" key={key}>
 									<FadeIn transitionDuration={1000}>
-										<Playlist key={key} name={playlist.name} img_link={playlist.images[0] ? playlist.images[0].url : {blank_image}} id={playlist.id} token={this.state.accessToken} desc={playlist.description} authCode={this.state.authCode}/>
+										<Playlist 
+										   key={key} 
+										   name={playlist.name} 
+										   img_link={playlist.images[0] ? playlist.images[0].url : {blank_image}} 
+										   id={playlist.id} 
+										   token={this.state.accessToken} 
+										   desc={playlist.description} 
+										   authCode={this.state.authCode}
+										   />
 									</FadeIn>
 								</div>
 							);
