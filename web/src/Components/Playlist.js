@@ -1,7 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {
-  isMobile
-} from 'react-device-detect';
 import { useInView } from 'react-hook-inview'
 import styled from 'styled-components';
 
