@@ -1,6 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import useInView from "react-cool-inview";
+import {
+  isMobile
+} from 'react-device-detect';
+import { useInView } from 'react-hook-inview'
 import styled from 'styled-components';
+
 import './css/Playlist.css';
 import { createMuiTheme } from '@material-ui/core/styles';
 import {ThemeProvider} from 'styled-components';
@@ -30,6 +34,12 @@ const Wrapper = styled(Card)`
   margin-right: 7px;
   transition: ease 0.1s !important;
 
+  && {
+	  @media (max-width: 768px) {
+      box-shadow: ${props => props.inView ? props.boxShadow : 'none'};
+      transform: ${props => props.inView ? 'translate(-2%,-4px)' : 'none'};
+    }
+
   &:hover {
     /*border: solid ${props => props.palette ? props.palette.Vibrant.hex : 'white'} 1px;*/
     /* box-shadow: ${props => props.palette ? props.palette.Vibrant.hex : 'white'} 10px 10px; */
@@ -52,14 +62,19 @@ const Link = styled.a`
 const querystring = require('querystring');
 const REDIRECT_BASE = process.env.REACT_APP_BASE_URL + '/analysis?'
 
-const Playlist = ({name, img_link, token, authCode, id, desc}) => {
+const Playlist = ({name, img_link, token, authCode, id, desc, setName}) => {
+
+  const [ref, inView] = useInView({
+    threshold: 1
+  });
   
-  const [palette, setPalette] = useState({});
+  const [palette, setPalette] = useState();
   const [boxShadowString, setBoxShadowString] = useState('');
 
   useEffect(() => {
-    getVibrant(img_link)
-  }, [])
+    if(!palette){getVibrant(img_link)}
+    console.log(inView)
+  }, [inView])
 
   const getVibrant = (img_link) => {
     
@@ -110,6 +125,8 @@ const Playlist = ({name, img_link, token, authCode, id, desc}) => {
                     square={true}
                     palette={palette}
                     boxShadow={boxShadowString}
+                    inView={inView}
+                    ref={ref}
                   >
                     <CardActionArea>
                       <CardMedia

@@ -324,7 +324,6 @@ class Playlists extends React.Component{
 
 		render() {
 
-		const { classes } = this.props
 
 		if(this.state.playlists){
 		return (
@@ -356,6 +355,7 @@ class Playlists extends React.Component{
 				</Typography>
                 <Typography variant={isMobile ? 'body1' : 'h5'} align={'left'} style={{fontWeight: 100, textAlign: isMobile ? 'center !important' : 'left !important'}}>
 					Please select a playlist to continue.
+					{this.state.name}
 				</Typography>
 			  </div>
 			  </ThemeProvider>
@@ -387,7 +387,7 @@ class Playlists extends React.Component{
 										   token={this.state.accessToken} 
 										   desc={playlist.description} 
 										   authCode={this.state.authCode}
-										   />
+										/>
 									</FadeIn>
 								</div>
 							);
