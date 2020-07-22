@@ -330,6 +330,7 @@ class Playlists extends React.Component{
 		return (
 		<div>
         <br></br>
+		<br></br>
         <Container>
           <Grid container
                 direction={isMobile ? "column" : "row"}
@@ -377,7 +378,7 @@ class Playlists extends React.Component{
 						{chunk.map((playlist,key) => {
 							return (
 								<div className="col-md-4 col-lg-3 col-xl-3 card-col" key={key}>
-									<FadeIn transitionDuration={1000}>
+									<FadeIn transitionDuration={500}>
 										<Playlist 
 										   key={key} 
 										   name={playlist.name} 

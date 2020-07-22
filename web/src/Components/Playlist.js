@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import useInView from "react-cool-inview";
 import styled from 'styled-components';
 import './css/Playlist.css';
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -27,18 +28,16 @@ const card_theme = createMuiTheme({
 const Wrapper = styled(Card)`
   margin-left: 7px;
   margin-right: 7px;
-  transition: ease-in-out 0.5 !important;
-  box-shadow: ${props => props.palette ? props.palette.Vibrant.hex : 'white'} 2px 2px;
+  transition: ease 0.1s !important;
 
   &:hover {
-    transition: ease-in-out 0.5 !important;
     /*border: solid ${props => props.palette ? props.palette.Vibrant.hex : 'white'} 1px;*/
-    box-shadow: ${props => props.palette ? props.palette.Vibrant.hex : 'white'} 10px 10px;
-    transform: translate(-4px,-4px);
+    /* box-shadow: ${props => props.palette ? props.palette.Vibrant.hex : 'white'} 10px 10px; */
+    box-shadow: ${props => props.boxShadow ? props.boxShadow : 'white 10px 10px'};
+    transform: translate(-5%,-4px);
   &:active {
-    transition: ease-in-out 0.5 !important;
-    box-shadow: ${props => props.palette ? props.palette.Vibrant.hex : 'white'} 2px 2px;
-    transform: translate(2px,2px);
+    box-shadow: ${props => props.boxShadow ? props.boxShadow : 'white 5px 5px'};
+    transform: translate(-4%,-3px);
   }
   }
 `
@@ -53,65 +52,69 @@ const Link = styled.a`
 const querystring = require('querystring');
 const REDIRECT_BASE = process.env.REACT_APP_BASE_URL + '/analysis?'
 
-class Playlist extends React.Component{
+const Playlist = ({name, img_link, token, authCode, id, desc}) => {
+  
+  const [palette, setPalette] = useState({});
+  const [boxShadowString, setBoxShadowString] = useState('');
 
-	constructor(props) {
-    		super(props);
-    		//console.log(props.accessToken)
-    		this.state = {
-      		name: props.name,
-      		img_link: props.img_link,
-      		access_token: props.token,
-          authCode: props.authCode,
-      		id: props.id,
-          desc: props.desc,
-          palette: null,
-    		};
+  useEffect(() => {
+    getVibrant(img_link)
+  }, [])
 
-      }
-    componentDidMount(){
-      this.getVibrant(this.state.img_link)
+  const getVibrant = (img_link) => {
+    
+    Vibrant.from(img_link).getPalette()
+         .then((palette) => {
+        setPalette(palette)
+        setBoxShadowString(
+          `1px 1px ${palette.Vibrant.hex}, 
+          1.5px 1.5px ${palette.Vibrant.hex},
+          2px 2px ${palette.Vibrant.hex},
+          2.5px 2.5px ${palette.Vibrant.hex},
+          3px 3px ${palette.Vibrant.hex},
+          3.5px 3.5px ${palette.Vibrant.hex}, 
+          4px 4px ${palette.Vibrant.hex},
+          4.5px 4.5px ${palette.Vibrant.hex}, 
+          5px 5px ${palette.Vibrant.hex},
+          5.5px 5.5px ${palette.Vibrant.hex}, 
+          6px 6px ${palette.Vibrant.hex},
+          6.5px 6.5px ${palette.Vibrant.hex}, 
+          7px 7px ${palette.Vibrant.hex},
+          7.5px 7.5px ${palette.Vibrant.hex}, 
+          8px 8px ${palette.Vibrant.hex},
+          8.5px 8.5px ${palette.Vibrant.hex}, 
+          9px 9px ${palette.Vibrant.hex}`
+        )
+    })
+  }
+
+  const generateURL = (access_token,playlist_id,name,authCode) => {
+    let payload = {
+      access_token: access_token,
+      code: authCode,
+      id: playlist_id,
+      name: name
     }
+    let url_query = querystring.stringify(payload)
 
-    getVibrant = (img_link) => {
-			Vibrant.from(img_link).getPalette()
-				   .then((palette) => {
-             console.log(palette)
-					this.setState({palette: palette})
-	
-		  })
-		}
+    return REDIRECT_BASE + url_query
+  }
 
-  	generateURL(access_token,playlist_id,name,authCode) {
-  			let payload = {
-  				access_token: access_token,
-          code: authCode,
-  				id: playlist_id,
-          name: name
-  			}
-
-  			let url_query = querystring.stringify(payload)
-
-  			return REDIRECT_BASE + url_query
-
-
-      }
-
-  	render() {
-  			
-          if(!this.state.palette){return(' ')}else{
-          return (
-          <Link href={this.generateURL(this.state.access_token,this.state.id,this.state.name,this.state.authCode)}>
+  return(
+    <div>
+    {boxShadowString ? 
+    <Link href={generateURL(token,id,name,authCode)}>
             <ThemeProvider theme={card_theme}>
                   <Wrapper 
                     elevation={0} 
                     square={true}
-                    palette={this.state.palette}
+                    palette={palette}
+                    boxShadow={boxShadowString}
                   >
                     <CardActionArea>
                       <CardMedia
                         style = {{ height: "300", width: "max", paddingTop: '100%'}}
-                        image={this.state.img_link}
+                        image={img_link}
                         title="Image title"
                       />
                       <CardContent className='playlist-card' style={{height: '100%'}}>
@@ -119,15 +122,16 @@ class Playlist extends React.Component{
                           theme={card_theme}
                           variant="h6"
                         >
-                          {this.state.name}
+                          {name}
                         </Typography>
                       </CardContent>
                     </CardActionArea>
                   </Wrapper>
             </ThemeProvider>
           </Link>
-  				);
-  		}}
-}
+    : ' '}
+    </div>
+  )
+  }
 
-export default Playlist
+export default Playlist;
