@@ -36,6 +36,7 @@ const Wrapper = styled(Card)`
       box-shadow: ${props => props.inView ? props.boxShadow : 'none'};
       transform: ${props => props.inView ? 'translate(-2%,-4px)' : 'none'};
     }
+    }
 
   &:hover {
     /*border: solid ${props => props.palette ? props.palette.Vibrant.hex : 'white'} 1px;*/
@@ -70,32 +71,33 @@ const Playlist = ({name, img_link, token, authCode, id, desc, setName}) => {
 
   useEffect(() => {
     if(!palette){getVibrant(img_link)}
-    console.log(inView)
-  }, [inView])
+  }, [])
 
   const getVibrant = (img_link) => {
     
     Vibrant.from(img_link).getPalette()
          .then((palette) => {
+        // console.log(palette)
+        let color = palette.LightVibrant.hex
         setPalette(palette)
         setBoxShadowString(
-          `1px 1px ${palette.Vibrant.hex}, 
-          1.5px 1.5px ${palette.Vibrant.hex},
-          2px 2px ${palette.Vibrant.hex},
-          2.5px 2.5px ${palette.Vibrant.hex},
-          3px 3px ${palette.Vibrant.hex},
-          3.5px 3.5px ${palette.Vibrant.hex}, 
-          4px 4px ${palette.Vibrant.hex},
-          4.5px 4.5px ${palette.Vibrant.hex}, 
-          5px 5px ${palette.Vibrant.hex},
-          5.5px 5.5px ${palette.Vibrant.hex}, 
-          6px 6px ${palette.Vibrant.hex},
-          6.5px 6.5px ${palette.Vibrant.hex}, 
-          7px 7px ${palette.Vibrant.hex},
-          7.5px 7.5px ${palette.Vibrant.hex}, 
-          8px 8px ${palette.Vibrant.hex},
-          8.5px 8.5px ${palette.Vibrant.hex}, 
-          9px 9px ${palette.Vibrant.hex}`
+          `1px 1px ${color}, 
+          1.5px 1.5px ${color},
+          2px 2px ${color},
+          2.5px 2.5px ${color},
+          3px 3px ${color},
+          3.5px 3.5px ${color}, 
+          4px 4px ${color},
+          4.5px 4.5px ${color}, 
+          5px 5px ${color},
+          5.5px 5.5px ${color}, 
+          6px 6px ${color},
+          6.5px 6.5px ${color}, 
+          7px 7px ${color},
+          7.5px 7.5px ${color}, 
+          8px 8px ${color},
+          8.5px 8.5px ${color}, 
+          9px 9px ${color}`
         )
     })
   }
