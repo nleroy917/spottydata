@@ -10,6 +10,7 @@ import blank_profile from '../images/blank_profile.png'
 import Playlist from '../Components/Playlist'
 import Loader from '../Components/Loader'
 import loading_gif from '../images/loading.gif'
+import Layout from '../Components/Layout'
 
 // Load Material UI
 // Load in the materials-ui components
@@ -327,10 +328,11 @@ class Playlists extends React.Component{
 
 		if(this.state.playlists){
 		return (
-		<div>
+		<>
         <br></br>
 		<br></br>
-        <Container>
+        <Container
+		>
           <Grid container
                 direction={isMobile ? "column" : "row"}
                 justify="center"
@@ -397,7 +399,7 @@ class Playlists extends React.Component{
 		</div>
 		</Container>
         <br></br>
-        </div>
+		</>
 				);}
 		else if(this.state.accessTokenError) {
 			return(

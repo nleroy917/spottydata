@@ -29,12 +29,12 @@ const card_theme = createMuiTheme({
 const Wrapper = styled(Card)`
   margin-left: 7px;
   margin-right: 7px;
-  transition: ease 0.1s !important;
+  transition: box-shadow ease-in-out 0.1s !important;
 
   && {
 	  @media (max-width: 768px) {
       box-shadow: ${props => props.inView ? props.boxShadow : 'none'};
-      transform: ${props => props.inView ? 'translate(-2%,-4px)' : 'none'};
+      transform: ${props => props.inView ? 'translate(-4.5,-4.5px)' : 'none'};
     }
     }
 
@@ -42,10 +42,11 @@ const Wrapper = styled(Card)`
     /*border: solid ${props => props.palette ? props.palette.Vibrant.hex : 'white'} 1px;*/
     /* box-shadow: ${props => props.palette ? props.palette.Vibrant.hex : 'white'} 10px 10px; */
     box-shadow: ${props => props.boxShadow ? props.boxShadow : 'white 10px 10px'};
-    transform: translate(-5%,-4px);
+    transform: translate(-4.5px,-4.5px);
+    border: ${props => props.palette.LightVibrant.hex ? props.palette.LightVibrant.hex : ''} 2px solid;
   &:active {
     box-shadow: ${props => props.boxShadow ? props.boxShadow : 'white 5px 5px'};
-    transform: translate(-4%,-3px);
+    transform: translate(-2px,-2px);
   }
   }
 `

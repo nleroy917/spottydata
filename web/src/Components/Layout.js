@@ -64,7 +64,10 @@ const Layout = ({ children }) => {
                       Logout?
                     </A>
         </Header> 
-        : ''}
+        : 
+        <Header>
+            
+        </Header>}
         {children}
     </Wrapper>
     )

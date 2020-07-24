@@ -176,7 +176,6 @@ const donateHoverChange = () => {
 return(
 	<>
 	<Layout>
-	<br></br>
 	<Grid container
 		direction="column"
 		justify="center"
