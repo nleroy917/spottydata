@@ -1,0 +1,27 @@
+# use alpine linux with standard python-7
+FROM python:3.7.7-alpine
+
+# open up port 5000
+EXPOSE 5000
+
+# install c and c compilers
+RUN apk add --no-cache g++ gcc musl-dev linux-headers unixodbc-dev curl
+
+# set working directory
+WORKDIR /api
+
+# copy files over
+ADD ./requirements.txt /api/requirements.txt
+
+# install python dependencies
+RUN pip install -r requirements.txt
+
+# set env variables
+ENV FLASK_ENV development
+ENV FLASK_APP api.py
+
+# set working directory to the api dir
+WORKDIR /api
+
+# spin up api server
+CMD ["flask", "run", "--host=0.0.0.0"]
