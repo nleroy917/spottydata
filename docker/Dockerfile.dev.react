@@ -1,0 +1,24 @@
+# use node + alpine image
+FROM node:10.15.2-alpine
+
+# open port
+EXPOSE 3000
+
+# make frontend dir
+RUN mkdir /web
+
+# install git
+RUN apk update && apk upgrade && \
+    apk add --no-cache git
+
+# change to /frontend
+WORKDIR /web
+
+# copy over dependencies
+COPY web/package.json /web/package.json
+
+# install dependencies
+RUN npm install
+
+# run
+CMD ["npm", "start", "--silent"]

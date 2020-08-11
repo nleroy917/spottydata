@@ -5,8 +5,8 @@
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  background-repeat: no-repeat;
-  background: url('../../images/landing.jpg');
+  background: url('../../images/landing3.png');
+  background-repeat: repeat;
   color: #E6FAFC;
 }
 
