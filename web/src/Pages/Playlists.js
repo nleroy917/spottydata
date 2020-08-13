@@ -1,4 +1,5 @@
 import React from 'react';
+import {Redirect} from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import styled from 'styled-components'
 import {isMobile} from 'react-device-detect'
@@ -10,7 +11,6 @@ import blank_profile from '../images/blank_profile.png'
 import Playlist from '../Components/Playlist'
 import Loader from '../Components/Loader'
 import loading_gif from '../images/loading.gif'
-import Layout from '../Components/Layout'
 
 // Load Material UI
 // Load in the materials-ui components
@@ -126,9 +126,16 @@ class Playlists extends React.Component{
       		user_id: null,
       		playlists: null,
 			chunked_playlists: null,
+			cancelled: false,
 
     		};
-  		}
+		  }
+		
+		componentWillMount() {
+			if(querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).error === 'access_denied') {
+				this.setState({cancelled: true})
+			}
+		}
 		
   		componentDidMount() {
   			this.fetchAuthCode()
@@ -413,6 +420,8 @@ class Playlists extends React.Component{
               <NewButton variant="outlined"><span> Take me back! </span></NewButton>
             </ButtonWrapper>
 			</div>)
+		}else if(this.state.cancelled) {
+			return(<Redirect to="/" />)
 		}
 		else{
 			return(<Loader image={loading_gif} message="Fetching Playlists..."/>);

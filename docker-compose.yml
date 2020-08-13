@@ -12,6 +12,9 @@ services:
             dockerfile: ./docker/Dockerfile.dev.flask
         volumes:
             - ./lib:/api/lib
+            - ./api.py:/api/api.py
+            - ./static:/api/static
+            - ./templates:/api/templates
         networks:
             - backend
     
