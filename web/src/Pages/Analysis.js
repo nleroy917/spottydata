@@ -515,8 +515,9 @@ class Analysis extends React.Component {
             direction="row"
             justify="space-between"
             alignItems="stretch"
+            style={{height: '100%'}}
           >
-            <Grid item lg={4} md={4} s={6} xs={12} style={{height: '100%'}}>
+            <Grid item lg={4} md={4} s={6} xs={12}>
               <ChartContainer title="Playlist Feel" style={{height: '100%'}}>
                 {this.state.feel_data ? <FeelChart data={this.state.feel_data} palette={this.state.palette}/> : ' '}
               </ChartContainer>

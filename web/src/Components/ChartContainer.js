@@ -13,7 +13,8 @@ const styles = theme => ({
     overflow: 'hidden',
   },
   paper: {
-    background: '#212529'
+	background: '#212529',
+	height: '100%'
   },
   paper_title: {
     color: '#fff'
