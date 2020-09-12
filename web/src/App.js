@@ -6,10 +6,11 @@ import {
   Route
 } from "react-router-dom";
 
-import Home from './Pages/Home'
-import Playlists from './Pages/Playlists'
-import Analysis from './Pages/Analysis'
-import About from './Pages/About'
+import Home from './Pages/Home';
+import AnalysisSelect from './Pages/AnalysisSelect';
+import Playlists from './Pages/Playlists';
+import Analysis from './Pages/Analysis';
+import About from './Pages/About';
 
 
 const App = () => {
@@ -23,6 +24,8 @@ const App = () => {
         <Route path="/playlists/" component={Playlists}>
         </Route>
         <Route path="/analysis/" component={Analysis}>
+        </Route>
+        <Route path="/analysis-select/" component={AnalysisSelect}>
         </Route>
         <Route path="/" exact component={Home}>
         </Route>

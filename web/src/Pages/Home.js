@@ -9,9 +9,10 @@ import Layout from '../Components/Layout'
 
 import {
 Typography,
-Button,
 Grid
 } from '@material-ui/core';
+
+import SDButton from '../Components/SDButton';
 
 const AnalysisText = styled.p`
 	font-size:1.32rem;
@@ -64,41 +65,9 @@ const ButtonWrapper = styled.a`
     }
 `
 
-const NewButton = styled(Button)`
-  && {
-	@media (max-width: 768px) {
-	margin:15px;
-	width: 60vw;
-	height: 60px;
-  }
-	margin: 30px;
-	color: inherit;
-	width: 150px;
-	height: 50px;
-	border-radius: 0px;
-	border: solid 1px white;
-	box-shadow: 4px 4px;
-	&:hover {
-		color: white;
-		transform: translate(1px,1px);
-		opacity: 0.7;
-		text-decoration: none;
-		box-shadow: 2px 2px;
-    }
-  }
-`
-
 const TypistWrapper = styled.div`
 	min-height: 50px;
 
-`
-
-const CookieNotice = styled(Typography)`
-
-  color: white !important;
-  font-weight: 400 !important;
-  opacity: 0.6;
-  font-size: 1rem !important;
 `
 
 const HoverAlertWrapper = styled.div`
@@ -150,7 +119,6 @@ const payload = {
 }
 
 const authorize_url = base_url + querystring.stringify(payload)
-
 
 
 const Home = () => {
@@ -209,13 +177,13 @@ return(
 			</Typist>
 		  </TypistWrapper>
 	        <ButtonWrapper onMouseEnter={() => {letsGoHoverChange()}} onMouseLeave={() => letsGoHoverChange()} href={authorize_url}>
-              <NewButton variant="outlined">Lets Go</NewButton>
+              <SDButton variant="outlined">Lets Go</SDButton>
             </ButtonWrapper>
 			<ButtonWrapper onMouseEnter={() => {gitHubHoverChange()}} onMouseLeave={() => gitHubHoverChange()} href="https://github.com/NLeRoy917/spottydata">
-              <NewButton variant="outlined">GitHub</NewButton>
+              <SDButton variant="outlined">GitHub</SDButton>
             </ButtonWrapper>
 	        <ButtonWrapper onMouseEnter={() => {donateHoverChange()}} onMouseLeave={() => donateHoverChange()} href="https://paypal.me/nathanleroy?locale.x=en_US">
-              <NewButton variant="outlined">Donate</NewButton>
+              <SDButton variant="outlined">Donate</SDButton>
             </ButtonWrapper>
 			{isMobile ? '' : 
 			<HoverAlertWrapper style={{minHeight: '75px'}}>
