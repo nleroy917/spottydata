@@ -42,15 +42,108 @@ const redirect_uri = process.env.REACT_APP_REDIRECT_URI
 const AnalysisSelect = ({  }) => {
 
     const [authCode, setAuthCode] = useState(querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code);
-    const [accessToken, setAccessToken] = useState(null);
-    const [user, setUser] = useState(null);
+    const [redirectURI, setRedirectURI] = useState(process.env.REACT_APP_REDIRECT_URI)
+    const [headers, setHeaders] = useState({
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + btoa(client_id + ':' + process.env.REACT_APP_CLIENT_SECRET,)
+    })
+    const [authBody, setAuthBody] = useState({
+        grant_type: 'authorization_code',
+        code: authCode,
+        redirect_uri: redirectURI
+    })
+    const [accessToken, setAccessToken] = useState(cookies.get('accessToken') || null);
+    const [refreshToken, setRefreshToken] = useState(cookies.get('refreshToken') || null);
+    const [user, setUser] = useState(cookies.get('userName') || null)
     const [uID, setUID] = useState(null);
+    const [error, setError] = useState(false);
     const [cancelled, setCancelled] = useState(false);
     
     useEffect(() => {
-        // console.log(authCode)
+
+        authorizationCodeFlow()
 
     },[])
+
+    const fetchName = async (token) => {
+
+        let hdrs = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+ 
+        let res  = await axios.get('https://api.spotify.com/v1/me', {headers: hdrs})
+        
+        if(res.status === 200) {
+            //console.log(response) 
+            let data = await res.data
+            cookies.set('userName', data.display_name, {path: '/'})
+        }
+    }
+  
+
+    const tokenRefresh = async (refreshToken) => {
+
+			let hdrs = {
+				'Authorization': 'Basic ' + btoa(client_id + ':' + client_secret)
+			}
+
+			let body = {
+				grant_type: 'refresh_token',
+				refresh_token: cookies.get('refreshToken')
+			}
+			try {
+			    let res = await axios.post('https://accounts.spotify.com/api/token', querystring.stringify(body), {headers: hdrs})
+			if(res.status === 200) {
+				//console.log('Access token refreshed')
+				let data = await res.data
+				//console.log(data)
+
+				if(data.refresh_token !== undefined){
+					setRefreshToken(data.refresh_token)
+				}
+				setAccessToken(data.access_token)
+
+				if(data.refresh_token !== undefined){
+					cookies.set('refreshToken',data.refresh_token,{path: '/'})
+				} else {
+					cookies.remove('refreshToken')
+                }
+                
+				cookies.set('accessToken',data.access_token,{ path: '/', expires: new Date(Date.now()+ data.expires_in*3600)})
+
+				fetchName(data.access_token)
+			}
+		} catch(err) {
+			setError(true)
+			cookies.delete('accessToken')
+			cookies.delete('refreshToken')
+		}
+
+	}
+
+    const authorizationCodeFlow = async () => {
+        if(accessToken) {
+            if(!user){fetchName(accessToken)}
+        } else if(refreshToken) {
+            tokenRefresh(refreshToken)
+        } else{
+        try {
+            var res = await axios.post(`https://accounts.spotify.com/api/token`, querystring.stringify(authBody), {headers: headers})
+            var data = await res.data
+            setAccessToken(data.access_token)
+            setRefreshToken(data.refresh_token)
+            cookies.set('refreshToken',data.refresh_token,{path: '/'})
+            cookies.set('accessToken',data.access_token,{ path: '/', expires: new Date(Date.now()+ data.expires_in*3600)})
+
+            fetchName(data.access_token)
+            
+        } catch (error) {
+            alert(`Error in auth: ${error}`)
+        }
+    }
+        
+    }
 
     return(
         <>

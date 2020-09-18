@@ -41,7 +41,7 @@ const Layout = ({ children }) => {
 
     useEffect(() => {
         checkCookies()
-    }, [])
+    }, [children])
 
     const checkCookies = () => {
         if (cookies.get('accessToken')) {
@@ -58,7 +58,7 @@ const Layout = ({ children }) => {
 
     return(
     <Wrapper className="masthead home-background">
-        {authed ? 
+     {authed ? 
         <Header>
           Logged in as {user}. <A onClick={() => clearCookies()} href={`${process.env.REACT_APP_BASE_URL}`}>
                       Logout?
