@@ -147,7 +147,9 @@ const AnalysisSelect = ({  }) => {
 
     return(
         <>
-          <Layout>
+          <Layout
+            userID={user}
+          >
            <VerticalCenter>
             <LandingText variant="h4">
                 What would you like to analyze?

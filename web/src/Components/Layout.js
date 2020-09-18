@@ -60,7 +60,7 @@ const Layout = ({ children }) => {
     <Wrapper className="masthead home-background">
      {authed ? 
         <Header>
-          Logged in as {user}. <A onClick={() => clearCookies()} href={`${process.env.REACT_APP_BASE_URL}`}>
+          Logged in as {cookies.get('userName')}. <A onClick={() => clearCookies()} href={`${process.env.REACT_APP_BASE_URL}`}>
                       Logout?
                     </A>
         </Header> 
