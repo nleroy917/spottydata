@@ -32,7 +32,8 @@ const Header = styled.header`
 `
 
 const A = styled.a`
-
+    margin-left: 5px;
+    margin-right: 5px;
     color: blue;
 
 `
@@ -65,11 +66,12 @@ const Layout = ({ children }) => {
         <Header>
 
         <A href={"/"}>Home</A>
-
+        <div>
           Logged in as {cookies.get('userName')}. 
           <A onClick={() => clearCookies()} href={`${process.env.REACT_APP_BASE_URL}`}>
                       Logout?
                     </A>
+        </div>
 
         </Header> 
         : 
