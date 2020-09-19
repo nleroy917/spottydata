@@ -427,7 +427,7 @@ class Analysis extends React.Component {
                 <ThemeProvider theme={button_theme}>
                   <Grid item>
                   <ButtonWrapper>
-                    <NewButton href={`${process.env.REACT_APP_REDIRECT_URI}`}>
+                    <NewButton href="/playlists">
                       Analyze Another
                     </NewButton>
                   </ButtonWrapper>

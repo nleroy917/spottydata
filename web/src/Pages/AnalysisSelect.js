@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {Redirect} from 'react-router-dom';
 import styled from 'styled-components';
 import { isMobile } from 'react-device-detect';
 import Cookies from 'universal-cookie';
@@ -39,6 +40,21 @@ const client_id = '0ca7dd0007fd4ff2a34c3aab07379970'
 const client_secret =  process.env.REACT_APP_CLIENT_SECRET
 const redirect_uri = process.env.REACT_APP_REDIRECT_URI
 
+const ErrorView = ({ }) => {
+    return(
+        <div>
+			<br>
+			</br>
+			<br></br>
+			<Typography variant="h4">Token Error :( Please go back to the home page</Typography>
+				<Typography variant="body1">If error persists, try clearing your browser cache and removing cookies for the site.</Typography>
+			<ButtonWrapper >
+              <SDButton href="/" variant="outlined"><span> Take me back! </span></SDButton>
+            </ButtonWrapper>
+		</div>
+    )
+}
+
 const AnalysisSelect = ({  }) => {
 
     const [authCode, setAuthCode] = useState(querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code);
@@ -60,7 +76,7 @@ const AnalysisSelect = ({  }) => {
     const [cancelled, setCancelled] = useState(false);
     
     useEffect(() => {
-
+        checkCancelled()
         authorizationCodeFlow()
 
     },[])
@@ -78,6 +94,8 @@ const AnalysisSelect = ({  }) => {
             //console.log(response) 
             let data = await res.data
             cookies.set('userName', data.display_name, {path: '/'})
+            cookies.set('userID', data.id, {path: '/'})
+            cookies.set('user', data, {path: '/'})
         }
     }
   
@@ -120,7 +138,15 @@ const AnalysisSelect = ({  }) => {
 			cookies.delete('refreshToken')
 		}
 
-	}
+    }
+    
+    const checkCancelled = () => {
+
+        if(querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).error === 'access_denied') {
+            setCancelled(true)
+        }
+
+    }
 
     const authorizationCodeFlow = async () => {
         if(accessToken) {
@@ -139,13 +165,14 @@ const AnalysisSelect = ({  }) => {
             fetchName(data.access_token)
             
         } catch (error) {
-            alert(`Error in auth: ${error}`)
+            setError(true)
         }
     }
         
     }
 
     return(
+        error ? <ErrorView /> : cancelled ? <Redirect to="/" /> : 
         <>
           <Layout
             userID={user}
@@ -160,13 +187,20 @@ const AnalysisSelect = ({  }) => {
                 >
                     Playlist
                 </SDButton>
-                <SDButton>
-                    Song
+                <SDButton
+                    variant="disabled"
+                >
+                {
+                    <>
+                    Song<br></br>Coming soon..
+                    </>
+                }
                 </SDButton>
             </ButtonWrapper>
             </VerticalCenter>
           </Layout>
         </>
+        
     )
 }
 
