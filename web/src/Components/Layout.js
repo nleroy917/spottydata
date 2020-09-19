@@ -15,6 +15,9 @@ const Wrapper = styled.div`
 `
 
 const Header = styled.header`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   min-height: 50px;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -60,9 +63,14 @@ const Layout = ({ children }) => {
     <Wrapper className="masthead home-background">
      {authed ? 
         <Header>
-          Logged in as {cookies.get('userName')}. <A onClick={() => clearCookies()} href={`${process.env.REACT_APP_BASE_URL}`}>
+
+        <A href={"/"}>Home</A>
+
+          Logged in as {cookies.get('userName')}. 
+          <A onClick={() => clearCookies()} href={`${process.env.REACT_APP_BASE_URL}`}>
                       Logout?
                     </A>
+
         </Header> 
         : 
         <Header>
