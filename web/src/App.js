@@ -9,7 +9,7 @@ import {
 import Home from './Pages/Home';
 import AnalysisSelect from './Pages/AnalysisSelect';
 import Playlists from './Pages/Playlists';
-import Analysis from './Pages/Analysis';
+import PlaylistAnalysis from './Pages/PlaylistAnalysis';
 import SearchPage from './Pages/Search';
 import About from './Pages/About';
 
@@ -24,7 +24,7 @@ const App = () => {
         </Route> */}
         <Route path="/playlists/" component={Playlists}>
         </Route>
-        <Route path="/analysis/" component={Analysis}>
+        <Route path="/playlist-analysis/" component={PlaylistAnalysis}>
         </Route>
         <Route path="/analysis-select/" component={AnalysisSelect}>
         </Route>

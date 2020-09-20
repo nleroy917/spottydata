@@ -152,7 +152,7 @@ function nthIndex(str, pat, n){
 }
 
 
-class Analysis extends React.Component {
+class PlaylistAnalysis extends React.Component {
 
 		  constructor(props) {
     		super(props);
@@ -598,8 +598,8 @@ class Analysis extends React.Component {
 
 }
 
-Analysis.propTypes = {
+PlaylistAnalysis.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Analysis);
+export default withStyles(styles)(PlaylistAnalysis);

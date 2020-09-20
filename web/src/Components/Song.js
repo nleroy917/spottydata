@@ -1,12 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const Link = styled.a`
+    text-decoration: none;
+    width: 60%;
+    && {
+	    @media (max-width: 768px) {
+        width: 100%
+      }
+    }
+
+    &:hover {
+        text-decoration: none;
+        underline: none;
+    }
+`
+
 const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
     background: rgba(0, 0, 0, 0.6);
-    width: 300px;
-    height: 150px;
+    width: 90%;
     color: white;
     margin: 10px;
     padding: 15px;
@@ -18,6 +32,11 @@ const Wrapper = styled.div`
     &:hover {
         transform: translate(-2px,-2px);
         box-shadow: rgba(0, 0, 0, 0.8) 6px 6px;
+    }
+
+    &:active {
+        transform: translate(1px,1px);
+        box-shadow: rgba(0, 0, 0, 0.8) 3px 3px;
     }
 `
 
@@ -44,6 +63,7 @@ const SongArtist = styled.p`
 const Song = ({result}) => {
     return(
         <>
+        <Link href={`/song-analysis/${result.id}`}>
         <Wrapper>
         <Thumbnail src={result.album.images[0].url} />
           <SongDeets>
@@ -51,10 +71,11 @@ const Song = ({result}) => {
                 {result.name}
             </SongTitle>
             <SongArtist>
-                {`${result.artists[0].name}, ${result.album.name}`}
+                {`${result.artists[0].name}`}
             </SongArtist>
             </SongDeets>
         </Wrapper>
+        </Link>
         </>
     )
 }

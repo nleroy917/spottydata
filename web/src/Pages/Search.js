@@ -98,7 +98,7 @@ const SearchPage = ({ }) => {
             {/* <SearchButton>
                   Search
             </SearchButton> */}
-            <ResultsWrapper>
+
             {
               results.map((result, key) => {
                   return(
@@ -106,7 +106,7 @@ const SearchPage = ({ }) => {
                   )
               })
           }
-          </ResultsWrapper>
+
           </VerticalCenter>
         </Layout>
         </>
