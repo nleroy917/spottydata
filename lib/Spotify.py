@@ -108,6 +108,13 @@ class Spotify():
             
         
         return tracks_full, analysis, artists, last_update
+    
+    def search(self, query, type):
+        '''
+        Method to search spotify for a certain query
+        '''
+        results = self._spotify.search(query, type=type, limit=24)
+        return results['tracks']
         
 
     def get_recommendations(self):

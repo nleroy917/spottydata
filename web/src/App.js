@@ -10,6 +10,7 @@ import Home from './Pages/Home';
 import AnalysisSelect from './Pages/AnalysisSelect';
 import Playlists from './Pages/Playlists';
 import Analysis from './Pages/Analysis';
+import SearchPage from './Pages/Search';
 import About from './Pages/About';
 
 
@@ -26,6 +27,8 @@ const App = () => {
         <Route path="/analysis/" component={Analysis}>
         </Route>
         <Route path="/analysis-select/" component={AnalysisSelect}>
+        </Route>
+        <Route path="/search/" component={SearchPage}>
         </Route>
         <Route path="/" exact component={Home}>
         </Route>

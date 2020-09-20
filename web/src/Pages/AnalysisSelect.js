@@ -188,11 +188,20 @@ const AnalysisSelect = ({  }) => {
                     Playlist
                 </SDButton>
                 <SDButton
+                    href="/search"
+                >
+                {
+                    <>
+                    Song
+                    </>
+                }
+                </SDButton>
+                <SDButton
                     variant="disabled"
                 >
                 {
                     <>
-                    Song<br></br>Coming soon..
+                    Album<br></br>Coming soon..
                     </>
                 }
                 </SDButton>
