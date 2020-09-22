@@ -192,7 +192,7 @@ const AnalysisSelect = ({  }) => {
                 >
                 {
                     <>
-                    Song
+                    Song (Beta)
                     </>
                 }
                 </SDButton>

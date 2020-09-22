@@ -66,6 +66,7 @@ const SearchPage = ({ }) => {
     const [query, setQuery] = useState('')
     const [accessToken, setAccessToken] = useState(cookies.get('accessToken'))
     const [results, setResults] = useState([]);
+    const [noResults, setNoResults] = useState(false);
 
     const search = async () => {
         if(!query) {
@@ -80,7 +81,9 @@ const SearchPage = ({ }) => {
         if(res.status === 200) {
             let data = await res.data
             setResults(data.results)
-            console.log(data.results)
+            if(data.results.length === 0){setNoResults(true)}
+            else{setNoResults(false)}
+            // console.log(data.results)
         }
     }
 
@@ -98,11 +101,13 @@ const SearchPage = ({ }) => {
             {/* <SearchButton>
                   Search
             </SearchButton> */}
-
+            {
+                noResults ? <><p>No Results :(</p></> : ''
+            }
             {
               results.map((result, key) => {
                   return(
-                      <Song result={result} />
+                      <Song result={result} accessToken={accessToken} />
                   )
               })
           }

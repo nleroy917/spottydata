@@ -12,7 +12,6 @@ const Link = styled.a`
 
     &:hover {
         text-decoration: none;
-        underline: none;
     }
 `
 
@@ -60,10 +59,10 @@ const SongArtist = styled.p`
     margin-left: 5px;
 `
 
-const Song = ({result}) => {
+const Song = ({result, accessToken}) => {
     return(
         <>
-        <Link href={`/song-analysis/${result.id}`}>
+        <Link href={`/song-analysis?id=${result.id}&access_token=${accessToken}`}>
         <Wrapper>
         <Thumbnail src={result.album.images[0].url} />
           <SongDeets>

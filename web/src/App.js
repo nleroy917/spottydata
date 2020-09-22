@@ -12,6 +12,7 @@ import Playlists from './Pages/Playlists';
 import PlaylistAnalysis from './Pages/PlaylistAnalysis';
 import SearchPage from './Pages/Search';
 import About from './Pages/About';
+import SongAnalysis from './Pages/SongAnalysis';
 
 
 const App = () => {
@@ -23,6 +24,8 @@ const App = () => {
         {/* <Route path="/about/" component={About}>
         </Route> */}
         <Route path="/playlists/" component={Playlists}>
+        </Route>
+        <Route path="/song-analysis/" component={SongAnalysis}>
         </Route>
         <Route path="/playlist-analysis/" component={PlaylistAnalysis}>
         </Route>

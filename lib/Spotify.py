@@ -113,7 +113,7 @@ class Spotify():
         '''
         Method to search spotify for a certain query
         '''
-        results = self._spotify.search(query, type=type, limit=24)
+        results = self._spotify.search(query, type=type, limit=5)
         return results['tracks']
         
 
