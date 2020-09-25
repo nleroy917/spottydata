@@ -61,6 +61,13 @@ class Spotify():
             artists = self._spotify.artists(artist_ids)['artists']
             return artists
 
+    def song_features(self, song_id):
+        '''
+        Method to get the audio features for one song at a time. This is used for the song analysis section of the page.
+        '''
+        analysis = self._spotify.audio_features(song_id)
+        return analysis
+
     def get_playlist_items(self,playlist_id):
         '''
         Method to extract all the playlist items from a playlist regardless of number of items. The Spotify

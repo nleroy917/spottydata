@@ -2,12 +2,22 @@ import React, {useState, useEffect} from 'react';
 import { isMobile } from 'react-device-detect'
 import styled from 'styled-components'
 
-import Container from '@material-ui/core/Container';
+import {
+    Container,
+    Grid
+ } from '@material-ui/core';
 
 import axios from 'axios';
 import SDButton from '../Components/SDButton';
+import InfoCard from '../Components/InfoCard';
+import TempoPulse from '../Components/TempoPulse';
+
+// Import Vibrant.js
+import * as Vibrant from 'node-vibrant'
 
 const querystring = require('querystring');
+
+const URL_BASE = process.env.REACT_APP_API_URL
 
 const SongInfoWrapper = styled.div`
     display: flex;
@@ -27,6 +37,15 @@ const SongInfoWrapper = styled.div`
         align-items: center;
       }
     }
+`
+
+const AnalysisWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
 `
 
 const SongTitle = styled.h2`
@@ -62,10 +81,13 @@ const Thumbnail = styled.img`
 const SongAnalysis = ({ }) => {
     const [id, setID] = useState(querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).id)
     const [accessToken, setAccessToken] = useState(querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).access_token)
-    const [song, setSong] = useState(null)
+    const [song, setSong] = useState(null);
+    const [analysis, setAnalysis] = useState(null);
+    const [palette, setPalette] = useState({})
 
     useEffect(() => {
         fetchSong()
+        fetchAnalysis()
     }, [])
 
     const fetchSong = async () => {
@@ -79,11 +101,41 @@ const SongAnalysis = ({ }) => {
             let data = await res.data
             setSong(data)
             console.log(data)
+            getVibrant(data.album.images[0].url)
         }
+    }
+
+    const fetchAnalysis = async () => {
+        let hdrs = {
+            access_token: `${accessToken}`
+        }
+
+        let res = await axios.get(`${URL_BASE}/analysis/song/${id}`, {headers: hdrs})
+        if(res.status === 200) {
+            let data = res.data
+            console.log(data)
+            setAnalysis(data.analysis)
+            
+        }
+    }
+
+    const getVibrant = (url) => {
+        Vibrant.from(url).getPalette()
+               .then((palette) => {
+                console.log(palette)
+                //document.body.style.backgroundImage = `radial-gradient(ellipse at top,rgba(${palette.Vibrant.r},${palette.Vibrant.g},${palette.Vibrant.b},0.5),
+                                                                                      //rgba(${palette.Muted.r},${palette.Muted.g},${palette.Muted.b},0.4),
+                                                                                      
+                                                                                      //#2e2f32)`
+                setPalette(palette)
+               
+
+      }
+    )
     }
     
     return(
-        song ? 
+        song && analysis ? 
         <>
           <Container>
             <SongInfoWrapper>
@@ -99,14 +151,45 @@ const SongAnalysis = ({ }) => {
                 </SongAlbum>
                 </div>
                 <div>
-                    <SDButton>
+                    <SDButton href="/">
                         Home
                     </SDButton>
-                    <SDButton onClick="/search">
+                    <SDButton href="/search">
                         Analyze Another
                     </SDButton>
                 </div>
             </SongInfoWrapper>
+            <br></br>
+            <Grid container spacing={2}
+              direction="row"
+              justify="space-between"
+              alignItems="flex-start"
+            >
+            <Grid item lg={4} s={6} xs={12}>
+              <InfoCard
+                title="Song Key"
+                content={analysis.key}
+              >
+              </InfoCard>
+            </Grid>
+            <Grid item lg={4} s={6} xs={12}>
+              <InfoCard
+                title="Genre"
+                content={analysis.tempo}
+              >
+              </InfoCard>
+            </Grid>
+            <Grid item lg={4} s={6} xs={12}>
+              <InfoCard
+                title={`Tempo`}
+                content={`${analysis.tempo} bpm`}
+              >
+                <div style={{padding: '5px'}}>
+                  <TempoPulse bpm={analysis.tempo} color={palette.LightVibrant.hex} />
+                </div>
+              </InfoCard>
+            </Grid>
+            </Grid>
           </Container>
         </>
         : ' '

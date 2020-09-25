@@ -223,7 +223,7 @@ class PlaylistAnalysis extends React.Component {
         'access_token': this.state.accessToken
          }
 
-        const response = await axios.get(URL_BASE + `${this.state.id}/analysis`, {headers})
+        const response = await axios.get(URL_BASE + `/analysis/playlist/${this.state.id}`, {headers})
 
         if(response.status === 200){
             //console.log(response) 
@@ -293,7 +293,7 @@ class PlaylistAnalysis extends React.Component {
           'access_token': this.state.accessToken
            }
 
-          const response = await axios.get(URL_BASE + `${this.state.id}/analysis/lyrics`, {headers})
+          const response = await axios.get(URL_BASE + `/analysis/lyrics/playlist/${this.state.id}`, {headers})
 
           if(response.status === 200){
               //console.log(response) 
