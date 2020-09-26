@@ -2,19 +2,32 @@ import React from 'react';
 import styled from 'styled-components';
 
 import {
-    Paper
+    Paper,
+    Tooltip
 } from '@material-ui/core';
+import InfoIcon from '@material-ui/icons/Info';
 
-const InfoWrapper = styled(Paper)`
+const FullCard = styled(Paper)`
     padding: 30px;
     background: #212529;
     height: 100%;
     color: inherit;
+`
+
+const TooltipWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`
+
+const InnerWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
     direction: row;
     justify-content: space-between;
     align-items: center;
+    height: 80%;
 `
 
 const InfoTitle = styled.h4`
@@ -32,13 +45,19 @@ const InfoContent = styled.p`
 const InfoCard = (props) => {
     return(
         <>
-          <InfoWrapper
+          <FullCard
             elevation={3}
           >
-          <div>
+          <TooltipWrapper>
           <InfoTitle>
               {props.title}
           </InfoTitle>
+            <Tooltip title={props.tooltip}>
+              <InfoIcon />
+            </Tooltip>
+          </TooltipWrapper>
+          <InnerWrapper>
+          <div>
           <InfoContent>
               {props.content}
           </InfoContent>
@@ -46,7 +65,8 @@ const InfoCard = (props) => {
           <div>
             {props.children}
           </div>
-          </InfoWrapper>
+          </InnerWrapper>
+          </FullCard>
         </>
     )
 }

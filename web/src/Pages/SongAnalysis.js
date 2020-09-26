@@ -8,14 +8,18 @@ import {
  } from '@material-ui/core';
 
 import axios from 'axios';
+import Utils from '../Utils/Utils';
 import SDButton from '../Components/SDButton';
 import InfoCard from '../Components/InfoCard';
 import TempoPulse from '../Components/TempoPulse';
+import FeelChart from '../Components/FeelChart'
+import ChartContainer from '../Components/ChartContainer';
 
 // Import Vibrant.js
 import * as Vibrant from 'node-vibrant'
 
 const querystring = require('querystring');
+const utils = new Utils()
 
 const URL_BASE = process.env.REACT_APP_API_URL
 
@@ -65,6 +69,11 @@ const SongAlbum = styled.h4`
 const ThumbnailLink = styled.a`
 `
 
+const KeySignature = styled.img`
+  height: 100px;
+  width: 120px;
+`
+
 const Thumbnail = styled.img`
     margin: 15px;
     height: 150px;
@@ -83,7 +92,8 @@ const SongAnalysis = ({ }) => {
     const [accessToken, setAccessToken] = useState(querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).access_token)
     const [song, setSong] = useState(null);
     const [analysis, setAnalysis] = useState(null);
-    const [palette, setPalette] = useState({})
+    const [palette, setPalette] = useState(null);
+    const [keyImg, setKeyImg] = useState(null);
 
     useEffect(() => {
         fetchSong()
@@ -115,27 +125,22 @@ const SongAnalysis = ({ }) => {
             let data = res.data
             console.log(data)
             setAnalysis(data.analysis)
+            setKeyImg(utils.getKeySignatureImg(`${data.analysis.key} ${data.analysis.mode.toLowerCase()}`))
             
         }
     }
 
     const getVibrant = (url) => {
         Vibrant.from(url).getPalette()
-               .then((palette) => {
-                console.log(palette)
-                //document.body.style.backgroundImage = `radial-gradient(ellipse at top,rgba(${palette.Vibrant.r},${palette.Vibrant.g},${palette.Vibrant.b},0.5),
-                                                                                      //rgba(${palette.Muted.r},${palette.Muted.g},${palette.Muted.b},0.4),
-                                                                                      
-                                                                                      //#2e2f32)`
-                setPalette(palette)
-               
-
+          .then((palette) => {
+           console.log(palette)
+           setPalette(palette)     
       }
     )
     }
     
     return(
-        song && analysis ? 
+        song && analysis && palette ? 
         <>
           <Container>
             <SongInfoWrapper>
@@ -163,19 +168,22 @@ const SongAnalysis = ({ }) => {
             <Grid container spacing={2}
               direction="row"
               justify="space-between"
-              alignItems="flex-start"
+              alignItems="stretch"
             >
             <Grid item lg={4} s={6} xs={12}>
               <InfoCard
                 title="Song Key"
-                content={analysis.key}
+                content={`${analysis.key} ${analysis.mode}`}
+                tooltip={`Key and modality of the song`}
               >
+              <KeySignature src={keyImg} />
               </InfoCard>
             </Grid>
             <Grid item lg={4} s={6} xs={12}>
               <InfoCard
-                title="Genre"
-                content={analysis.tempo}
+                title="Duration"
+                content={utils.msToTime(analysis.duration_ms)}
+                tooltip={`Duration of the song in min:sec`}
               >
               </InfoCard>
             </Grid>
@@ -183,11 +191,27 @@ const SongAnalysis = ({ }) => {
               <InfoCard
                 title={`Tempo`}
                 content={`${analysis.tempo} bpm`}
+                tooltip={`Estimated tempo of the song (from Spotify's end)`}
               >
-                <div style={{padding: '5px'}}>
+                <div style={{paddingTop: '30px', paddingRight: '30px'}}>
                   <TempoPulse bpm={analysis.tempo} color={palette.LightVibrant.hex} />
                 </div>
               </InfoCard>
+            </Grid>
+            </Grid>
+            <Grid container spacing={2}
+              direction="row"
+              justify="space-between"
+              alignItems="stretch"
+            >
+            <Grid item lg={4} s={6} xs={12}>
+              
+            </Grid>
+            <Grid item lg={4} s={6} xs={12}>
+              
+            </Grid>
+            <Grid item lg={4} s={6} xs={12}>
+              
             </Grid>
             </Grid>
           </Container>
