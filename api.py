@@ -91,14 +91,25 @@ def full_playlist_analysis(playlist_id):
 	access_token = request.headers['access_token']
 	spotify = Spotify(access_token)
 
-	tracks, analysis_list, artist_list, last_update_iso = spotify.get_playlist_items(playlist_id)
-	
+	tracks, track_additions, analysis_list, artist_list, last_update_iso = spotify.get_playlist_items(playlist_id)
+
 	# get most recently added date
 	last_update = parser.isoparse(last_update_iso)
 
 	key_data, feel_data, genre_data, tempo_data, duration_data = utils.analyze_playlist(analysis_list,tracks,artist_list)
 
- 
+	timeline_dict = {}
+	for isodate in track_additions:
+		date = parser.isoparse(isodate)
+		date_string = utils.month_int_to_string(date.month) + ' ' + str(date.year)
+		if date_string in timeline_dict:
+			timeline_dict[date_string] += 1
+		else:
+			timeline_dict[date_string] = 1
+
+	timeline_labels = [key for key in timeline_dict]
+	timeline_data = [timeline_dict[key] for key in timeline_dict]
+
 	payload = {}
 	payload['keys'] = key_data
 	payload['feel'] = feel_data
@@ -106,6 +117,8 @@ def full_playlist_analysis(playlist_id):
 	payload['tempo'] = tempo_data
 	payload['duration'] = duration_data
 	payload['last_update'] = last_update
+	payload['timeline_labels'] = timeline_labels
+	payload['timeline_data'] = timeline_data
  
 	del spotify
 

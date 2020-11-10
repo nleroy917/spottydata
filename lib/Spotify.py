@@ -75,15 +75,20 @@ class Spotify():
         be extracted at once - so a loop is used to repeatedly get the items until none are left.
         '''
         tracks_full = []
+        track_additions = []
         analysis = []
         artists = []
         
         tracks = self._get_playlist_tracks(playlist_id)
+        
         while True:
             
             # initialize empty track_ids and artist_ids lists
             track_ids = []
             artist_ids = []
+
+            for track in tracks['items']:
+                track_additions.append(track['added_at'])
             
             # extract track objects
             track_objects = [x['track'] for x in tracks['items']]
@@ -111,10 +116,8 @@ class Spotify():
             else:
                 last_update = tracks['items'][-1]['added_at']
                 break
-            
-            
         
-        return tracks_full, analysis, artists, last_update
+        return tracks_full, track_additions, analysis, artists, last_update
     
     def search(self, query, type):
         '''

@@ -9,6 +9,7 @@ import GenreChart from '../Components/GenreChart'
 import FeelChart from '../Components/FeelChart'
 import TempoChart from '../Components/TempoChart'
 import DurationChart from '../Components/DurationChart'
+import PlaylistTimeline from '../Components/PlaylistTimeline'
 import LyricCloud from '../Components/LyricCloud'
 import Loader from '../Components/Loader'
 import loading_gif from '../images/loading.gif'
@@ -285,6 +286,8 @@ class PlaylistAnalysis extends React.Component {
             this.setState({tempo_data: data.tempo})
             this.setState({duration_data: data.duration})
             this.setState({last_update: data.last_update})
+            this.setState({timeline_labels: data.timeline_labels})
+            this.setState({timeline_data: data.timeline_data})
           }
             }
 
@@ -570,9 +573,18 @@ class PlaylistAnalysis extends React.Component {
           <Grid container spacing={2}
             direction="row"
             justify="center"
-            alignItems="center"
+            alignItems="stretch"
           >
-          <Grid item lg={8} md={8} s={6} xs={12}>
+          <Grid item lg={6} md={6} s={6} xs={12} style={{height: '100%'}}>
+            <ChartContainer title="Timeline">
+              {
+                this.state.timeline_data ?
+                <PlaylistTimeline labels={this.state.timeline_labels} data={this.state.timeline_data} palette={this.state.palette}/>
+                : ' '
+              }
+            </ChartContainer>
+          </Grid>
+          <Grid item lg={6} md={6} s={6} xs={12}>
               <ChartContainer title="Lyrics">
                   {this.state.lyrics_data ? 
                     <LyricCloud data={this.state.lyrics_data} palette={this.state.palette}/> : 
