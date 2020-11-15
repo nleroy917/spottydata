@@ -36,7 +36,7 @@ const VerticalCenter = styled.div`
     align-items: center;
 `
 
-const client_id = '0ca7dd0007fd4ff2a34c3aab07379970'
+const client_id = process.env.REACT_APP_CLIENT_ID
 const client_secret =  process.env.REACT_APP_CLIENT_SECRET
 const redirect_uri = process.env.REACT_APP_REDIRECT_URI
 
@@ -87,8 +87,8 @@ const AnalysisSelect = ({  }) => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
- 
-        let res  = await axios.get('https://api.spotify.com/v1/me', {headers: hdrs})
+
+        let res = await axios.get('https://api.spotify.com/v1/me', {headers: hdrs})
         
         if(res.status === 200) {
             //console.log(response) 

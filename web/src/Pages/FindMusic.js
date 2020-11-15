@@ -13,6 +13,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import Layout from '../Components/Layout';
 
+const querystring = require('querystring');
 const URL_BASE = process.env.REACT_APP_API_URL
 
 const PageHeaderWrapper = styled.div`
@@ -56,10 +57,28 @@ const Select = styled.select`
 
 const FindMusic = () => {
     const [seedType, setSeedType] = useState('track');
+    const [seed, setSeed] = useState({})
     const [query, setQuery] = useState(null)
     const [searchOpen, setSearchOpen] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [accessToken, setAccessToken] = useState(null)
+
+    const clientCredentialsFlow = async () => {
+        let hdrs = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + btoa(process.env.REACT_APP_CLIENT_ID + ':' + process.env.REACT_APP_CLIENT_SECRET)
+        }
+        let body ={
+            grant_type: 'client_credentials'
+        }
+
+        let res = await axios.post(`https://accounts.spotify.com/api/token`, querystring.stringify(body), {headers: hdrs})
+        if (res.status === 200) {
+            let data = res.data
+            setAccessToken(data.access_token)
+        }
+    }
 
     const debouncedSearch = useDebouncedCallback(
         // function
@@ -70,11 +89,11 @@ const FindMusic = () => {
           console.log(query)
         },
         // delay in ms
-        250
+        500
       );
     
     const handleSearchChange = (e) => {
-        debouncedSearch(e.target.value)
+        debouncedSearch.callback(e.target.value)
     }
 
     const handleSeedTypeChange = (e) => {
@@ -83,14 +102,25 @@ const FindMusic = () => {
     }
 
     const searchSeeds = async (query) => {
-        let res = await axios.get(`${URL_BASE}/search?type=${seedType}&query=${query}`)
+        if(!query){
+            setLoading(false)
+            setSearchResults([])
+        }
+        else{
+        let hdrs = {access_token: accessToken}
+        let res = await axios.get(`${URL_BASE}/search?type=${seedType}&query=${query}`, {headers: hdrs})
         if(res.status === 200) {
             let data = await res.data
             setSearchResults(data.results)
+            setLoading(false)
             // console.log(data.results)
         }
     }
-    
+    }
+    useEffect(() => {
+        clientCredentialsFlow()
+        console.log(seed)
+    }, [seed])
     return (
         <>
          <Container>
@@ -103,7 +133,6 @@ const FindMusic = () => {
          <PageSubHeader>
              1. Select seed type:
          </PageSubHeader>
-         
          </PageHeaderWrapper>
          <SeedTypeWrapper>
            <Select onChange={handleSeedTypeChange}>
@@ -121,8 +150,12 @@ const FindMusic = () => {
             onClose={() => {
               setSearchOpen(false);
             }}
+            onChange={(e,val) => {
+                
+                setSeed(val)}
+                }
             getOptionSelected={(option, value) => option.name === value.name}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option) => `${option.name}, ${option.artists[0].name}`}
             options={searchResults}
             loading={loading}
             renderInput={(params) => (
@@ -135,7 +168,7 @@ const FindMusic = () => {
                 ...params.InputProps,
                 endAdornment: (
                   <React.Fragment>
-                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                    {loading ? <CircularProgress color="white" size={20} /> : null}
                     {params.InputProps.endAdornment}
                   </React.Fragment>
                 ),
