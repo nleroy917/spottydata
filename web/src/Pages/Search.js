@@ -76,7 +76,6 @@ const SearchPage = ({ }) => {
         let hdrs = {
           'access_token': accessToken
         }
-    
         let res = await axios.get(`${URL_BASE}/search?type=track&query=${query}`, {headers: hdrs})
         if(res.status === 200) {
             let data = await res.data

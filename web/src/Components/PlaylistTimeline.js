@@ -23,7 +23,7 @@ const PlaylistTimeline = (props) => {
             display: true,
             scaleLabel: {
                 display: true,
-                labelString: 'No. of Songs',
+                labelString: 'New Songs',
                 fontColor: '#E6FAFC',
                 fontSize:14
             },

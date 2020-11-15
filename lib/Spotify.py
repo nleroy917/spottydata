@@ -11,7 +11,10 @@ class Spotify():
         Args:
             access_token - the access token obtained as part of the authorization code flow on the front-end
         '''
-        self._spotify = spotipy.Spotify(auth=access_token)
+        if access_token:
+            self._spotify = spotipy.Spotify(auth=access_token)
+        else:
+            self._spotify = spotipy.Spotify()
 
     def get_playlists(self):
         '''

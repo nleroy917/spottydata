@@ -205,13 +205,10 @@ const SongAnalysis = ({ }) => {
               alignItems="stretch"
             >
             <Grid item lg={4} s={6} xs={12}>
-              
+              Here
             </Grid>
-            <Grid item lg={4} s={6} xs={12}>
-              
-            </Grid>
-            <Grid item lg={4} s={6} xs={12}>
-              
+            <Grid item lg={8} s={6} xs={12}>
+              Here
             </Grid>
             </Grid>
           </Container>

@@ -13,6 +13,7 @@ import PlaylistAnalysis from './Pages/PlaylistAnalysis';
 import SearchPage from './Pages/Search';
 import About from './Pages/About';
 import SongAnalysis from './Pages/SongAnalysis';
+import FindMusic from './Pages/FindMusic';
 
 
 const App = () => {
@@ -32,6 +33,8 @@ const App = () => {
         <Route path="/analysis-select/" component={AnalysisSelect}>
         </Route>
         <Route path="/search/" component={SearchPage}>
+        </Route>
+        <Route path="/find-music/" component={FindMusic}>
         </Route>
         <Route path="/" exact component={Home}>
         </Route>

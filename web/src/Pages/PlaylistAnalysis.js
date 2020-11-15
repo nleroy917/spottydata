@@ -576,7 +576,7 @@ class PlaylistAnalysis extends React.Component {
             alignItems="stretch"
           >
           <Grid item lg={6} md={6} s={6} xs={12} style={{height: '100%'}}>
-            <ChartContainer title="Timeline">
+            <ChartContainer title="Timeline (beta)">
               {
                 this.state.timeline_data ?
                 <PlaylistTimeline labels={this.state.timeline_labels} data={this.state.timeline_data} palette={this.state.palette}/>
