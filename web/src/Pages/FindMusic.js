@@ -6,7 +6,8 @@ import axios from 'axios';
 import {
     Container,
     TextField,
-    CircularProgress
+    CircularProgress,
+    makeStyles
 } from '@material-ui/core';
 
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -45,17 +46,53 @@ const SeedTypeWrapper = styled.div`
 `
 
 const Select = styled.select`
-    padding: 10px;
+    padding: 15px;
     color: white;
     border: white solid 1px;
     border-radius: 0px;
     background: none;
+    height: 100%;
     &:focus {
         outline: none;
     }
 `
 
+const useStyles = makeStyles({
+    inputRoot: {
+      color: 'white',
+      borderRadius: 0,
+      "& .MuiOutlinedInput-notchedOutline": {
+        borderColor: "white",
+        color: 'white'
+      },
+      "&:hover .MuiOutlinedInput-notchedOutline": {
+        borderColor: "white",
+        color: 'white'
+      },
+      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+        borderColor: "white",
+        color: 'white'
+      }
+    },
+    inputLabel: {
+        color: 'white',
+        "& .MuiOutlinedInput-notchedOutline": {
+          borderColor: "white",
+          color: 'white'
+        },
+        "&:hover .MuiOutlinedInput-notchedOutline": {
+          borderColor: "white",
+          color: 'white'
+        },
+        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+          borderColor: "white",
+          color: 'white'
+        }
+      },
+  });
+
 const FindMusic = () => {
+    const classes = useStyles();
     const [seedType, setSeedType] = useState('track');
     const [seed, setSeed] = useState({})
     const [query, setQuery] = useState(null)
@@ -97,11 +134,20 @@ const FindMusic = () => {
     }
 
     const handleSeedTypeChange = (e) => {
+        setSearchResults([])
         setSeedType(e.target.value)
         console.log(e.target.value)
     }
 
     const searchSeeds = async (query) => {
+        if(seedType === 'genre'){
+            setLoading(false)
+            setSearchResults([
+                {name: 'country'},
+                {name: 'rap'},
+                {name: 'rock'}
+            ])
+        } else{
         if(!query){
             setLoading(false)
             setSearchResults([])
@@ -115,7 +161,7 @@ const FindMusic = () => {
             setLoading(false)
             // console.log(data.results)
         }
-    }
+    }}
     }
     useEffect(() => {
         clientCredentialsFlow()
@@ -131,7 +177,7 @@ const FindMusic = () => {
          </PageHeaderWrapper>
          <PageHeaderWrapper>
          <PageSubHeader>
-             1. Select seed type:
+             1. Search for seed:
          </PageSubHeader>
          </PageHeaderWrapper>
          <SeedTypeWrapper>
@@ -141,6 +187,7 @@ const FindMusic = () => {
             <option value={'genre'}>Genre</option>
            </Select>
            <Autocomplete
+            classes={classes}
             style={{width: 300}}
             id="search-bar"
             open={searchOpen}
@@ -155,14 +202,14 @@ const FindMusic = () => {
                 setSeed(val)}
                 }
             getOptionSelected={(option, value) => option.name === value.name}
-            getOptionLabel={(option) => `${option.name}, ${option.artists[0].name}`}
+            getOptionLabel={(option) => `${option.name}, ${option.artists ? option.artists[0].name : ''}`}
             options={searchResults}
             loading={loading}
             renderInput={(params) => (
             <TextField
+              variant="standard"
               onChange={handleSearchChange}
               {...params}
-              label="Search for seed"
               variant="outlined"
               InputProps={{
                 ...params.InputProps,
