@@ -17,6 +17,10 @@ const Parameter = styled.div`
     border: white solid 1px;
     border-radius: 5px;
     padding: 15px;
+    margin: 10px;
+    @media (max-width: 1024px) { /* iPad in portrait  */
+		width: 100%;
+    }
 `
 
 const ParameterTitle = styled.h4`
@@ -39,15 +43,6 @@ const GoalSelect = styled.select`
     }
 `
 
-const ValueWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    gap: 5px;
-`
-
 const Attribute = ({attributes, setAttributes, name, default_val, tooltip, min, max}) => {
 
     const [checked, setChecked] = useState(false);
@@ -63,15 +58,27 @@ const Attribute = ({attributes, setAttributes, name, default_val, tooltip, min, 
     return(
       <>
         <Parameter>
-          <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:'space-between', gap: '10px'}}>
+            <div style={{width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:'space-between'}}>
+            <div>
+            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:'space-between'}}>
             <ParameterTitle>
                 {title}
             </ParameterTitle>
-            <Tooltip title={tooltip}>
+            <Tooltip enterTouchDelay={100} title={tooltip} style={{margin: 10}}>
               <InfoIcon fontSize="small"/>
             </Tooltip>
+            </div>
+            </div>
+            <div>
             <Switch size="normal" checked={checked} onChange={toggleChecked} color="primary"/>
             </div>
+            </div>
+            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:'space-between', gap: '10px'}}>
+            <GoalSelect onChange={(e) => setAttributes({...attributes, [name]: {...attributes[name], goal: e.target.value}})}>
+                <option value='target'>Target</option>
+                <option value='min'>Min</option>
+                <option value='max'>Max</option>
+              </GoalSelect>
             <Slider
               style={{width: 250}}
               aria-label={`${name}-slider`}
@@ -79,21 +86,18 @@ const Attribute = ({attributes, setAttributes, name, default_val, tooltip, min, 
               max={max || 1}
               step={0.01}
               valueLabelDisplay="auto"
-              valueLabelFormat={(x) => `${Math.round(x*100,2)}%`}
+              valueLabelFormat={(x) => `${x}`}
               defaultValue={default_val || 0.5}
-              onChange={(e,val)=>{setAttributes({...attributes, [name]: {...attributes[name], value: val}})}}
+              onChange={(e,val)=> {
+                   if(!checked){
+                       toggleChecked()
+                       setAttributes({...attributes, [name]: {...attributes[name], value: val, on: true}})
+                   } else {
+                   setAttributes({...attributes, [name]: {...attributes[name], value: val}})
+                   }
+                   }}
             />
-            <ValueWrapper>
-              <GoalSelect onChange={(e) => setAttributes({...attributes, [name]: {...attributes[name], goal: e.target.value}})}>
-                <option value='target'>Target</option>
-                <option value='min'>Min</option>
-                <option value='max'>Max</option>
-              </GoalSelect>
-              <b>{attributes[name] ? attributes[name].value ? `${attributes[name].value}` : 'None' : 'None'}</b>
-              <IconButton style={{margin: '10px', outline: 'none'}} onClick={() => setAttributes({...attributes, [name]: undefined})}>
-                <ClearIcon style={{fill: 'white'}} size="0.5em"/>
-              </IconButton>
-            </ValueWrapper>
+            </div>
         </Parameter>
      </>
     )
