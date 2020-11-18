@@ -8,18 +8,22 @@ import {
     TextField,
     CircularProgress,
     makeStyles,
-    IconButton,
-    Slider
 } from '@material-ui/core';
-import ClearIcon from '@material-ui/icons/Clear';
+
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Attribute from '../Components/Attribute';
 
 const querystring = require('querystring');
 const URL_BASE = process.env.REACT_APP_API_URL
 
 const muiTheme = createMuiTheme({
+    palette: {
+        primary: {
+            main: '#FFF'
+        }
+    },
     overrides:{
       MuiSlider: {
         thumb:{
@@ -30,6 +34,12 @@ const muiTheme = createMuiTheme({
         },
         rail: {
           color: 'black'
+        },
+        markLabel: {
+            color: 'black'
+        },
+        valueLabel: {
+            color: 'black'
         }
       }
   }
@@ -95,32 +105,6 @@ const Select = styled.select`
     }
 `
 
-const GoalSelect = styled.select`
-    margin: 5px;
-    margin-right: 15px;
-    padding: 5px;
-    font-size: 12px;
-    color: white;
-    border: white solid 1px;
-    border-radius: 0px;
-    background: none;
-    height: 100%;
-    &:focus {
-        outline: none;
-    }
-`
-
-const Parameter = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-`
-
-const ParameterTitle = styled.h4`
-    font-size: 24px;
-    font-weight: 500px;
-`
-
 const useStyles = makeStyles({
     inputRoot: {
       color: 'white',
@@ -165,7 +149,6 @@ const FindMusic = () => {
     const [loading, setLoading] = useState(false);
     const [accessToken, setAccessToken] = useState(null)
     const [attributes, setAttributes] = useState([]);
-    const DEFAULT_VAL = 0.5;
 
     const clientCredentialsFlow = async () => {
         let hdrs = {
@@ -235,8 +218,8 @@ const FindMusic = () => {
     }
     useEffect(() => {
         if(!accessToken){clientCredentialsFlow()}
-        //console.log(attributes)
-    }, [])
+        console.log(attributes)
+    }, [attributes])
     return (
         <>
          <Container>
@@ -302,78 +285,32 @@ const FindMusic = () => {
          <ThemeProvider theme={muiTheme}>
            <ParameterForm>
                <FormSection>
-                   <Parameter>
-                     <ParameterTitle>
-                        Acousticness
-                     </ParameterTitle>
-                     <Slider
-                       style={{width: 250}}
-                       aria-labelledby="acousticness-slider"
-                       min={0}
-                       max={1}
-                       step={0.01}
-                       defaultValue={0.5}
-                       onChange={(e,val)=>{setAttributes({...attributes, acousticness: {...attributes.acousticness, value: val}})}}
-                     />
-                     <span>
-                     <GoalSelect onChange={(e) => setAttributes({...attributes, acousticness: {...attributes.acousticness, goal: e.target.value, value: attributes.acousticness ? attributes.acousticness.value : DEFAULT_VAL}})}>
-                         <option value='target'>Target</option>
-                         <option value='min'>Min</option>
-                         <option value='max'>Max</option>
-                     </GoalSelect>
-                     <b>{attributes.acousticness ? `${attributes.acousticness.value}` : 'None chosen'}</b>
-                     <IconButton style={{margin: '10px', outline: 'none'}} onClick={() => setAttributes({...attributes, acousticness: null})}>
-                         <ClearIcon style={{fill: 'white'}} size="0.5em"/>
-                     </IconButton>
-                     </span>
-                   </Parameter>
-                   <Parameter>
-                     <ParameterTitle>
-                       Danceability
-                     </ParameterTitle>
-                     <Slider
-                       style={{width: 250}}
-                       aria-label="danceability-slider"
-                       min={0}
-                       max={1}
-                       step={0.00000001}
-                       defaultValue={0.5}
-                       onChange={(e,val)=>{setAttributes({...attributes, danceability: {...attributes.danceability, value: val}})}}
-                     />
-                     <span>
-                     <GoalSelect onChange={(e) => setAttributes({...attributes, danceability: {...attributes.danceability, goal: e.target.value, value: attributes.danceability ? attributes.danceability.value : DEFAULT_VAL}})}>
-                         <option value='target'>Target</option>
-                         <option value='min'>Min</option>
-                         <option value='max'>Max</option>
-                     </GoalSelect>
-                     <b>{attributes.danceability ? `${attributes.danceability.value}` : 'None chosen'}</b>
-                     </span>
-                   </Parameter>
-                   <Parameter>
-                    <ParameterTitle>
-                     Energy
-                     </ParameterTitle>
-                     <Slider
-                       style={{width: 250}}
-                       aria-label="danceability-slider"
-                       min={0}
-                       max={1}
-                       step={0.00000001}
-                       defaultValue={0.5}
-                       onChange={(e,val)=>{setAttributes({...attributes, energy: {...attributes.energy, value: val}})}}
-                     />
-                     <span>
-                     <GoalSelect onChange={(e) => setAttributes({...attributes, energy: {...attributes.energy, goal: e.target.value, value: attributes.energy ? attributes.energy.value : DEFAULT_VAL}})}>
-                         <option value='target'>Target</option>
-                         <option value='min'>Min</option>
-                         <option value='max'>Max</option>
-                     </GoalSelect>
-                     <b>{attributes.energy ? `${attributes.energy.value}` : 'None chosen'}</b>
-                     </span>
-                   </Parameter>
+                   <Attribute
+                     attributes={attributes}
+                     setAttributes={setAttributes}
+                     name="acousticness"
+                     tooltip="A confidence measure from 0.0 to 1.0 of whether the track is acoustic. 1.0 represents high confidence the track is acoustic."
+                   />
+                   <Attribute
+                     attributes={attributes}
+                     setAttributes={setAttributes}
+                     tooltip="Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy. For example, death metal has high energy, while a Bach prelude scores low on the scale. Perceptual features contributing to this attribute include dynamic range, perceived loudness, timbre, onset rate, and general entropy."
+                     name="energy"
+                   />
+                   <Attribute
+                     attributes={attributes}
+                     setAttributes={setAttributes}
+                     tooltip="float	Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 1.0 is most danceable."
+                     name="danceability"
+                   />
                </FormSection>
                <FormSection>
-                   <div>Here</div><div>Here</div><div>Here</div>
+                   <Attribute
+                     attributes={attributes}
+                     setAttributes={setAttributes}
+                     tooltip="Predicts whether a track contains no vocals. “Ooh” and “aah” sounds are treated as instrumental in this context. Rap or spoken word tracks are clearly “vocal”. The closer the instrumentalness value is to 1.0, the greater likelihood the track contains no vocal content. Values above 0.5 are intended to represent instrumental tracks, but confidence is higher as the value approaches 1.0."
+                     name="instrumentalness"
+                   />
                </FormSection>
            </ParameterForm>
            </ThemeProvider>

@@ -61,8 +61,8 @@ def playlists_get(username):
 # search spotify
 @app.route('/search', methods=['GET'])
 def search():
-	
-	spotify = Spotify(access_token=None)
+	access_token = request.headers['access_token']
+	spotify = Spotify(access_token)
 	type = request.args.get('type')
 	query = request.args.get('query')
 	results = spotify.search(query, type)['items']
