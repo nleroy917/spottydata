@@ -87,7 +87,7 @@ const FormSection = styled.div`
     padding: 5px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     align-items: center;
     width: 100%;
     height: 100%;
@@ -112,6 +112,18 @@ const SearchField = styled(Autocomplete)`
     @media (max-width: 768px) {
 		width: 60vw;
   }
+`
+
+const Input = styled.input`
+    border: white solid 1px;
+    border-radius: 0px;
+    background-color: rgba(0,0,0,0);
+    padding: 10px;
+    color: white;
+    font-size: 20px;
+    &:focus {
+        outline: none;
+    }
 `
 
 const useStyles = makeStyles({
@@ -304,7 +316,7 @@ const FindMusic = () => {
             )}
            />
            </SeedTypeWrapper>
-           <PageHeaderWrapper>
+        <PageHeaderWrapper>
          <PageSubHeader>
              2. Tweak parameters:
          </PageSubHeader>
@@ -356,6 +368,7 @@ const FindMusic = () => {
                      attributes={attributes}
                      setAttributes={setAttributes}
                      tooltip="The popularity of the track. The value will be between 0 and 100, with 100 being the most popular. The popularity is calculated by algorithm and is based, in the most part, on the total number of plays the track has had and how recent those plays are."
+                     defaultVal={50}
                      min={0}
                      max={100}
                      name="popularity"
@@ -396,10 +409,11 @@ const FindMusic = () => {
                     options={availableTimeSignatures}
                     tooltip="An estimated overall time signature of a track. The time signature (meter) is a notational convention to specify how many beats are in each bar (or measure)."
                    />
-                   <AttributeInput
+               </FormSection>
+               <FormSection>
+               <AttributeInput
                      attributes={attributes}
                      setAttributes={setAttributes}
-                     inputType="number"
                      name="bpm"
                      title="Tempo"
                      mask="999 bpm"
@@ -407,11 +421,17 @@ const FindMusic = () => {
                    <AttributeInput
                     attributes={attributes}
                     setAttributes={setAttributes}
-                    inputType="number"
                     name="duration"
+                    mask="99:99 min"
                    />
                </FormSection>
            </ParameterForm>
+           <PageHeaderWrapper>
+         <PageSubHeader>
+             3. Search:
+         </PageSubHeader>
+         </PageHeaderWrapper>
+         <Input />
            </ThemeProvider>
           </Container>
         </>

@@ -2,27 +2,27 @@ import React, {useState} from 'react';
 import styled from 'styled-components';
 
 import { Switch, Tooltip } from '@material-ui/core';
-import { InfoIcon } from '@material-ui/icons/Info';
 
 const Wrapper = styled.div`
-    border: white solid 1px;
+    /* border: white solid 1px; */
     border-radius: 5px;
     padding: 15px;
     margin: 10px;
-    width: 250px;
     @media (max-width: 1024px) { /* iPad in portrait  */
 		width: 100%;
     }
 `
 
 const Select = styled.select`
-    padding: 15px;
+    padding: 12px;
     margin: 10px;
     color: white;
     border: white solid 1px;
     border-radius: 0px;
     background: none;
     height: 100%;
+    font-size: 12px;
+    width: 100%;
     &:focus {
         outline: none;
     }
@@ -45,28 +45,29 @@ const AttributeDropdown = ({attributes, setAttributes, name, options, title, too
     const [checked, setChecked] = useState(false)
 
     const toggleChecked = () => {
-        setAttributes({...attributes, key: {...attributes[name],
+        setAttributes({...attributes, [name]: {...attributes[name],
             on: !checked
         }})
         setChecked(!checked)
     }
 
     const handleChange = (e) => {
-        if(!checked){
-            toggleChecked()
-        }
-        setAttributes({...attributes, [name]: {...attributes[name], goal: e.target.value}})
+        setChecked(true)
+        setAttributes({...attributes, [name]: {...attributes[name], value: e.target.value, on: true}})
     }
 
     return(
         <>
         <Wrapper>
+        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:'space-between', margin: '5px'}}>
         <Title>
             {title || (name.charAt(0).toUpperCase() + name.slice(1))}
         </Title>
+        <Switch size="normal" checked={checked} onChange={toggleChecked} color="primary"/>
+        </div>
          <LowerWrapper>
           <Select
-            value={attributes[name] ? attributes[name].goal : undefined}
+            value={attributes[name] ? attributes[name].value : undefined}
             onChange={handleChange}
           >
               <option value={undefined}>Any</option>
@@ -77,7 +78,6 @@ const AttributeDropdown = ({attributes, setAttributes, name, options, title, too
                     )
               }
           </Select>
-          <Switch size="normal" checked={checked} onChange={toggleChecked} color="primary"/>
           </LowerWrapper>
           </Wrapper>
         </>

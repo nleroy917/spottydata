@@ -13,7 +13,7 @@ const Parameter = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    border: white solid 1px;
+    /* border: white solid 1px; */
     border-radius: 5px;
     padding: 15px;
     margin: 10px;
@@ -42,7 +42,7 @@ const GoalSelect = styled.select`
     }
 `
 
-const Attribute = ({attributes, setAttributes, name, default_val, tooltip, min, max}) => {
+const Attribute = ({attributes, setAttributes, name, defaultVal, tooltip, min, max}) => {
 
     const [checked, setChecked] = useState(false);
     const [title, setTitle] = useState(name.charAt(0).toUpperCase() + name.slice(1))
@@ -77,16 +77,16 @@ const Attribute = ({attributes, setAttributes, name, default_val, tooltip, min, 
                 <option value='target'>Target</option>
                 <option value='min'>Min</option>
                 <option value='max'>Max</option>
-              </GoalSelect>
+            </GoalSelect>
             <Slider
-              style={{width: 250}}
+              style={{width: 200}}
               aria-label={`${name}-slider`}
               min={min || 0}
               max={max || 1}
               step={0.01}
               valueLabelDisplay="auto"
               valueLabelFormat={(x) => `${x}`}
-              defaultValue={default_val || 0.5}
+              defaultValue={defaultVal || 0.5}
               onChange={(e,val)=> {
                    if(!checked){
                        toggleChecked()
