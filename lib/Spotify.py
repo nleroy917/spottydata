@@ -130,14 +130,48 @@ class Spotify():
         return results[type + 's']
         
 
-    def get_recommendations(self):
+    def get_recommendations(self, seeds, attributes):
         '''
         Gets song recommendations for a specified user. This is all done on Spotify's end. It takes in
         a few seed genres that are generated with Spotipy, then those are passed back into the recommednation
         method to produce a list of recommended songs
+
+        seeds - list of seeds to use for recommednations
+        attributes - 
         
         returns: recs - a lsit of recommended songs
         '''
-        seeds = self._spotify.recommendation_genre_seeds()
-        recs = self._spotify.recommendations(seed_genres=seeds)
+
+        # format parameters key-word arguments dictionary
+        parameters = {}
+        for attribute in attributes:
+            attribute_data = attributes[attribute]
+            if attribute_data['on']:
+                if 'goal' not in attribute_data:
+                    parameters['target_' + attribute] = attribute_data['value']
+                else:
+                    parameters[attribute_data['goal'] + '_' + attribute] = attribute_data['value']
+
+        
+        # format seeds into comma separated strings
+        seed_tracks = []
+        seed_artists = []
+        seed_genres = []
+        for seed in seeds:
+            if 'type' in seed:
+                if seed['type'] == 'track':
+                    seed_tracks.append(seed['id'])
+                else:
+                    seed_artists.append(seed['id'])
+            else:
+                seed_genres.append(seed['name'])
+
+
+        recs = self._spotify.recommendations(seed_tracks=seed_tracks, 
+                                      seed_artists=seed_artists, 
+                                      seed_genres=seed_genres,
+                                      limit=5,
+                                      **parameters
+                                      )
+
         return recs

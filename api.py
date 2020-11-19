@@ -214,5 +214,23 @@ def playlist_recs(playlist_id):
 
 	return jsonify(recs)
 
+@app.route('/recommendations', methods=['POST'])
+def song_recs():
+
+	# Get access token from the headers and generate spotify's required header
+	access_token = request.headers['access_token']
+	attributes = request.get_json()['attributes']
+	seeds = request.get_json()['seeds']
+
+	spotify = Spotify(access_token)
+	recs = spotify.get_recommendations(seeds, attributes)
+	del spotify
+
+	return_package = {
+		'recs': recs
+	}
+
+	return jsonify(return_package)
+
 if __name__ == '__main__':
 	app.run()

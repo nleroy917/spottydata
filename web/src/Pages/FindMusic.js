@@ -16,6 +16,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import Attribute from '../Components/AttributeSlider';
 import AttributeDropdown from '../Components/AttributeDropdown';
 import AttributeInput from '../Components/AttributeInput';
+import SDButton from '../Components/SDButton';
 
 const querystring = require('querystring');
 const URL_BASE = process.env.REACT_APP_API_URL
@@ -114,7 +115,7 @@ const SearchField = styled(Autocomplete)`
   }
 `
 
-const Input = styled.input`
+const Input = styled.input` 
     border: white solid 1px;
     border-radius: 0px;
     background-color: rgba(0,0,0,0);
@@ -164,15 +165,13 @@ const FindMusic = () => {
 
     const classes = useStyles();
     const [seedType, setSeedType] = useState('track');
-    const [seed, setSeed] = useState({})
+    const [seeds, setSeeds] = useState([])
     const [query, setQuery] = useState(null)
     const [searchOpen, setSearchOpen] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [accessToken, setAccessToken] = useState(null)
     const [attributes, setAttributes] = useState([]);
-    const [songKey, setSongKey] = useState({});
-    const [mode, setMode] = useState({});
 
     const availableKeys = [
         {val: 0, label: 'C'}, {val: 1, label: 'C#'}, {val: 2, label: 'D'},
@@ -256,10 +255,24 @@ const FindMusic = () => {
         }
     }}
     }
+
+    const findMusic = async () => {
+      let hdrs = {access_token: accessToken}
+      let body = {
+        attributes: attributes,
+        seeds: seeds
+      }
+      let res = await axios.post(`${URL_BASE}/recommendations`, body, {headers: hdrs})
+      if(res.status === 200){
+        let data = res.data
+        console.log(data)
+      }
+    }
+
     useEffect(() => {
         if(!accessToken){clientCredentialsFlow()}
-        console.log(attributes)
-    }, [attributes])
+        console.log(seeds)
+    }, [seeds])
     return (
         <>
          <Container>
@@ -280,6 +293,7 @@ const FindMusic = () => {
             <option value={'genre'}>Genre</option>
            </Select>
            <SearchField
+            multiple
             classes={classes}
             id="search-bar"
             open={searchOpen}
@@ -290,9 +304,8 @@ const FindMusic = () => {
               setSearchOpen(false);
             }}
             onChange={(e,val) => {
-                
-                setSeed(val)}
-                }
+                setSeeds(val)
+                }}
             getOptionSelected={(option, value) => option.name === value.name}
             getOptionLabel={(option) => `${option.name}, ${option.artists ? option.artists[0].name : ''}`}
             options={searchResults}
@@ -307,7 +320,7 @@ const FindMusic = () => {
                 ...params.InputProps,
                 endAdornment: (
                   <React.Fragment>
-                    {loading ? <CircularProgress color="white" size={20} /> : null}
+                    {loading ? <CircularProgress size={20} /> : null}
                     {params.InputProps.endAdornment}
                   </React.Fragment>
                 ),
@@ -431,9 +444,16 @@ const FindMusic = () => {
              3. Search:
          </PageSubHeader>
          </PageHeaderWrapper>
-         <Input />
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+            <SDButton
+              onClick={() => {findMusic()}}
+            >
+              Find Music
+            </SDButton>
+          </div>
            </ThemeProvider>
           </Container>
+          <br></br>
         </>
     )
 }
