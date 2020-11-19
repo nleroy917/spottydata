@@ -7,7 +7,6 @@ import {
     Tooltip,
     Switch
 } from '@material-ui/core';
-import ClearIcon from '@material-ui/icons/Clear';
 import InfoIcon from '@material-ui/icons/Info';
 
 const Parameter = styled.div`
@@ -49,7 +48,7 @@ const Attribute = ({attributes, setAttributes, name, default_val, tooltip, min, 
     const [title, setTitle] = useState(name.charAt(0).toUpperCase() + name.slice(1))
 
     const toggleChecked = () => {
-        setAttributes({...attributes, [name]: {
+        setAttributes({...attributes, [name]: {...attributes[name],
             on: !checked
         }})
         setChecked(!checked)
@@ -59,19 +58,19 @@ const Attribute = ({attributes, setAttributes, name, default_val, tooltip, min, 
       <>
         <Parameter>
             <div style={{width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:'space-between'}}>
-            <div>
-            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:'space-between'}}>
-            <ParameterTitle>
-                {title}
-            </ParameterTitle>
-            <Tooltip enterTouchDelay={100} title={tooltip} style={{margin: 10}}>
-              <InfoIcon fontSize="small"/>
-            </Tooltip>
-            </div>
-            </div>
-            <div>
-            <Switch size="normal" checked={checked} onChange={toggleChecked} color="primary"/>
-            </div>
+              <div>
+              <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:'space-between'}}>
+              <ParameterTitle>
+                  {title}
+              </ParameterTitle>
+              <Tooltip enterTouchDelay={100} title={tooltip} style={{margin: 10}}>
+                <InfoIcon fontSize="small"/>
+              </Tooltip>
+              </div>
+              </div>
+              <div>
+              <Switch size="normal" checked={checked} onChange={toggleChecked} color="primary"/>
+              </div>
             </div>
             <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:'space-between', gap: '10px'}}>
             <GoalSelect onChange={(e) => setAttributes({...attributes, [name]: {...attributes[name], goal: e.target.value}})}>

@@ -13,7 +13,9 @@ import {
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import Attribute from '../Components/Attribute';
+import Attribute from '../Components/AttributeSlider';
+import AttributeDropdown from '../Components/AttributeDropdown';
+import AttributeInput from '../Components/AttributeInput';
 
 const querystring = require('querystring');
 const URL_BASE = process.env.REACT_APP_API_URL
@@ -85,7 +87,7 @@ const FormSection = styled.div`
     padding: 5px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: space-evenly;
     align-items: center;
     width: 100%;
     height: 100%;
@@ -147,6 +149,7 @@ const useStyles = makeStyles({
   });
 
 const FindMusic = () => {
+
     const classes = useStyles();
     const [seedType, setSeedType] = useState('track');
     const [seed, setSeed] = useState({})
@@ -156,6 +159,24 @@ const FindMusic = () => {
     const [loading, setLoading] = useState(false);
     const [accessToken, setAccessToken] = useState(null)
     const [attributes, setAttributes] = useState([]);
+    const [songKey, setSongKey] = useState({});
+    const [mode, setMode] = useState({});
+
+    const availableKeys = [
+        {val: 0, label: 'C'}, {val: 1, label: 'C#'}, {val: 2, label: 'D'},
+        {val: 3, label: 'D#'}, {val: 4, label: 'E'}, {val: 5, label: 'F'},
+        {val: 6, label: 'F#'}, {val: 7, label: 'G'}, {val: 8, label: 'G#'},
+        {val: 9, label: 'A'}, {val: 10, label: 'A#'}, {val: 11, label: 'B'},
+    ]
+
+    const availableModes = [
+        {val: 0, label: 'Minor'}, {val: 1, label: 'Major'}
+    ]
+    /* The time signature ranges from 3 to 7 indicating time signatures of 3/4, to 7/4. A value of -1 may indicate no time signature, while a value of 1 indicates a rather complex or changing time signature. */
+    const availableTimeSignatures = [
+        {val: 3, label: '3/4'}, {val: 4, label:'4/4'}, {val: 5, label: '5/4'},
+        {val: 6, label: '6/4'}, {val: 7, label: '7/4'}
+    ]
 
     const clientCredentialsFlow = async () => {
         let hdrs = {
@@ -335,6 +356,8 @@ const FindMusic = () => {
                      attributes={attributes}
                      setAttributes={setAttributes}
                      tooltip="The popularity of the track. The value will be between 0 and 100, with 100 being the most popular. The popularity is calculated by algorithm and is based, in the most part, on the total number of plays the track has had and how recent those plays are."
+                     min={0}
+                     max={100}
                      name="popularity"
                    />
                    <Attribute
@@ -348,6 +371,44 @@ const FindMusic = () => {
                      setAttributes={setAttributes}
                      tooltip="A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry)."
                      name="valence"
+                   />
+               </FormSection>
+               <FormSection>
+                   <AttributeDropdown
+                     attributes={attributes}
+                     setAttributes={setAttributes}
+                     name="key"
+                     options={availableKeys}
+                     tooltip="The key the track is in. Integers map to pitches using standard Pitch Class notation. E.g. 0 = C, 1 = C♯/D♭, 2 = D, and so on."
+                   />
+                   <AttributeDropdown
+                    attributes={attributes}
+                    setAttributes={setAttributes}
+                    name="mode"
+                    options={availableModes}
+                    tooltip="Mode indicates the modality (major or minor) of a track, the type of scale from which its melodic content is derived. Major is represented by 1 and minor is 0."
+                   />
+                   <AttributeDropdown
+                    attributes={attributes}
+                    setAttributes={setAttributes}
+                    name="time_signature"
+                    title="Time Signature"
+                    options={availableTimeSignatures}
+                    tooltip="An estimated overall time signature of a track. The time signature (meter) is a notational convention to specify how many beats are in each bar (or measure)."
+                   />
+                   <AttributeInput
+                     attributes={attributes}
+                     setAttributes={setAttributes}
+                     inputType="number"
+                     name="bpm"
+                     title="Tempo"
+                     mask="999 bpm"
+                   />
+                   <AttributeInput
+                    attributes={attributes}
+                    setAttributes={setAttributes}
+                    inputType="number"
+                    name="duration"
                    />
                </FormSection>
            </ParameterForm>
