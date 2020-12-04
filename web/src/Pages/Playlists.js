@@ -293,7 +293,7 @@ class Playlists extends React.Component{
 			if(response.status === 200) {
 		    	//console.log(response);
 		    	const data = await response.data
-		    	//console.log(data)
+
 		    	this.setState({playlists: data})
 		    	this.setState({chunked_playlists: this.chunkPlaylists(data,3)})
 			}
@@ -304,7 +304,7 @@ class Playlists extends React.Component{
 		}
 
 		chunkPlaylists(playlists,cols) {
-
+			console.log(playlists)
 			let chunked_playlists = [];
 			let chunk = [];
 
@@ -326,6 +326,12 @@ class Playlists extends React.Component{
 
 				}
 			}
+
+			if(chunk.length > 0) {
+				chunked_playlists.push(chunk)
+			}
+
+			console.log(chunked_playlists)
 
 			return chunked_playlists
 		}
