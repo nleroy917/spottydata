@@ -12,6 +12,8 @@ import requests
 
 LYRICS_API = 'https://api.lyrics.ovh/v1/'
 WEAK_WORDS = [
+	'you',
+	'me',
 	'i',
 	'the',
 	'that',
