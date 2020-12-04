@@ -33,7 +33,7 @@ const InnerWrapper = styled.div`
 const InfoTitle = styled.h4`
     text-align: left;
     font-weight: 500;
-    font-size: 2.0rem;
+    font-size: 1.8rem;
 
 `
 

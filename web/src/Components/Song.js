@@ -53,10 +53,20 @@ const SongDeets = styled.div`
 
 const SongTitle = styled.h5`
     margin: 5px;
+    && {
+	    @media (max-width: 768px) {
+        font-size: 14px;
+      }
+    }
 `
 
 const SongArtist = styled.p`
     margin-left: 5px;
+    && {
+	    @media (max-width: 768px) {
+        font-size: 12px;
+      }
+    }
 `
 
 const Song = ({result, accessToken}) => {

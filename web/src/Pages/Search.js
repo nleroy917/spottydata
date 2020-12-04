@@ -88,7 +88,6 @@ const SearchPage = ({ }) => {
 
     return(
         <>
-        <Layout>
           <VerticalCenter>
             <LandingText
                 variant="h4"
@@ -112,7 +111,6 @@ const SearchPage = ({ }) => {
           }
 
           </VerticalCenter>
-        </Layout>
         </>
     )
 }

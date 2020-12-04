@@ -95,5 +95,26 @@ class Utils {
       
         return minutes + ":" + seconds + "." + milliseconds;
       }
+
+      timeSignatureToString(ts) {
+        switch(ts) {
+          case 3:
+            return "3/4"
+            break
+          case 4:
+            return "4/4"
+            break
+          case 5:
+            return "5/4"
+            break
+          case 6:
+            return "6/4"
+            break
+          case 7:
+            return "7/4"
+            break
+        }
+        return "Unknown"
+      }
   }
   export default Utils;

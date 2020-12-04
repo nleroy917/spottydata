@@ -43,6 +43,11 @@ const SongInfoWrapper = styled.div`
     }
 `
 
+const Popularity = styled.h4`
+  text-align: left;
+  margin: 15px;
+`
+
 const AnalysisWrapper = styled.div`
     display: flex;
     flex-direction: row;
@@ -154,6 +159,9 @@ const SongAnalysis = ({ }) => {
                 <SongAlbum>
                     {<em>{song.artists[0].name}</em>}
                 </SongAlbum>
+                <Popularity>
+                  {`Popularity: ${song.popularity}`}
+                </Popularity>
                 </div>
                 <div>
                     <SDButton href="/">
@@ -170,7 +178,7 @@ const SongAnalysis = ({ }) => {
               justify="space-between"
               alignItems="stretch"
             >
-            <Grid item lg={4} s={6} xs={12}>
+            <Grid item lg={3} s={6} xs={12}>
               <InfoCard
                 title="Song Key"
                 content={`${analysis.key} ${analysis.mode}`}
@@ -179,7 +187,7 @@ const SongAnalysis = ({ }) => {
               <KeySignature src={keyImg} />
               </InfoCard>
             </Grid>
-            <Grid item lg={4} s={6} xs={12}>
+            <Grid item lg={3} s={6} xs={12}>
               <InfoCard
                 title="Duration"
                 content={utils.msToTime(analysis.duration_ms)}
@@ -187,7 +195,7 @@ const SongAnalysis = ({ }) => {
               >
               </InfoCard>
             </Grid>
-            <Grid item lg={4} s={6} xs={12}>
+            <Grid item lg={3} s={6} xs={12}>
               <InfoCard
                 title={`Tempo`}
                 content={`${analysis.tempo} bpm`}
@@ -198,6 +206,14 @@ const SongAnalysis = ({ }) => {
                 </div>
               </InfoCard>
             </Grid>
+            <Grid item lg={3} s={6} xs={12}>
+              <InfoCard
+                title="Time Signature"
+                content={utils.timeSignatureToString(analysis.time_signature)}
+                tooltip={`The time signature of the song`}
+              >
+              </InfoCard>
+            </Grid>
             </Grid>
             <Grid container spacing={2}
               direction="row"
@@ -205,10 +221,8 @@ const SongAnalysis = ({ }) => {
               alignItems="stretch"
             >
             <Grid item lg={4} s={6} xs={12}>
-              Here
             </Grid>
             <Grid item lg={8} s={6} xs={12}>
-              Here
             </Grid>
             </Grid>
           </Container>

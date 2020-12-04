@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import { useDebouncedCallback } from 'use-debounce';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -163,6 +164,14 @@ const useStyles = makeStyles({
 
 const FindMusic = () => {
 
+  const range = (start,stop) => {
+    let number_array = []
+    for (let i =start; i < (stop+1); i++) {
+        number_array.push(i);
+    }
+    return number_array;
+  }
+
     const classes = useStyles();
     const [seedType, setSeedType] = useState('track');
     const [seeds, setSeeds] = useState([])
@@ -172,6 +181,8 @@ const FindMusic = () => {
     const [loading, setLoading] = useState(false);
     const [accessToken, setAccessToken] = useState(null)
     const [attributes, setAttributes] = useState([]);
+    const [availableLimits, setAvailableLimits] = useState(range(1,100))
+    let history = useHistory();
 
     const availableKeys = [
         {val: 0, label: 'C'}, {val: 1, label: 'C#'}, {val: 2, label: 'D'},
@@ -188,6 +199,8 @@ const FindMusic = () => {
         {val: 3, label: '3/4'}, {val: 4, label:'4/4'}, {val: 5, label: '5/4'},
         {val: 6, label: '6/4'}, {val: 7, label: '7/4'}
     ]
+
+    
 
     const clientCredentialsFlow = async () => {
         let hdrs = {
@@ -257,6 +270,9 @@ const FindMusic = () => {
     }
 
     const findMusic = async () => {
+      if(seeds.length === 0){
+        alert('Please select at least 1 seed!')
+      } else {
       let hdrs = {access_token: accessToken}
       let body = {
         attributes: attributes,
@@ -267,6 +283,7 @@ const FindMusic = () => {
         let data = res.data
         console.log(data)
       }
+    }
     }
 
     useEffect(() => {
@@ -280,6 +297,9 @@ const FindMusic = () => {
            <PageHeader>
                Find new music
            </PageHeader>
+           <SDButton href="/">
+             Home
+           </SDButton>
          </PageHeaderWrapper>
          <PageHeaderWrapper>
          <PageSubHeader>
@@ -307,7 +327,7 @@ const FindMusic = () => {
                 setSeeds(val)
                 }}
             getOptionSelected={(option, value) => option.name === value.name}
-            getOptionLabel={(option) => `${option.name}, ${option.artists ? option.artists[0].name : ''}`}
+            getOptionLabel={(option) => `${option.name}`}
             options={searchResults}
             loading={loading}
             renderInput={(params) => (
@@ -445,10 +465,17 @@ const FindMusic = () => {
          </PageSubHeader>
          </PageHeaderWrapper>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+            <Select
+            >
+              {
+                availableLimits.map((l) => <option value={l}>{l}</option>)
+              }
+            </Select>
             <SDButton
+            style={{margin: '5px'}}
               onClick={() => {findMusic()}}
             >
-              Find Music
+              Find
             </SDButton>
           </div>
            </ThemeProvider>
