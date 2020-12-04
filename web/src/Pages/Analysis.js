@@ -208,7 +208,7 @@ class Analysis extends React.Component {
       getVibrant = () => {
         Vibrant.from(this.state.playlist.images[0].url).getPalette()
                .then((palette) => {
-                console.log(palette)
+                // console.log(palette)
                 //document.body.style.backgroundImage = `radial-gradient(ellipse at top,rgba(${palette.Vibrant.r},${palette.Vibrant.g},${palette.Vibrant.b},0.5),
                                                                                       //rgba(${palette.Muted.r},${palette.Muted.g},${palette.Muted.b},0.4),
                                                                                       

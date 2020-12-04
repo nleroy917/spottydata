@@ -304,34 +304,38 @@ class Playlists extends React.Component{
 		}
 
 		chunkPlaylists(playlists,cols) {
-			console.log(playlists)
+			// console.log(playlists)
 			let chunked_playlists = [];
 			let chunk = [];
+			let cnt = 1;
 
-			for(let i = 1; i<=playlists.length;i++) {
-
-				if (typeof playlists[i-1] === 'undefined') {
+			for(let i = 0; i<playlists.length;i++) {
+				
+				if (typeof playlists[i] === 'undefined') {
+					continue
+				} else if (playlists[i].tracks.total < 2) {
 					continue
 				}
 
 				//console.log(typeof playlists[i])
 				//console.log(playlists[i])
 				//console.log(i)
-				if(i%cols === 0) {
-					chunk.push(playlists[i-1])
+				if(cnt%cols === 0) {
+					chunk.push(playlists[i])
 					chunked_playlists.push(chunk)
 					chunk = [];
 				} else {
-					chunk.push(playlists[i-1])
+					chunk.push(playlists[i])
 
 				}
+				cnt++
 			}
 
 			if(chunk.length > 0) {
 				chunked_playlists.push(chunk)
 			}
 
-			console.log(chunked_playlists)
+			// console.log(chunked_playlists)
 
 			return chunked_playlists
 		}
