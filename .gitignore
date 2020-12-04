@@ -1,6 +1,6 @@
 testing/
 .DS_Store
 .env
-venv/
+env/
 .vscode/
 __pycache__/

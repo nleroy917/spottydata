@@ -312,8 +312,10 @@ class Playlists extends React.Component{
 			for(let i = 0; i<playlists.length;i++) {
 				
 				if (typeof playlists[i] === 'undefined') {
+					// skip if something weird
 					continue
 				} else if (playlists[i].tracks.total < 2) {
+					// skip if less than 2 tracks - API cant analyze
 					continue
 				}
 
