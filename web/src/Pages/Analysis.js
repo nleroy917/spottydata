@@ -514,18 +514,18 @@ class Analysis extends React.Component {
                 </div>
               </Paper>
             </Grid>
-            <Grid item lg={4} xs={6}>
+            <Grid item lg={4} xs={12}>
               <Paper elevation={3} className={classes.paper}>
                 <div className={classes.paper_div}>
-                  <h6 align="left" className={classes.paper_title}>Total Playlistlength</h6>
+                  <h6 align="left" className={classes.paper_title}>Total Playlist Length</h6>
                   <h1 align="left" className={classes.paper_title}>{this.state.duration_total}</h1>
                 </div>
               </Paper>
             </Grid>
-            <Grid item lg={4} xs={6}>
+            <Grid item lg={4} xs={12}>
               <Paper elevation={3} className={classes.paper}>
                 <div className={classes.paper_div}>
-                  <h6 align="left" className={classes.paper_title}>Average Tracklength</h6>
+                  <h6 align="left" className={classes.paper_title}>Average Track Length</h6>
                   <h1 align="left" className={classes.paper_title}>{this.state.duration_avg}</h1>
                 </div>
               </Paper>
