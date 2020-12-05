@@ -1,4 +1,6 @@
 # Contributing
+**If you have specific questions, shoot me a DM on Twitter: @NathanJLeRoy**
+
 I openly welcome contributions to SpottyData! The code can be messy at times as it was my first ever React project - so there is a lot to change and update. In addition, there are so many things I want to add; I can't do them all!
 
 # How to contribute
