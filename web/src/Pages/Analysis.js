@@ -168,6 +168,8 @@ class Analysis extends React.Component {
 		        feel_data: null,
             tempo_data: null,
             tempo_avg: null,
+            duration_total: null,
+            duration_avg: null,
             lyrics_data: null,
             palette: null,
             last_update: null
@@ -265,6 +267,16 @@ class Analysis extends React.Component {
             }
             tempo_avg /= sum
 
+
+            //Calculate the total and average duration
+            var duration_total = 0;
+            var sum = 0;
+            for(let i = 0; i<data.duration.x.length; i++){
+              duration_total += (data.duration.x[i]*data.duration.y[i]*60)
+              sum += data.duration.y[i]
+            }
+            var duration_avg = duration_total / sum;
+
             var major_key_max = Object.keys(data.keys.major).reduce((a, b) => data.keys.major[a] > data.keys.major[b] ? a : b);
             var minor_key_max = Object.keys(data.keys.minor).reduce((a, b) => data.keys.minor[a] > data.keys.minor[b] ? a : b);
 
@@ -279,6 +291,8 @@ class Analysis extends React.Component {
               this.getKeySignatureImg()
 
             this.setState({tempo_avg:Math.round(tempo_avg)})
+            this.setState({duration_total:this.formatTime(duration_total)})
+            this.setState({duration_avg:this.formatTime(duration_avg)})
             this.setState({key_data: data.keys})
             this.setState({genre_data: genres_sliced})
             this.setState({feel_data: data.feel})
@@ -384,6 +398,23 @@ class Analysis extends React.Component {
           }
         }
 
+		formatTime(duration) {
+
+		    var h = ~~(duration / 3600);
+		    var m = ~~((duration % 3600) / 60);
+		    var s = ~~duration % 60;
+
+		    var str = "";
+
+            if (h > 0) {
+                str += "" + h + "h " + (m < 10 ? "0" : "");
+		    }
+
+		    str += "" + m + "m " + (s < 10 ? "0" : "");
+		    str += "" + s + "s";
+		    return str;
+		}
+
   		render() {
 
         const { classes } = this.props;
@@ -451,15 +482,7 @@ class Analysis extends React.Component {
             alignItems="stretch"
 
           >
-            <Grid item lg={3} xs={6}>
-              <Paper elevation={3} className={classes.paper}>
-                <div className={classes.paper_div}>
-                  <h6 align="left" className={classes.paper_title}>Total Tracks</h6>
-                  <h1 align="left" className={classes.paper_title}>{this.state.playlist.tracks.total}</h1>
-                </div>
-              </Paper>
-            </Grid>
-            <Grid item lg={3} xs={6}>
+            <Grid item lg={4} xs={6}>
               <Paper elevation={3} className={classes.paper}>
                 <div className={classes.paper_div}>
                  <h6 align="left" className={classes.paper_title}>Followers</h6>
@@ -467,7 +490,7 @@ class Analysis extends React.Component {
                 </div>
               </Paper>
             </Grid>
-            <Grid item lg={3} xs={6}>
+            <Grid item lg={4} xs={6}>
               <Paper elevation={3} className={classes.paper}>
                 <div className={classes.paper_div}>
                 <h6 align="left" className={classes.paper_title}>Playlist Owner</h6>
@@ -475,11 +498,35 @@ class Analysis extends React.Component {
                 </div>
               </Paper>
             </Grid>
-            <Grid item lg={3} xs={6} align="stretch">
+            <Grid item lg={4} xs={6} align="stretch">
               <Paper elevation={3} className={classes.paper}>
                 <div className={classes.paper_div}>
                   <h6 align="left" className={classes.paper_title}>Last Updated</h6>
                   <h2 align="left" className={classes.paper_title}>{this.state.last_update.slice(0,nthIndex(this.state.last_update,' ',4))}</h2>
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item lg={4} xs={6}>
+              <Paper elevation={3} className={classes.paper}>
+                <div className={classes.paper_div}>
+                  <h6 align="left" className={classes.paper_title}>Total Tracks</h6>
+                  <h1 align="left" className={classes.paper_title}>{this.state.playlist.tracks.total}</h1>
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item lg={4} xs={12}>
+              <Paper elevation={3} className={classes.paper}>
+                <div className={classes.paper_div}>
+                  <h6 align="left" className={classes.paper_title}>Total Playlist Length</h6>
+                  <h1 align="left" className={classes.paper_title}>{this.state.duration_total}</h1>
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item lg={4} xs={12}>
+              <Paper elevation={3} className={classes.paper}>
+                <div className={classes.paper_div}>
+                  <h6 align="left" className={classes.paper_title}>Average Track Length</h6>
+                  <h1 align="left" className={classes.paper_title}>{this.state.duration_avg}</h1>
                 </div>
               </Paper>
             </Grid>
