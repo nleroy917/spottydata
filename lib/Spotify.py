@@ -94,10 +94,13 @@ class Spotify():
                         pass
                 except:
                     continue
+            
             # get analysis for each track
             # get artists for each track
-            analysis += self._get_features(track_ids)
-            artists += self._get_artists(artist_ids)
+            if len(track_ids) > 0:
+                analysis += self._get_features(track_ids)
+            if len(artist_ids) > 0:
+                artists += self._get_artists(artist_ids)
             
             if tracks['next']:
                 tracks = self._spotify.next(tracks)
