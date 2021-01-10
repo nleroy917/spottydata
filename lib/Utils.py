@@ -152,8 +152,8 @@ class Utils():
         		feel_data['energy'] += analysis['energy']
         		feel_data['instrumentalness'] += analysis['instrumentalness']
         		feel_data['liveness'] += analysis['liveness']
-        		feel_data['speechiness'] += analysis['speechiness'] 
-                feel_data['valence'] += analysis['valence']
+        		feel_data['speechiness'] += analysis['speechiness']
+        		feel_data['valence'] += analysis['valence']
         	except:
         		pass    
         	## STORE GENRE DATA ##
