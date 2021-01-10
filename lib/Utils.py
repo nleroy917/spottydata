@@ -119,7 +119,8 @@ class Utils():
         		  "energy" : 0,
         		  "instrumentalness" : 0,
         		  "liveness" : 0,
-        		  "speechiness" : 0
+        		  "speechiness" : 0,
+                  "valence": 0
         		}   
         # init empty dicts and variables
         genre_data = {}
@@ -152,6 +153,7 @@ class Utils():
         		feel_data['instrumentalness'] += analysis['instrumentalness']
         		feel_data['liveness'] += analysis['liveness']
         		feel_data['speechiness'] += analysis['speechiness'] 
+                feel_data['valence'] += analysis['valence']
         	except:
         		pass    
         	## STORE GENRE DATA ##
