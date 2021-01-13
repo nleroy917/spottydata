@@ -20,7 +20,32 @@ class Spotify():
         returns: list of playlist objects
         '''
         playlists = self._spotify.current_user_playlists()
+        playlists["items"].append(self.get_playlist("saved"))
         return playlists
+
+    def get_playlist(self, id):
+        '''
+        Gets information about a given playlist
+        '''
+        print(id)
+        if(id == "saved"):
+            playlist = self._spotify.current_user_saved_tracks()
+
+            playlist["collaborative"] = False
+            playlist["description"] = "Saved tracks"
+            playlist["name"] = "Saved tracks"
+            playlist["id"] = "saved"
+            playlist["href"] = "https://api.spotify.com/v1/me/tracks"
+            playlist["followers"] = {"href": None, "total": 0}
+            playlist["owner"] = {"id": "You"}
+            playlist["images"] = [{"url": "https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png"}]
+            playlist["external_urls"] = { "spotify": "https://open.spotify.com/collection/tracks"}
+            playlist["tracks"] = {"total": playlist["total"]}
+
+        else:
+            playlist = self._spotify.playlist(id)
+
+        return playlist
 
     def _get_playlist_tracks(self,id):
         '''
@@ -30,7 +55,10 @@ class Spotify():
         Returns:
             tracks - a list of tracks inside that playlist
         '''
-        tracks = self._spotify.playlist_tracks(id)
+        if(id == "saved"):
+            tracks = self._spotify.current_user_saved_tracks()
+        else:
+            tracks = self._spotify.playlist_tracks(id)
         return tracks
     
     def _get_features(self,track_ids):
