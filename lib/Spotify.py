@@ -20,7 +20,7 @@ class Spotify():
         returns: list of playlist objects
         '''
         playlists = self._spotify.current_user_playlists()
-        playlists["items"].append(self.get_playlist("saved"))
+        playlists["items"].append(self.get_playlist("saved_tracks"))
         return playlists
 
     def get_playlist(self, id):
@@ -30,30 +30,34 @@ class Spotify():
         returns: a playlist object
         '''
 
-        if(id == "saved"):
-            saved_tracks = self._spotify.current_user_saved_tracks()
+        if(id == "saved_tracks"):
 
-            playlist= {}
-
-            playlist["collaborative"] = False
-            playlist["external_urls"] = { "spotify": "https://open.spotify.com/collection/tracks"}
-            playlist["href"] = "https://api.spotify.com/v1/me/tracks"
-            playlist["description"] = "Saved tracks"
-            playlist["id"] = "saved"
-            playlist["images"] = [{"url": "https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png"}]
-            playlist["name"] = "Saved tracks"
-            playlist["owner"] = self._spotify.current_user()
-            playlist["public"] = False
-            playlist["snapshot_id"] = None
-            playlist["tracks"] = {
-                "total": saved_tracks["total"],
-                "tracks": saved_tracks["items"],
-                "href": "https://api.spotify.com/v1/me/tracks"
+            playlist= {
+                "name": "Saved Tracks",
+                "description": "Saved Tracks",
+                "id": "saved_tracks",
+                "collaborative": False,
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/collection/tracks"
+                },
+                "href": "https://api.spotify.com/v1/me/tracks",
+                "images": [
+                    {
+                        "url": "https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png"
+                    }
+                ],
+                "tracks": self._spotify.current_user_saved_tracks(),
+                "owner": self._spotify.current_user(),
+                "public": None,
+                "snapshot_id": None,
+                "uri": None,
+                "type": "playlist",
+                "followers": {
+                    "href": None,
+                    "total": 0
+                }
             }
-            playlist["uri"] = None
-            playlist["type"] = "playlist"
-            playlist["followers"] = {"href": None, "total": 0}
-
+        
         else:
             playlist = self._spotify.playlist(id)
 
@@ -67,7 +71,7 @@ class Spotify():
         Returns:
             tracks - a list of tracks inside that playlist
         '''
-        if(id == "saved"):
+        if(id == "saved_tracks"):
             tracks = self._spotify.current_user_saved_tracks()
         else:
             tracks = self._spotify.playlist_tracks(id)
