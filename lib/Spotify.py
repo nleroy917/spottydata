@@ -26,21 +26,33 @@ class Spotify():
     def get_playlist(self, id):
         '''
         Gets information about a given playlist
+
+        returns: a playlist object
         '''
-        print(id)
+
         if(id == "saved"):
-            playlist = self._spotify.current_user_saved_tracks()
+            saved_tracks = self._spotify.current_user_saved_tracks()
+
+            playlist= {}
 
             playlist["collaborative"] = False
-            playlist["description"] = "Saved tracks"
-            playlist["name"] = "Saved tracks"
-            playlist["id"] = "saved"
-            playlist["href"] = "https://api.spotify.com/v1/me/tracks"
-            playlist["followers"] = {"href": None, "total": 0}
-            playlist["owner"] = {"id": "You"}
-            playlist["images"] = [{"url": "https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png"}]
             playlist["external_urls"] = { "spotify": "https://open.spotify.com/collection/tracks"}
-            playlist["tracks"] = {"total": playlist["total"]}
+            playlist["href"] = "https://api.spotify.com/v1/me/tracks"
+            playlist["description"] = "Saved tracks"
+            playlist["id"] = "saved"
+            playlist["images"] = [{"url": "https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png"}]
+            playlist["name"] = "Saved tracks"
+            playlist["owner"] = self._spotify.current_user()
+            playlist["public"] = False
+            playlist["snapshot_id"] = None
+            playlist["tracks"] = {
+                "total": saved_tracks["total"],
+                "tracks": saved_tracks["items"],
+                "href": "https://api.spotify.com/v1/me/tracks"
+            }
+            playlist["uri"] = None
+            playlist["type"] = "playlist"
+            playlist["followers"] = {"href": None, "total": 0}
 
         else:
             playlist = self._spotify.playlist(id)
