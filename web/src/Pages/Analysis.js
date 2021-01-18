@@ -193,10 +193,10 @@ class Analysis extends React.Component {
       fetchPlaylist = async () => {
           const headers = {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + this.state.accessToken
+            'access_token': this.state.accessToken
           }
 
-        const response = await axios.get(`https://api.spotify.com/v1/playlists/${this.state.id}`, {headers: headers})
+        const response = await axios.get(URL_BASE + `${this.state.id}`, {headers: headers})
 
         if(response.status === 200) {
               //console.log(response)

@@ -67,7 +67,16 @@ def tracks_get(playlist_id):
 	tracks = spotify._get_playlist_tracks(playlist_id)['items']
 	del spotify
 
-	return jsonify(tracks['items'])
+	return jsonify(tracks)
+
+@app.route('/<playlist_id>', methods=['GET'])
+def playlist_get(playlist_id):
+	access_token = request.headers['access_token']
+	spotify = Spotify(access_token)
+    
+	playlist = spotify.get_playlist(playlist_id)
+	return jsonify(playlist)
+
 
 @app.route('/<playlist_id>/analysis/lyrics', methods=['GET'])
 def lyrics_analysis(playlist_id):
@@ -84,7 +93,7 @@ def lyrics_analysis(playlist_id):
 
 	# select random sample of songs 
 	max_songs=20
-	tracks = random.sample(tracks,k=max_songs)
+	tracks = random.sample(tracks,k=min(max_songs, len(tracks)))
 
 	lyrics_count = {}
 
@@ -154,7 +163,6 @@ def full_analysis(playlist_id):
 	del spotify
 
 	return jsonify(payload)
-
 
 
 if __name__ == '__main__':
