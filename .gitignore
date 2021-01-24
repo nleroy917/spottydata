@@ -4,3 +4,4 @@ testing/
 env/
 .vscode/
 __pycache__/
+scripts/
