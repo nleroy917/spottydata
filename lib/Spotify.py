@@ -155,6 +155,13 @@ class Spotify():
             
         
         return tracks_full, analysis, artists, last_update
+    
+    def current_song(self):
+        '''
+        Get the currently playing song for a user on spotify. Returns song track object
+        if song is playing, otherwise returns false.
+        '''
+        return self._spotify.current_user_playing_track()
         
 
     def get_recommendations(self):

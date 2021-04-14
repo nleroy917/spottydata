@@ -227,8 +227,8 @@ return(
 			</div>
 			</HoverAlertWrapper>
 			}
+			<a href="https://open.spotify.com/user/nleroy917">Follow me on Spotify ;)</a>
 	      <br></br>
-
 		</Grid>
 	</Grid>
 	<Footer>
@@ -239,10 +239,10 @@ return(
 		style={{width: '100%', textAlign: 'center'}}
 		>
 			<Grid item lg={4} xs={11} style={{width: '100%'}}>
-				Created by <FooterLink href="https://twitter.com/NathanJLeRoy">Nathan LeRoy</FooterLink>
+				Created by <FooterLink href="https://open.spotify.com/user/nleroy917">Nathan LeRoy</FooterLink>
 			</Grid>
 			<Grid item lg={4} xs={11} style={{width: '100%'}}>
-				© 2020
+				© 2021
 			</Grid>
 			<Grid item lg={4} xs={11} style={{width: '100%'}}>
 				<FooterLink href="https://github.com/NLeRoy917/spottydata/issues">Report an issue</FooterLink>

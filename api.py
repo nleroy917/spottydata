@@ -58,6 +58,13 @@ def playlists_get(username):
 
 	return jsonify(playlists_filtered)
 
+@app.route('/<username>/current-playing/analysis', methods=['GET'])
+def current_playing(username):
+	access_token = request.headers['access_token']
+	spotify = Spotify(access_token)
+	current_track = spotify.current_song()
+    
+
 # testing route to load test the API for getting tracks
 @app.route('/playlists/<playlist_id>/tracks', methods=['GET'])
 def tracks_get(playlist_id):
