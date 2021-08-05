@@ -55,13 +55,15 @@ export default function Auth() {
                 setProfile,
                 setError
             )
+        }
+        if(authData !== undefined && playlists === undefined) {
             fetchPlaylists(
                 authData,
                 setPlaylists,
                 setError
             )
         }
-        if (playlists !== undefined) {
+        if (playlists !== undefined && profile !== undefined) {
             setPlaylistAnalysis(playlistAnalysisBasic(playlists.filter(p => p.owner.display_name === profile.display_name)))
         }
     }, [authData, playlists])
@@ -97,7 +99,7 @@ export default function Auth() {
     } else {
         return (
             <div className="flex flex-col items-center justify-start bg-gradient min-h-screen">
-              <div className="h-40 w-full opacity-50 bg-no-repeat" style={{
+              <div className="h-56 w-full opacity-50 bg-no-repeat" style={{
                   backgroundImage: `url(${profile.images[0].url})`,
                   backgroundSize: 'cover'
               }}>
@@ -107,7 +109,7 @@ export default function Auth() {
                     </Link>
                 </div>
               </div>
-              <div className="mx-4 p-4 rounded-lg shadow-lg border-2 border-black -translate-y-20 md:-translate-y-1/4 bg-white w-11/12 md:w-1/2">
+              <div className="mx-4 p-4 rounded-lg shadow-lg border-2 border-black -translate-y-20 md:-translate-y-1/4 bg-white w-11/12 md:max-w-screen-md">
                <div className="flex flex-row items-start justify-between mb-2 border-b border-gray-200 pb-2">
                {/* <div className="my-auto">
                 <Image
@@ -166,8 +168,8 @@ export default function Auth() {
                       </div>
                   </div>
                   <div className="flex flex-col justify-start">
-                    <p className="text-2xl font-bold md:text-4xl">Recently Played: </p>
-                    <div className="flex flex-row items-center my-2 md:justify-center">
+                    <p className="text-2xl font-extrabold md:text-4xl">Recently Played: </p>
+                    <div className="flex flex-row items-center my-2">
                     <Image 
                         height={75}
                         width={75}
@@ -178,27 +180,27 @@ export default function Auth() {
                       <p className="text-base italic">{playback.item.artists[0].name}</p>
                      </div>
                     </div>
-                    <div className="my-2 flex flex-col md:flex-row text-lg md:justify-evenly md:text-2xl">
-                        <p>Song Key: <span className="font-bold text-blue-500">{keyCodeToKey(playback.analysis.key)}</span></p>
-                        <p>Tempo: <span className="font-bold text-green-500">{playback.analysis.tempo}</span></p>
-                        <p>Mode: <span className="font-bold text-red-500">{modeKeyToMode(playback.analysis.mode)}</span></p>
+                    <div className="my-2 flex flex-col md:flex-row text-lg md:text-2xl">
+                        <p>Song Key: <span className="mr-4 font-bold text-blue-500">{keyCodeToKey(playback.analysis.key)}</span></p>
+                        <p>Tempo: <span className="mr-4 font-bold text-green-500">{playback.analysis.tempo}</span></p>
+                        <p>Mode: <span className="mr-4 font-bold text-red-500">{modeKeyToMode(playback.analysis.mode)}</span></p>
                     </div>
                   </div>
               </div>
-              <div className="-translate-y-16 md:max-w-screen-lg">
+              <div className="-translate-y-16 w-full md:max-w-screen-lg">
                 <div className="flex flex-col justify-center items-center md:flex-row flex-wrap text-center text-3xl font-bold md:text-4xl">
-                  <div className="w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-lg border-2 border-black hover:shadow-sm hover:-translate-y-0.5 hover:border-blue-500 hover:text-blue-500 transition-all">
+                  <div className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-blue-500 hover:text-blue-500 transition-all">
                     Analyze Playlists
                   </div>
-                  <div className="w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-lg border-2 border-black hover:shadow-sm hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
+                  <div className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
                     Search for music
                   </div>
-                  <div className="w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-lg border-2 border-black hover:shadow-sm hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
+                  {/* <div className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
                     Another thing
                   </div>
-                  <div className="w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-lg border-2 border-black hover:shadow-sm hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
+                  <div className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
                     Another thing
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>   

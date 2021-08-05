@@ -37,32 +37,30 @@ export default function Home() {
       <main>
         <div className="flex flex-col items-center justify-center">
           <div className="my-2">
-            <p className="text-5xl font-bold text-center lg:text-7xl mb-4">
+            <p className="text-6xl font-bold text-center lg:text-7xl mb-4">
               Welcome to <span className="text-green-400">SpottyData</span>
             </p>
           </div>
-          <div className="my-4 flex flex-col justify-center items-center md:flex-row">
+          <div className="my-4 flex flex-col justify-center items-center md:flex-row w-11/12">
             <div
-              className="w-full"
               onMouseEnter={() => setHoverGo(true)}
               onMouseLeave={() => setHoverGo(false)}
             >
               <Link href={authorize_url}>
                 <button 
-                  className="w-48 rounded-lg border-2 border-black hover:bg-black hover:text-white hover:shadow-sm my-2 mx-2 px-8 py-2 text-xl font-bold transition-all"
+                  className="w-56 md:w-48 rounded-lg border-2 border-black hover:bg-black hover:text-white hover:shadow-sm my-2 mx-2 px-8 py-4 md:py-2 text-xl font-bold transition-all"
                 >
                   Lets Go
                 </button>
               </Link>
             </div>
             <div
-              className="w-full"
               onMouseEnter={() => setHoverSource(true)}
               onMouseLeave={() => setHoverSource(false)}
             >
               <Link href="https://github.com/nleroy917/spottydata">
                 <button 
-                  className="w-48 rounded-lg border-2 border-black hover:bg-black hover:text-white hover:shadow-sm my-2 mx-2 px-8 py-2 text-xl font-bold transition-all"
+                  className="w-56 md:w-48 rounded-lg border-2 border-black hover:bg-black hover:text-white hover:shadow-sm my-2 mx-2 px-8 py-4 md:py-2 text-xl font-bold transition-all"
 
                 >
                   GitHub
@@ -70,13 +68,12 @@ export default function Home() {
               </Link>
             </div>
             <div
-              className="w-full"
               onMouseEnter={() => setHoverSupport(true)}
               onMouseLeave={() => setHoverSupport(false)}
             >
               <Link href="https://paypal.me/nathanleroy?locale.x=en_US">
                 <button 
-                  className="w-48 rounded-lg border-2 border-black hover:bg-black hover:text-white hover:shadow-sm my-2 mx-2 px-8 py-2 text-xl font-bold transition-all"
+                  className="w-56 md:w-48 rounded-lg border-2 border-black hover:bg-black hover:text-white hover:shadow-sm my-2 mx-2 px-8 py-4 md:py-2 text-xl font-bold transition-all"
                 >
                   Support
                 </button>

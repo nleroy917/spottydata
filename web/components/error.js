@@ -15,15 +15,15 @@ const ErrorMessage = ({error}) => {
                 {
                     error.response ?
                     <div className="p-4 border-2 border-green-500 rounded-md bg-green-200 shadow-md mx-6">
-                        <p className="text-3xl font-bold mb-4">
+                        <p className="text-3xl font-bold mb-4 text-center md:text-left">
                             Error Code: {error.response.status}
                         </p>
-                        <code>
+                        <code className="mx-auto">
                           {
                               JSON.stringify(error.response.data, null, 2)
                           }
                         </code>
-                        <div className="flex flex-row justify-start mt-4">
+                        <div className="flex flex-row justify-center md:justify-start mt-4">
                           <Link href="https://github.com/nleroy917/spottydata/issues">
                             <button className="border-2 border-black rounded-lg text-white bg-black mr-1 px-6 py-2 font-bold transition-all hover:bg-transparent hover:text-black">
                                 Report Issue
