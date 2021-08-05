@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Link from "next/link";
-import { currentPlayback, fetchAccessToken, fetchPlaylists, fetchProfile, playlistAnalysisBasic } from '../utils/spotify';
+import { currentPlayback, fetchAccessToken, fetchPlaylists, fetchProfile, keyCodeToKey, modeKeyToMode, playlistAnalysisBasic } from '../utils/spotify';
 import { Error } from '../components/error';
 import { Loading } from '../components/loading';
 import Image from 'next/image';
@@ -74,7 +74,7 @@ export default function Auth() {
             if(authData !== undefined) {
                 currentPlayback(authData, setPlayback, setError)
             }
-        }, 2000) // run every two seconds
+        }, 3000) // run every three seconds
 
         // cleanup
         return () => clearInterval(playbackCycle)
@@ -96,7 +96,7 @@ export default function Auth() {
         )
     } else {
         return (
-            <div className="flex flex-col items-center justify-start">
+            <div className="flex flex-col items-center justify-start bg-gradient min-h-screen">
               <div className="h-40 w-full opacity-50 bg-no-repeat" style={{
                   backgroundImage: `url(${profile.images[0].url})`,
                   backgroundSize: 'cover'
@@ -166,19 +166,40 @@ export default function Auth() {
                       </div>
                   </div>
                   <div className="flex flex-col justify-start">
-                      <p className="text-4xl font-bold">Recently Played: </p>
-                      <div className="flex flex-row items-center my-2">
-                      <Image 
-                          height={75}
-                          width={75}
-                          src={playback.item.album.images[0].url}
-                      />
-                       <div className="ml-2">
-                        <p className="text-4xl font-mediumbold">{playback.item.name}</p>
-                        <p className="text-xl italic">{playback.item.artists[0].name}</p>
-                       </div>
-                      </div>
+                    <p className="text-2xl font-bold md:text-4xl">Recently Played: </p>
+                    <div className="flex flex-row items-center my-2 justify-center">
+                    <Image 
+                        height={75}
+                        width={75}
+                        src={playback.item.album.images[0].url}
+                    />
+                     <div className="ml-2">
+                      <p className="text-xl md:text-2xl font-semibold">{playback.item.name}</p>
+                      <p className="text-base italic">{playback.item.artists[0].name}</p>
+                     </div>
+                    </div>
+                    <div className="my-2 flex flex-col md:flex-row text-lg md:justify-evenly md:text-2xl">
+                        <p>Song Key: <span className="font-bold text-blue-500">{keyCodeToKey(playback.analysis.key)}</span></p>
+                        <p>Tempo: <span className="font-bold text-green-500">{playback.analysis.tempo}</span></p>
+                        <p>Mode: <span className="font-bold text-red-500">{modeKeyToMode(playback.analysis.mode)}</span></p>
+                    </div>
                   </div>
+              </div>
+              <div className="-translate-y-16 md:max-w-screen-lg">
+                <div className="flex flex-col justify-center items-center md:flex-row flex-wrap text-center text-3xl font-bold md:text-4xl">
+                  <div className="w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-lg border-2 border-black hover:shadow-sm hover:-translate-y-0.5 hover:border-blue-500 hover:text-blue-500 transition-all">
+                    Analyze Playlists
+                  </div>
+                  <div className="w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-lg border-2 border-black hover:shadow-sm hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
+                    Search for music
+                  </div>
+                  <div className="w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-lg border-2 border-black hover:shadow-sm hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
+                    Another thing
+                  </div>
+                  <div className="w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-lg border-2 border-black hover:shadow-sm hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
+                    Another thing
+                  </div>
+                </div>
               </div>
             </div>   
         )   
