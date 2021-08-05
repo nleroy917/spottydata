@@ -40,6 +40,29 @@ const ErrorMessage = ({error}) => {
                 }
             </div>
         )
+    } else {
+        console.log(error)
+        return (
+            <div className="p-4 border-2 border-green-500 rounded-md bg-green-200 shadow-md mx-6 font-bold">
+                <code>
+                    {
+                        error.toString()
+                    }
+                </code>
+                <div className="flex flex-row justify-center mt-4">
+                  <Link href="https://github.com/nleroy917/spottydata/issues">
+                    <button className="border-2 border-black rounded-lg text-white bg-black mr-1 px-6 py-2 font-bold transition-all hover:bg-transparent hover:text-black">
+                        Report Issue
+                    </button>
+                  </Link>
+                  <Link href="/">
+                    <button className="border-2 border-black rounded-lg text-white bg-black mx-1 px-6 py-2 font-bold transition-all hover:bg-transparent hover:text-black">
+                        Home
+                    </button>
+                  </Link>                            
+                </div>
+            </div>
+        )
     }
 }
 

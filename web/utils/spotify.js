@@ -47,19 +47,23 @@ export const currentPlayback = (authData, dataSetter, setError) => {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + authData.access_token
     }
-    axios.get('https://api.spotify.com/v1/me/player', {headers: hdrs})
+    axios.get('https://api.spotify.com/v1/me/player/currently-playing', {headers: hdrs})
     .then(res => {
-        let current = res.data
-        axios.get(`https://api.spotify.com/v1/audio-features/${current.item.id}`, {headers: hdrs})
-        .then(res => {
-            dataSetter({
-                ...current,
-                analysis: res.data
+        if (res.data === "") {
+            dataSetter({})
+        } else {
+            let current = res.data
+            axios.get(`https://api.spotify.com/v1/audio-features/${current.item.id}`, {headers: hdrs})
+            .then(res => {
+                dataSetter({
+                    ...current,
+                    analysis: res.data
+                })
             })
-        })
-        .catch(err => {
-            setError(err)
-        })
+            .catch(err => {
+                setError(err)
+            })
+        }
     })
     .catch(err => {
         setError(err)

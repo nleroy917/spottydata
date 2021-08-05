@@ -168,24 +168,35 @@ export default function Auth() {
                       </div>
                   </div>
                   <div className="flex flex-col justify-start">
-                    <p className="text-2xl font-extrabold md:text-4xl">Recently Played: </p>
-                    <div className="flex flex-row items-center my-2">
-                    <Image 
-                        height={75}
-                        width={75}
-                        src={playback.item.album.images[0].url}
-                    />
-                     <div className="ml-2">
-                      <p className="text-xl md:text-2xl font-semibold">{playback.item.name}</p>
-                      <p className="text-base italic">{playback.item.artists[0].name}</p>
-                     </div>
-                    </div>
-                    <div className="my-2 flex flex-col md:flex-row text-lg md:text-2xl">
-                        <p>Song Key: <span className="mr-4 font-bold text-blue-500">{keyCodeToKey(playback.analysis.key)}</span></p>
-                        <p>Tempo: <span className="mr-4 font-bold text-green-500">{playback.analysis.tempo}</span></p>
-                        <p>Mode: <span className="mr-4 font-bold text-red-500">{modeKeyToMode(playback.analysis.mode)}</span></p>
-                    </div>
-                  </div>
+                    <p className="text-2xl font-extrabold md:text-4xl">Currently Listening To: </p>
+                    {
+                        Object.keys(playback).length > 0 ?
+                        <>
+                        <div className="flex flex-row items-center my-2">
+                            <Image 
+                                height={75}
+                                width={75}
+                                src={playback.item.album.images[0].url}
+                            />
+                             <div className="ml-2">
+                              <p className="text-xl md:text-2xl font-semibold">{playback.item.name}</p>
+                              <p className="text-base italic">{playback.item.artists[0].name}</p>
+                             </div>
+                            </div>
+                            <div className="my-2 flex flex-col md:flex-row text-lg md:text-2xl">
+                                <p>Song Key: <span className="mr-4 font-bold text-blue-500">{keyCodeToKey(playback.analysis.key)}</span></p>
+                                <p>Tempo: <span className="mr-4 font-bold text-green-500">{playback.analysis.tempo}</span></p>
+                                <p>Mode: <span className="mr-4 font-bold text-red-500">{modeKeyToMode(playback.analysis.mode)}</span></p>
+                            </div>
+                        </>
+                        :
+                        <div className="flex flex-row items-center justify-center p-4">
+                            <p className="text-2xl text-gray-300 font-semibold">
+                                No music playing{' '}<span className="opacity-50">💤</span>
+                            </p>
+                        </div>
+                    }
+                </div>
               </div>
               <div className="-translate-y-16 w-full md:max-w-screen-lg">
                 <div className="flex flex-col justify-center items-center md:flex-row flex-wrap text-center text-3xl font-bold md:text-4xl">
