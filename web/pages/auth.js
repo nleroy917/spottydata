@@ -74,7 +74,7 @@ export default function Auth() {
             if(authData !== undefined) {
                 currentPlayback(authData, setPlayback, setError)
             }
-        }, 3000) // run every three seconds
+        }, 5000) // run every five seconds
 
         // cleanup
         return () => clearInterval(playbackCycle)
