@@ -143,7 +143,7 @@ export default function Auth() {
                         Total Tracks: <span className="text-purple-400 font-bold">{playlistAnalysis.totalTracks}</span>
                     </div>
                   </div>
-                  <div className="flex flex-col text-base md:text-lg mb-2 md:flex-row justify-start border-b border-gray-200 pb-2 ">
+                  <div className="flex flex-col text-base md:text-lg mb-2 md:flex-row justify-start border-b border-gray-200 ">
                     <div className="flex flex-row my-1">
                         <Image
                             src={playlistAnalysis.longestPlaylist.images[0].url}

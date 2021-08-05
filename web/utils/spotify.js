@@ -80,7 +80,7 @@ export const fetchPlaylists = (authData, dataSetter, setError) => {
         axios.get(url, {headers: hdrs})
         .then(res => {
             if (res.data.next) {
-                playlists.concat(res.data.items)
+                playlists = playlists.concat(res.data.items)
                 getPlaylists(res.data.next)
             } else {
                 dataSetter(playlists.concat(res.data.items))
