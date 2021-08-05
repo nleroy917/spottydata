@@ -9,7 +9,7 @@ const base_url =  'https://accounts.spotify.com/authorize?'
 const payload = {
 	client_id: '0ca7dd0007fd4ff2a34c3aab07379970',
 	response_type: 'code',
-	scope: 'playlist-read-private playlist-read-collaborative user-top-read user-library-read',
+	scope: 'playlist-read-private playlist-read-collaborative user-top-read user-library-read user-read-playback-state user-read-recently-played',
 	redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI,
 	show_dialog: true
 }
