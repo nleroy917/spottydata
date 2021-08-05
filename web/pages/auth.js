@@ -167,7 +167,7 @@ export default function Auth() {
                   </div>
                   <div className="flex flex-col justify-start">
                     <p className="text-2xl font-bold md:text-4xl">Recently Played: </p>
-                    <div className="flex flex-row items-center my-2 justify-center">
+                    <div className="flex flex-row items-center my-2 md:justify-center">
                     <Image 
                         height={75}
                         width={75}
