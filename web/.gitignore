@@ -1,11 +1,3 @@
-testing/
-.DS_Store
-.env
-env/
-.vscode/
-__pycache__/
-scripts/
-
 # nextjs
 # dependencies
 node_modules
