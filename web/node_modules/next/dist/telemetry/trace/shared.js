@@ -1,0 +1,3 @@
+"use strict";exports.__esModule=true;exports.debugLog=exports.setGlobal=exports.traceGlobals=exports.TARGET=void 0;// eslint typescript has a bug with TS enums
+/* eslint-disable no-shadow */let TARGET;exports.TARGET=TARGET;(function(TARGET){TARGET["CONSOLE"]="CONSOLE";TARGET["ZIPKIN"]="ZIPKIN";TARGET["TELEMETRY"]="TELEMETRY";})(TARGET||(exports.TARGET=TARGET={}));const traceGlobals=new Map();exports.traceGlobals=traceGlobals;const setGlobal=(key,val)=>{traceGlobals.set(key,val);};exports.setGlobal=setGlobal;const debugLog=!!process.env.TRACE_DEBUG?console.info:function noop(){};exports.debugLog=debugLog;
+//# sourceMappingURL=shared.js.map

@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../lib/compile-error.ts"],"names":["CompileError","Error"],"mappings":"iEAAO,KAAMA,CAAAA,YAAN,QAA2BC,CAAAA,KAAM,E","sourcesContent":["export class CompileError extends Error {}\n"]}
