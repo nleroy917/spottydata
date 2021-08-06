@@ -122,13 +122,6 @@ export default function Auth() {
               </div>
               <div className="mx-4 p-4 rounded-lg shadow-lg border-2 border-black -translate-y-20 md:-translate-y-1/4 bg-white w-11/12 md:max-w-screen-md">
                <div className="flex flex-row items-start justify-between mb-4 border-b border-gray-200 pb-4">
-               {/* <div className="my-auto">
-                <Image
-                    height={100}
-                    width={100}
-                    src={profile.images[0].url}
-                />
-               </div> */}
                 <p className="font-extrabold text-2xl md:text-4xl">
                     Welcome,{' '}
                     <span className="text-green-500">{profile.display_name}</span>
@@ -179,7 +172,7 @@ export default function Auth() {
                       </div>
                   </div>
                   <div className="flex flex-col justify-start">
-                    <p className="text-2xl font-extrabold md:text-4xl">Currently Listening To: </p>
+                    <p className="text-2xl font-extrabold md:text-4xl">Currently listening to: </p>
                     {
                         Object.keys(playback).length > 0 ?
                         <>

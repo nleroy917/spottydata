@@ -49,7 +49,7 @@ export default function Playlists() {
     } else {
         return (
             <div>
-              <div className="bg-red-400 h-48">
+              <div className="bg-yellow-200 h-48">
                   <div className="p-4 flex flex-row justify-between items-center">
                     <Link href="/auth">
                         <span className="cursor-pointer">Back</span>
@@ -63,12 +63,12 @@ export default function Playlists() {
                     {
                         playlists.map((p, i) => {
                             return (
-                                <div className="bg-white shadow-lg rounded-lg w-11/12 md:w-72 m-4 border-2 border-black hover:shadow-2xl     hover:border-blue-600 hover:text-blue-600">
+                                <div key={i} className="bg-white shadow-lg rounded-lg w-11/12 md:w-72 m-4 border-2 border-black hover:shadow-2xl     hover:border-blue-600 hover:text-blue-600">
                                   <img
                                     className="rounded-t-lg h-64 md:h-52 w-full object-cover" 
                                     src={p.images[0].url}
                                   />
-                                  <div class="py-4 px-2 font-bold text-2xl text-center">
+                                  <div className="py-4 px-2 font-bold text-2xl text-center">
                                     {p.name}
                                   </div>
                                 </div>
