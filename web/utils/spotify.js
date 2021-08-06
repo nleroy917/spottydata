@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const fetchAccessToken = (authCode, clientID, clientSecret, redirectURI, dataSetter, setError) => {
+export const fetchAccessToken = (authCode, clientID, clientSecret, redirectURI, dataSetter, setError, setCookie) => {
     
     const hdrs = {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -21,6 +21,14 @@ export const fetchAccessToken = (authCode, clientID, clientSecret, redirectURI, 
     axios.post('https://accounts.spotify.com/api/token', qs, {headers: hdrs})
     .then(res => {
         dataSetter(res.data)
+        setCookie(
+            'authData',
+            res.data,
+            {
+                path: '/',
+                maxAge: 60*60 // 60 minutes
+            }
+        )
     })
     .catch(err => {
         setError(err)
@@ -28,13 +36,21 @@ export const fetchAccessToken = (authCode, clientID, clientSecret, redirectURI, 
 
 }
 
-export const fetchProfile = (authData, dataSetter, setError) => {
+export const fetchProfile = (authData, dataSetter, setError, setCookie) => {
     const hdrs = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + authData.access_token
     }
     axios.get('https://api.spotify.com/v1/me', {headers: hdrs})
     .then(res => {
+        setCookie(
+        'profile',
+        res.data,
+        {
+            path: '/',
+            maxAge: 60*60 // 60 minutes
+        }
+        )
         dataSetter(res.data)
     })
     .catch(err => {
@@ -95,7 +111,6 @@ export const fetchPlaylists = (authData, dataSetter, setError) => {
 }
 
 export const playlistAnalysisBasic = (playlists) => {
-
     let analysis = {
         longestPlaylist: playlists[0],
         shortestPlaylist: playlists[0],
@@ -114,7 +129,6 @@ export const playlistAnalysisBasic = (playlists) => {
             analysis.shortestPlaylist = playlist
         }
     })
-
     return analysis
 }
 

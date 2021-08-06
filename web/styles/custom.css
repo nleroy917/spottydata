@@ -15,3 +15,22 @@
 		background-position: 0% 50%;
 	}
 }
+
+.profile-bg {
+	position: relative; 
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-bg::before {    
+	content: "";
+	background-size: cover;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	opacity: 0.5;
+}

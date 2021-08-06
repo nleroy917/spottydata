@@ -1,7 +1,31 @@
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useCookies } from "react-cookie"
+
 export const Header = () => {
+    // access cookies
+    const [cookies, , removeCookie] = useCookies(['spottydata-credentials']);
+    const [profile, setProfile] = useState(cookies['profile'])
+
+    // router
+    const router = useRouter()
+
+    const clearCookies = () => {
+        removeCookie('authData')
+        removeCookie('profile')
+        setProfile(undefined)
+        router.push("/")
+    }
+
     return (
-        <header className="h-12 fixed top-0 text-xs md:text-base py-4 px-6 flex flex-row items-center justify-end w-full">
-            Logged in as {' '}
+        <header className="h-8 items-center">
+            {
+                profile ?
+                <p className="mb-0">Logged in as{' '}<span className="font-bold">{profile.display_name}</span>{' | '}
+                    <span className="text-blue-600 cursor-pointer" onClick={clearCookies}>Logout</span>
+                </p>
+                : <div></div>
+            }
         </header>
     )
 }

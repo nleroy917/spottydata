@@ -33,7 +33,9 @@ export default function Home() {
         <title>Spottydata</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
+      <div className="flex flex-row justify-end fixed top-0 p-4 w-full">
+        <Header />
+      </div>
       <main>
         <div className="flex flex-col items-center justify-center">
           <div className="my-2">

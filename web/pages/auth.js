@@ -1,32 +1,39 @@
 import { useEffect, useState } from 'react';
+import {useCookies} from 'react-cookie';
 import { useRouter } from 'next/router'
 import Link from "next/link";
 import { currentPlayback, fetchAccessToken, fetchPlaylists, fetchProfile, keyCodeToKey, modeKeyToMode, playlistAnalysisBasic } from '../utils/spotify';
 import { Error } from '../components/error';
 import { Loading } from '../components/loading';
 import Image from 'next/image';
+import { Header } from '../components/header';
 
 
 export default function Auth() {
     // create router object
     const router = useRouter()
+
+    // access cookies
+    const [cookies, setCookie, ] = useCookies(['spottydata-credentials']);
     
     // check for error code
     const params = router.query
     if (params.error === "access_denied") {
-        // send home
-        router.push("/")
+        if(process.browser) {
+            router.push("/")
+        }
     }
 
     // extract authorization code
     const authCode = params.code
 
     // state management
-    const [authData, setAuthData] = useState(undefined)
+    const [authData, setAuthData] = useState(cookies['authData'] || undefined)
     const [profile, setProfile] = useState(undefined)
     const [playback, setPlayback] = useState(undefined)
     const [playlists, setPlaylists] = useState(undefined)
     const [playlistAnalysis, setPlaylistAnalysis] = useState(undefined)
+    const [loadingMessage, setLoadingMessage] = useState(undefined)
     const [error, setError] = useState(undefined)
 
     /**
@@ -34,13 +41,15 @@ export default function Auth() {
      */
     useEffect(() => {
         if(authCode !== undefined && authData === undefined) {
+            setLoadingMessage("Authenting...")
             fetchAccessToken(
                 authCode,
                 process.env.NEXT_PUBLIC_CLIENT_ID,
                 process.env.NEXT_PUBLIC_CLIENT_SECRET,
                 process.env.NEXT_PUBLIC_REDIRECT_URI,
                 setAuthData,
-                setError
+                setError,
+                setCookie
             )
         }
     }, [authCode, authData])
@@ -50,13 +59,16 @@ export default function Auth() {
      */
     useEffect(() => {
         if(authData !== undefined) {
+            setLoadingMessage("Fetching profile...")
             fetchProfile(
                 authData,
                 setProfile,
-                setError
+                setError,
+                setCookie
             )
         }
         if(authData !== undefined && playlists === undefined) {
+            setLoadingMessage("Fetching playlists...")
             fetchPlaylists(
                 authData,
                 setPlaylists,
@@ -64,6 +76,7 @@ export default function Auth() {
             )
         }
         if (playlists !== undefined && profile !== undefined) {
+            setLoadingMessage("Analyzing profile...")
             setPlaylistAnalysis(playlistAnalysisBasic(playlists.filter(p => p.owner.display_name === profile.display_name)))
         }
     }, [authData, playlists])
@@ -93,24 +106,22 @@ export default function Auth() {
         // render a spinner
         return (
             <div className="min-h-screen flex flex-col justify-center items-center">
-                <Loading />
+                <Loading message={loadingMessage} />
             </div>
         )
     } else {
         return (
             <div className="flex flex-col items-center justify-start bg-gradient min-h-screen">
-              <div className="h-56 w-full opacity-50 bg-no-repeat" style={{
-                  backgroundImage: `url(${profile.images[0].url})`,
-                  backgroundSize: 'cover'
-              }}>
-                <div className="p-4">
+              <div className="h-40 md:h-64 w-full bg-blue-300">
+                <div className="p-4 flex flex-row items-center justify-between">
                     <Link href="/">
-                        <span className="cursor-pointer opacity-100">Home</span>
+                        <span className="cursor-pointer">Home</span>
                     </Link>
+                    <Header />
                 </div>
               </div>
               <div className="mx-4 p-4 rounded-lg shadow-lg border-2 border-black -translate-y-20 md:-translate-y-1/4 bg-white w-11/12 md:max-w-screen-md">
-               <div className="flex flex-row items-start justify-between mb-2 border-b border-gray-200 pb-2">
+               <div className="flex flex-row items-start justify-between mb-4 border-b border-gray-200 pb-4">
                {/* <div className="my-auto">
                 <Image
                     height={100}
@@ -132,7 +143,7 @@ export default function Auth() {
                     </span>
                   }
                </div>
-                  <div className="flex flex-row items-center justify-between text-base md:text-lg mb-2">
+                  <div className="flex flex-row items-center justify-between text-lg md:text-2xl mb-2">
                     <div className="mr-2">
                         Followers: <span className="text-blue-400 font-bold">{profile.followers.total}</span>
                     </div>
@@ -143,7 +154,7 @@ export default function Auth() {
                         Total Tracks: <span className="text-purple-400 font-bold">{playlistAnalysis.totalTracks}</span>
                     </div>
                   </div>
-                  <div className="flex flex-col text-base md:text-lg mb-2 md:flex-row justify-start border-b border-gray-200 ">
+                  <div className="flex flex-col text-base md:text-lg mb-4 pb-4 md:flex-row justify-start border-b border-gray-200 ">
                     <div className="flex flex-row my-1">
                         <Image
                             src={playlistAnalysis.longestPlaylist.images[0].url}
@@ -173,11 +184,12 @@ export default function Auth() {
                         Object.keys(playback).length > 0 ?
                         <>
                         <div className="flex flex-row items-center my-2">
-                            <Image 
-                                height={75}
-                                width={75}
-                                src={playback.item.album.images[0].url}
-                            />
+                              <Image
+                                  className="rounded-lg"
+                                  height={75}
+                                  width={75}
+                                  src={playback.item.album.images[0].url}
+                              />
                              <div className="ml-2">
                               <p className="text-xl md:text-2xl font-semibold">{playback.item.name}</p>
                               <p className="text-base italic">{playback.item.artists[0].name}</p>
@@ -185,7 +197,7 @@ export default function Auth() {
                             </div>
                             <div className="my-2 flex flex-col md:flex-row text-lg md:text-2xl">
                                 <p>Song Key: <span className="mr-4 font-bold text-blue-500">{keyCodeToKey(playback.analysis.key)}</span></p>
-                                <p>Tempo: <span className="mr-4 font-bold text-green-500">{playback.analysis.tempo}</span></p>
+                                <p>Tempo: <span className="mr-4 font-bold text-green-500">{Math.round(playback.analysis.tempo)} bpm</span></p>
                                 <p>Mode: <span className="mr-4 font-bold text-red-500">{modeKeyToMode(playback.analysis.mode)}</span></p>
                             </div>
                         </>
@@ -200,8 +212,11 @@ export default function Auth() {
               </div>
               <div className="-translate-y-16 w-full md:max-w-screen-lg">
                 <div className="flex flex-col justify-center items-center md:flex-row flex-wrap text-center text-3xl font-bold md:text-4xl">
-                  <div className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-blue-500 hover:text-blue-500 transition-all">
-                    Analyze Playlists
+                  <div
+                    onClick={() => router.push("/playlists")}
+                    className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-blue-500 hover:text-blue-500 transition-all"
+                  >
+                        My playlists
                   </div>
                   <div className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
                     Search for music
