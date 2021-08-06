@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { Header } from '../components/header'
+import SEO from '../components/seo'
 
 // construct log in link
 const base_url =  'https://accounts.spotify.com/authorize?'
@@ -29,10 +30,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gradient">
-      <Head>
-        <title>Spottydata</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <SEO />
       <div className="flex flex-row justify-end fixed top-0 p-4 w-full">
         <Header />
       </div>

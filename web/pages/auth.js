@@ -7,6 +7,7 @@ import { Error } from '../components/error';
 import { Loading } from '../components/loading';
 import Image from 'next/image';
 import { Header } from '../components/header';
+import SEO from '../components/seo';
 
 
 export default function Auth() {
@@ -99,6 +100,7 @@ export default function Auth() {
         // render the error
         return (
             <div>
+                <SEO title="Error!"/>
                 <Error error={error} />
             </div>
         )
@@ -106,12 +108,14 @@ export default function Auth() {
         // render a spinner
         return (
             <div className="min-h-screen flex flex-col justify-center items-center">
+                <SEO title="Spottydata"/>
                 <Loading message={loadingMessage} />
             </div>
         )
     } else {
         return (
             <div className="flex flex-col items-center justify-start bg-gradient min-h-screen">
+            <SEO title="Spottydata"/>
               <div className="h-40 md:h-64 w-full bg-blue-300">
                 <div className="p-4 flex flex-row items-center justify-between">
                     <Link href="/">

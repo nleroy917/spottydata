@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from "next/router"
-import Image from 'next/image'
 import { useCookies } from "react-cookie"
 import { Error } from '../components/error';
 import { Loading } from '../components/loading';
 import { fetchPlaylists } from '../utils/spotify';
 import { Header } from '../components/header';
+import SEO from '../components/seo';
 import Link from 'next/link';
 
 export default function Playlists() {
@@ -38,17 +38,22 @@ export default function Playlists() {
 
     if (error) {
         return (
-            <Error error={error} />
+            <div>
+              <SEO title="Error!"/>
+              <Error error={error} />
+            </div>
         )
     } else if (playlists === undefined) {
         return (
             <div className="min-h-screen flex flex-col justify-center items-center">
+                <SEO title="Playlists"/>
                 <Loading />
             </div>
         )
     } else {
         return (
             <div>
+              <SEO title="Playlists"/>
               <div className="bg-yellow-200 h-48">
                   <div className="p-4 flex flex-row justify-between items-center">
                     <Link href="/auth">
@@ -67,6 +72,7 @@ export default function Playlists() {
                                   <img
                                     className="rounded-t-lg h-64 md:h-52 w-full object-cover" 
                                     src={p.images[0].url}
+                                    alt={`Analyze playlist: ${p.name}`}
                                   />
                                   <div className="py-4 px-2 font-bold text-2xl text-center">
                                     {p.name}
