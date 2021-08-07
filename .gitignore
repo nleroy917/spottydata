@@ -5,6 +5,7 @@ env/
 .vscode/
 __pycache__/
 scripts/
+.cache
 
 # nextjs
 # dependencies
