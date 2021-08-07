@@ -5,9 +5,11 @@ import Link from "next/link";
 import { currentPlayback, fetchAccessToken, fetchPlaylists, fetchProfile, keyCodeToKey, modeKeyToMode, playlistAnalysisBasic } from '../utils/spotify';
 import { Error } from '../components/error';
 import { Loading } from '../components/loading';
-import Image from 'next/image';
 import { Header } from '../components/header';
 import SEO from '../components/seo';
+
+import arrow from '../public/arrow-right.png'
+import Image from 'next/image';
 
 
 export default function Auth() {
@@ -114,9 +116,9 @@ export default function Auth() {
         )
     } else {
         return (
-            <div className="flex flex-col items-center justify-start bg-gradient min-h-screen">
+            <div className="flex flex-col items-center justify-start bg-white min-h-screen">
             <SEO title="Spottydata"/>
-              <div className="h-40 md:h-64 w-full bg-blue-300">
+              <div className="h-40 md:h-64 w-full bg-gradient">
                 <div className="p-4 flex flex-row items-center justify-between">
                     <Link href="/">
                         <span className="cursor-pointer">Home</span>
@@ -124,7 +126,7 @@ export default function Auth() {
                     <Header />
                 </div>
               </div>
-              <div className="mx-4 p-4 rounded-lg shadow-lg border-2 border-black -translate-y-20 md:-translate-y-1/4 bg-white w-11/12 md:max-w-screen-md">
+              <div className="mx-4 p-4 rounded-lg shadow-lg border-2 border-black -translate-y-20 md:-translate-y-1/4 bg-white w-11/12 md:max-w-screen-lg">
                <div className="flex flex-row items-start justify-between mb-4 border-b border-gray-200 pb-4">
                 <p className="font-extrabold text-2xl md:text-4xl">
                     Welcome,{' '}
@@ -140,92 +142,46 @@ export default function Auth() {
                     </span>
                   }
                </div>
-                  <div className="flex flex-row items-center justify-between text-lg md:text-2xl mb-2">
-                    <div className="mr-2">
-                        Followers: <span className="text-blue-400 font-bold">{profile.followers.total}</span>
-                    </div>
-                    <div className="mx-2">
-                        Playlists: <span className="text-red-400 font-bold">{playlists.length}</span>
-                    </div>
-                    <div className="mx-2">
-                        Total Tracks: <span className="text-purple-400 font-bold">{playlistAnalysis.totalTracks}</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col text-base md:text-lg mb-4 pb-4 md:flex-row justify-start border-b border-gray-200 ">
-                    <div className="flex flex-row my-1">
-                        <Image
-                            src={playlistAnalysis.longestPlaylist.images[0].url}
-                            height={50}
-                            width={50}
-                        />
-                        <div className="mx-2">
-                            Longest Playlist: <br></br>
-                            <span className="font-bold">{playlistAnalysis.longestPlaylist.name}</span>
-                        </div>
+                <div className="flex flex-col justify-start">
+                  <p className="text-2xl font-bold md:text-3xl">Currently listening to: </p>
+                  {
+                      Object.keys(playback).length > 0 ?
+                      <>
+                      <div className="flex flex-row items-center my-2">
+                            <img
+                                className="rounded-lg border-2 border-black shadow-md"
+                                height={75}
+                                width={75}
+                                src={playback.item.album.images[0].url}
+                            />
+                           <div className="ml-2">
+                            <p className="text-xl md:text-2xl font-semibold">{playback.item.name}</p>
+                            <p className="text-base italic">{playback.item.artists[0].name}</p>
+                           </div>
+                          </div>
+                          <div className="my-2 flex flex-col md:flex-row text-lg md:text-2xl">
+                              <p>Song Key: <span className="mr-4 font-bold text-blue-500">{keyCodeToKey(playback.analysis.key)}</span></p>
+                              <p>Tempo: <span className="mr-4 font-bold text-green-500">{Math.round(playback.analysis.tempo)} bpm</span></p>
+                              <p>Mode: <span className="mr-4 font-bold text-red-500">{modeKeyToMode(playback.analysis.mode)}</span></p>
+                          </div>
+                      </>
+                      :
+                      <div className="flex flex-row items-center justify-center p-4 my-2">
+                          <p className="text-2xl text-gray-300 font-semibold">
+                              No music playing{' '}<span className="opacity-50">💤</span>
+                          </p>
                       </div>
-                      <div className="flex flex-row my-1">
-                        <Image
-                            src={playlistAnalysis.shortestPlaylist.images[0].url}
-                            height={50}
-                            width={50}
-                        />
-                        <div className="mx-2">
-                            Shortest Playlist: <br></br>
-                            <span className="font-bold">{playlistAnalysis.shortestPlaylist.name}</span>
-                        </div>
-                      </div>
-                  </div>
-                  <div className="flex flex-col justify-start">
-                    <p className="text-2xl font-extrabold md:text-4xl">Currently listening to: </p>
-                    {
-                        Object.keys(playback).length > 0 ?
-                        <>
-                        <div className="flex flex-row items-center my-2">
-                              <Image
-                                  className="rounded-lg"
-                                  height={75}
-                                  width={75}
-                                  src={playback.item.album.images[0].url}
-                              />
-                             <div className="ml-2">
-                              <p className="text-xl md:text-2xl font-semibold">{playback.item.name}</p>
-                              <p className="text-base italic">{playback.item.artists[0].name}</p>
-                             </div>
-                            </div>
-                            <div className="my-2 flex flex-col md:flex-row text-lg md:text-2xl">
-                                <p>Song Key: <span className="mr-4 font-bold text-blue-500">{keyCodeToKey(playback.analysis.key)}</span></p>
-                                <p>Tempo: <span className="mr-4 font-bold text-green-500">{Math.round(playback.analysis.tempo)} bpm</span></p>
-                                <p>Mode: <span className="mr-4 font-bold text-red-500">{modeKeyToMode(playback.analysis.mode)}</span></p>
-                            </div>
-                        </>
-                        :
-                        <div className="flex flex-row items-center justify-center p-4">
-                            <p className="text-2xl text-gray-300 font-semibold">
-                                No music playing{' '}<span className="opacity-50">💤</span>
-                            </p>
-                        </div>
-                    }
+                  }
                 </div>
               </div>
-              <div className="-translate-y-16 w-full md:max-w-screen-lg">
-                <div className="flex flex-col justify-center items-center md:flex-row flex-wrap text-center text-3xl font-bold md:text-4xl">
+              <div className="-translate-y-16 w-11/12 md:max-w-screen-lg">
                   <div
                     onClick={() => router.push("/analysis")}
-                    className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-blue-500 hover:text-blue-500 transition-all"
+                    className="w-full cursor-pointer my-4 p-2 rounded-lg shadow-lg border-2 border-black bg-black text-white hover:bg-white hover:text-black transition-all"
                   >
-                    Analysis
+                    <p className="font-bold text-3xl md:text-4xl text-center">Run full analysis →</p>
                   </div>
-                  <div className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
-                    Search for music
-                  </div>
-                  {/* <div className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
-                    Another thing
-                  </div>
-                  <div className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
-                    Another thing
-                  </div> */}
                 </div>
-              </div>
             </div>   
         )   
     }
