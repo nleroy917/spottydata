@@ -1,0 +1,44 @@
+version: '3'
+services:
+    
+    # flask api/backend
+    api:
+        container_name: api
+        restart: always
+        ports:
+            - "5000:5000"
+        build:
+            context: ./
+            dockerfile: ./Dockerfile.dev
+        volumes:
+          - ./lib:/api/lib
+          - ./api.py:/api/api.py
+        networks:
+          - backend
+
+    # react UI/frontend
+    client:
+        container_name: client
+        restart: always
+        ports:
+            - "3000:3000"
+        build:
+            context: ./web
+            dockerfile: ./Dockerfile.dev
+        volumes:
+          - ./web/public:/client/public/
+          - ./web/pages:/client/pages/
+          - ./web/components:/client/components/
+          - ./web/styles:/client/styles/
+          - ./web/utils:/client/utils/
+
+        depends_on: 
+            - "api"
+        environment:
+            - NODE_ENV=development
+        networks:
+            - backend
+
+networks:
+    backend:
+        driver: bridge
