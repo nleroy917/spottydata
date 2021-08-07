@@ -10,7 +10,7 @@ export default function Analysis() {
     const [cookies, setCookie, ] = useCookies(['spottydata-credentials']);
 
     const [authData, setAuthData] = useState(cookies['authData'])
-    const [featureMatrix, setFeatureMatrix] = useState([[]])
+    const [collaborationMatrix, setCollaborationMatrix] = useState([[]])
     const [artistNames, setArtistNames] = useState([])
     const [error, setError] = useState(undefined)
     const [loading, setLoading] = useState(true)
@@ -23,8 +23,7 @@ export default function Analysis() {
             axios.get(`${process.env.NEXT_PUBLIC_API_BASE}/analysis/profile`,{headers: hdrs})
             .then(res => {
                 setLoading(false)
-                console.log(res.data)
-                setFeatureMatrix(res.data.feature_matrix)
+                setCollaborationMatrix(res.data.collaboration_matrix)
                 setArtistNames(res.data.artist_map)
             })
             .catch(err => {
@@ -41,7 +40,7 @@ export default function Analysis() {
                 : error ? <Error error={error} /> : 
                 <div className="h-screen p-4">
                 <ResponsiveChord
-                    matrix={featureMatrix}
+                    matrix={collaborationMatrix}
                     keys={artistNames}
                     margin={{ top: 60, right: 60, bottom: 90, left: 60 }}
                     valueFormat=".2f"

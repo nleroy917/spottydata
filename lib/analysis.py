@@ -51,13 +51,18 @@ class Analyzer:
             
         return all_tracks
     
+    def _clean_playlist_tracks(self, tracks: list[dict]) -> list[dict]:
+        """Quick method to clean a list of tracks return from a playlist track request"""
+        tracks = [track['track'] for track in tracks if track['track'] is not None]
+        return tracks
+    
     def artists_from_tracks(self, tracks: list[dict]) -> list[dict]:
         """
         Retrieve a list of artists from a lsit of tracks
         """
         artist_ids = []
         for track in tracks:
-            artist_ids += [a['id'] for a in track['track']['artists']]
+            artist_ids += [a['id'] for a in track['artists'] if a['id'] is not None]
         
         if len(artist_ids) > 50:
             grouped_ids = self._grouper(artist_ids, 50)
@@ -84,7 +89,7 @@ class Analyzer:
         
         all_artist_names = []
         for track in tracks:
-            for artist in track['track']['artists']:
+            for artist in track['artists']:
                 all_artist_names.append(artist['name'])
         
         # count up artist occurances
@@ -100,7 +105,7 @@ class Analyzer:
         
         return [a[0] for a in artist_counts_top_n]
     
-    def feature_matrix(self, tracks: list[dict], n: int = None) -> list[list]:
+    def collaboration_matrix(self, tracks: list[dict], n: int = None) -> list[list]:
         """
         Create a feature matrix ready for plotting in
         a standard chord diagram
@@ -115,7 +120,6 @@ class Analyzer:
             # names of artists who are doing features
             artist_map = []
             for track in tracks:
-                track = track['track']
                 if len(track['artists']) > 1:
                     for artist in track['artists']:
                         # update artist map
@@ -125,7 +129,6 @@ class Analyzer:
             # init matrix
             feature_matrix = [[0 for i in range(len(artist_map))] for i in range(len(artist_map))]
             for track in tracks:
-                track = track['track']
                 if len(track['artists']) > 1 and all([a['name'] in top_n_artist_names for a in track['artists']]):
                     main_artist = track['artists'][0]
                     for feature in track['artists'][1:]:
@@ -136,7 +139,6 @@ class Analyzer:
             # names of artists who are doing features
             artist_map = []
             for track in tracks:
-                track = track['track']
                 if len(track['artists']) > 1:
                     for artist in track['artists']:
                         # update artist map
@@ -146,7 +148,6 @@ class Analyzer:
             # init matrix
             feature_matrix = [[0 for i in range(len(artist_map))] for i in range(len(artist_map))]
             for track in tracks:
-                track = track['track']
                 if len(track['artists']) > 1:
                     main_artist = track['artists'][0]
                     for feature in track['artists'][1:]:
@@ -170,7 +171,7 @@ if __name__ == "__main__":
     
     # get all playlists
     az = Analyzer(**app_settings)
-    playlists = az.user_playlists(is_author=True)
+    playlists = az.user_playlists(is_author=False)
     
     # get all tracks
     all_tracks = []
@@ -180,8 +181,10 @@ if __name__ == "__main__":
         all_tracks += tracks
     print(f"Total: {len(all_tracks)}")
     
+    all_tracks_cleaned = az._clean_playlist_tracks(all_tracks)
+    
     # get all artists
-    all_artists = az.artists_from_tracks(all_tracks)
+    all_artists = az.artists_from_tracks(all_tracks_cleaned)
     
     # basic artist stats
     artist_counts = {}
@@ -194,21 +197,8 @@ if __name__ == "__main__":
     artist_counts = sorted(artist_counts.items(), key=lambda kv: kv[1], reverse=True)
     for artist in artist_counts:
         print(f"{artist[0]} -- {artist[1]}")
-        
-    # # get all genres
-    # genres = az.genres_from_artists(all_artists)
-    # genre_counts = {}
-    # for genre in genres:
-    #     if genre not in genre_counts:
-    #         genre_counts[genre] = 1
-    #     else:
-    #         genre_counts[genre] += 1
     
-    # genre_counts = sorted(genre_counts.items(), key=lambda kv: kv[1], reverse=True)
-    # for genre in genre_counts:
-    #     print(f"{genre[0]} -- {genre[1]}")
-    
-    feature_matrix, artist_map = az.feature_matrix(all_tracks, n=25)
+    collaboration_matrix, artist_map = az.collaboration_matrix(all_tracks_cleaned, n=100)
                 
     
                     

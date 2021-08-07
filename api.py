@@ -44,10 +44,11 @@ def analyze_profile():
         tracks = az.playlist_tracks(playlist['id'])
         all_tracks += tracks
     
-    feature_matrix, artist_map = az.feature_matrix(all_tracks, n=50)
+    all_tracks_cleaned = az._clean_playlist_tracks(all_tracks)
+    collaboration_matrix, artist_map = az.collaboration_matrix(all_tracks_cleaned, n=50)
     
     return jsonify({
-		"feature_matrix": feature_matrix,
+		"collaboration_matrix": collaboration_matrix,
   		"artist_map": artist_map
 	})
 
