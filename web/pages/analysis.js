@@ -20,7 +20,7 @@ export default function Analysis() {
             let hdrs = {
                 access_token: authData['access_token']
             }
-            axios.get(`${process.env.NEXT_PUBLIC_API_BASE}/analysis/profile`,{headers: hdrs})
+            axios.get("http://192.168.1.164:8080",{headers: hdrs})
             .then(res => {
                 setLoading(false)
                 setCollaborationMatrix(res.data.collaboration_matrix)
