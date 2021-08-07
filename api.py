@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 import os
-import random
 
 from flask.json import jsonify
 
@@ -16,7 +15,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-from lib.analysis import Analyzer
+from spottydata.analysis import Analyzer
 
 # Testing route/main route
 @app.route('/')
