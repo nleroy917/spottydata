@@ -30,6 +30,9 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gradient">
+        <div className="w-11/12 md:w-1/2 fixed top-0 rounded-lg p-4 my-8 border-2 border-black bg-yellow-200">
+          <span><span className="font-bold text-lg">Thank you for visiting Spottydata!</span> If you've been here before, things may look very different. The site is currently undergoing some major changes, to provide an even better experience. Stay tuned for more and feel free to follow the progress or contribute by visitig the GitHub repository below!</span>
+        </div>
       <SEO />
       <div className="flex flex-row justify-end fixed top-0 p-4 w-full">
         <Header />
