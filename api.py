@@ -36,7 +36,7 @@ def api_base_test():
 def analyze_profile():
     access_token = request.headers['access_token']
     az = Analyzer(access_token=access_token)
-    playlists = az.user_playlists(is_author=False)
+    playlists = az.user_playlists(is_author=True)
     
     # get all tracks
     all_tracks = []
