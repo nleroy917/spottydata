@@ -74,32 +74,85 @@ class Analyzer:
         for artist in artists:
             all_genres += artist['genres']
         return all_genres
+
+    def _gather_top__n_artists(self, tracks: list['dict'], n: int) -> list[dict]:
+        """
+        Return a list of your top n artists.
+        :param - tracks - a list of playlist track objects
+        :param - n - number of artists to return
+        """
+        
+        all_artist_names = []
+        for track in tracks:
+            for artist in track['track']['artists']:
+                all_artist_names.append(artist['name'])
+        
+        # count up artist occurances
+        artist_counts = {}
+        for name in all_artist_names:
+            if name not in artist_counts:
+                artist_counts[name] = 1
+            else:
+                artist_counts[name] += 1
+
+        artist_counts = sorted(artist_counts.items(), key=lambda kv: kv[1], reverse=True)
+        artist_counts_top_n = artist_counts[:n]
+        
+        return [a[0] for a in artist_counts_top_n]
     
-    def feature_matrix(self, tracks: list[dict]) -> list[list]:
+    def feature_matrix(self, tracks: list[dict], n: int = None) -> list[list]:
         """
         Create a feature matrix ready for plotting in
         a standard chord diagram
-        """
-        # names of artists who are doing features
-        artist_map = []
-        for track in tracks:
-            track = track['track']
-            if len(track['artists']) > 1:
-                for artist in track['artists']:
-                    # update artist map
-                    if artist['name'] not in artist_map:
-                        artist_map.append(artist['name'])
-
-        # init matrix
-        feature_matrix = [[0 for i in range(len(artist_map))] for i in range(len(artist_map))]
-        for track in tracks:
-            track = track['track']
-            if len(track['artists']) > 1:
-                main_artist = track['artists'][0]
-                for feature in track['artists'][1:]:
-                    feature_matrix[artist_map.index(main_artist['name'])][artist_map.index(feature['name'])] += 1
-                    feature_matrix[artist_map.index(feature['name'])][artist_map.index(main_artist['name'])] += 1
         
+        :param - tracks - a list of playlist track objects
+        :param - n (optional) - create feature matrix for top n artists. That
+                                is artsists that appear the most
+        """
+        if n:
+            top_n_artist_names = self._gather_top__n_artists(tracks, n)
+  
+            # names of artists who are doing features
+            artist_map = []
+            for track in tracks:
+                track = track['track']
+                if len(track['artists']) > 1:
+                    for artist in track['artists']:
+                        # update artist map
+                        if artist['name'] not in artist_map and artist['name'] in top_n_artist_names:
+                            artist_map.append(artist['name'])
+
+            # init matrix
+            feature_matrix = [[0 for i in range(len(artist_map))] for i in range(len(artist_map))]
+            for track in tracks:
+                track = track['track']
+                if len(track['artists']) > 1 and all([a['name'] in top_n_artist_names for a in track['artists']]):
+                    main_artist = track['artists'][0]
+                    for feature in track['artists'][1:]:
+                        feature_matrix[artist_map.index(main_artist['name'])][artist_map.index(feature['name'])] += 1
+                        feature_matrix[artist_map.index(feature['name'])][artist_map.index(main_artist['name'])] += 1
+        
+        else:
+            # names of artists who are doing features
+            artist_map = []
+            for track in tracks:
+                track = track['track']
+                if len(track['artists']) > 1:
+                    for artist in track['artists']:
+                        # update artist map
+                        if artist['name'] not in artist_map:
+                            artist_map.append(artist['name'])
+
+            # init matrix
+            feature_matrix = [[0 for i in range(len(artist_map))] for i in range(len(artist_map))]
+            for track in tracks:
+                track = track['track']
+                if len(track['artists']) > 1:
+                    main_artist = track['artists'][0]
+                    for feature in track['artists'][1:]:
+                        feature_matrix[artist_map.index(main_artist['name'])][artist_map.index(feature['name'])] += 1
+                        feature_matrix[artist_map.index(feature['name'])][artist_map.index(main_artist['name'])] += 1
+
         return feature_matrix, artist_map
         
         
@@ -142,20 +195,20 @@ if __name__ == "__main__":
     for artist in artist_counts:
         print(f"{artist[0]} -- {artist[1]}")
         
-    # get all genres
-    genres = az.genres_from_artists(all_artists)
-    genre_counts = {}
-    for genre in genres:
-        if genre not in genre_counts:
-            genre_counts[genre] = 1
-        else:
-            genre_counts[genre] += 1
+    # # get all genres
+    # genres = az.genres_from_artists(all_artists)
+    # genre_counts = {}
+    # for genre in genres:
+    #     if genre not in genre_counts:
+    #         genre_counts[genre] = 1
+    #     else:
+    #         genre_counts[genre] += 1
     
-    genre_counts = sorted(genre_counts.items(), key=lambda kv: kv[1], reverse=True)
-    for genre in genre_counts:
-        print(f"{genre[0]} -- {genre[1]}")
+    # genre_counts = sorted(genre_counts.items(), key=lambda kv: kv[1], reverse=True)
+    # for genre in genre_counts:
+    #     print(f"{genre[0]} -- {genre[1]}")
     
-    feature_matrix, artist_map = az.feature_matrix(all_tracks)
+    feature_matrix, artist_map = az.feature_matrix(all_tracks, n=25)
                 
     
                     

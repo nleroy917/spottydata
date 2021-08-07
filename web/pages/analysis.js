@@ -30,36 +30,35 @@ export default function Analysis() {
         <div>
             {
                 loading ? `Laoding...` :
-            <div style={{height: '700px'}}>
-            <p>Cahrt</p>
+            <div className="h-screen p-4">
             <ResponsiveChord
                 matrix={featureMatrix}
                 keys={artistNames}
-                // margin={{ top: 60, right: 60, bottom: 90, left: 60 }}
-                // valueFormat=".2f"
-                // padAngle={0.02}
-                // innerRadiusRatio={0.96}
-                // innerRadiusOffset={0.02}
-                // arcOpacity={1}
-                // arcBorderWidth={1}
-                // arcBorderColor={{ from: 'color', modifiers: [ [ 'darker', 0.4 ] ] }}
-                // ribbonOpacity={0.5}
-                // ribbonBorderWidth={1}
-                // ribbonBorderColor={{ from: 'color', modifiers: [ [ 'darker', 0.4 ] ] }}
-                // enableLabel={true}
-                // label="id"
-                // labelOffset={12}
-                // labelRotation={-90}
-                // labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1 ] ] }}
-                // colors={{ scheme: 'nivo' }}
-                // isInteractive={true}
-                // arcHoverOpacity={1}
-                // arcHoverOthersOpacity={0.25}
-                // ribbonHoverOpacity={0.75}
-                // ribbonHoverOthersOpacity={0.25}
-                // animate={true}
-                // motionStiffness={90}
-                // motionDamping={7}
+                margin={{ top: 60, right: 60, bottom: 90, left: 60 }}
+                valueFormat=".2f"
+                padAngle={0.02}
+                innerRadiusRatio={0.96}
+                innerRadiusOffset={0.02}
+                arcOpacity={1}
+                arcBorderWidth={1}
+                arcBorderColor={{ from: 'color', modifiers: [ [ 'darker', 0.4 ] ] }}
+                ribbonOpacity={0.5}
+                ribbonBorderWidth={1}
+                ribbonBorderColor={{ from: 'color', modifiers: [ [ 'darker', 0.4 ] ] }}
+                enableLabel={true}
+                label="id"
+                labelOffset={12}
+                labelRotation={-90}
+                labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1 ] ] }}
+                colors={{ scheme: 'nivo' }}
+                isInteractive={true}
+                arcHoverOpacity={1}
+                arcHoverOthersOpacity={0.25}
+                ribbonHoverOpacity={0.75}
+                ribbonHoverOthersOpacity={0.25}
+                animate={true}
+                motionStiffness={90}
+                motionDamping={7}
             />
             </div>
             }
