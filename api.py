@@ -42,7 +42,6 @@ def analyze_profile():
     all_tracks = []
     for playlist in playlists:
         tracks = az.playlist_tracks(playlist['id'])
-        print(f"{playlist['name']}: {len(tracks)}")
         all_tracks += tracks
     
     feature_matrix, artist_map = az.feature_matrix(all_tracks)
