@@ -36,7 +36,7 @@ def api_base_test():
 def analyze_profile():
     access_token = request.headers['access_token']
     az = Analyzer(access_token=access_token)
-    playlists = az.user_playlists(is_author=True)
+    playlists = az.user_playlists(is_author=False)
     
     # get all tracks
     all_tracks = []
@@ -44,7 +44,7 @@ def analyze_profile():
         tracks = az.playlist_tracks(playlist['id'])
         all_tracks += tracks
     
-    feature_matrix, artist_map = az.feature_matrix(all_tracks, n=100)
+    feature_matrix, artist_map = az.feature_matrix(all_tracks, n=50)
     
     return jsonify({
 		"feature_matrix": feature_matrix,

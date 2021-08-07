@@ -2,6 +2,8 @@ import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { ResponsiveChord } from '@nivo/chord'
 import { useEffect, useState } from 'react'
+import { Loading } from '../components/loading';
+import { Error } from '../components/error';
 
 export default function Analysis() {
 
@@ -10,6 +12,7 @@ export default function Analysis() {
     const [authData, setAuthData] = useState(cookies['authData'])
     const [featureMatrix, setFeatureMatrix] = useState([[]])
     const [artistNames, setArtistNames] = useState([])
+    const [error, setError] = useState(undefined)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -24,43 +27,49 @@ export default function Analysis() {
                 setFeatureMatrix(res.data.feature_matrix)
                 setArtistNames(res.data.artist_map)
             })
+            .catch(err => {
+                setLoading(false)
+                setError(err)
+            })
         }
     }, [authData])
     return (
         <div>
             {
-                loading ? `Laoding...` :
-            <div className="h-screen p-4">
-            <ResponsiveChord
-                matrix={featureMatrix}
-                keys={artistNames}
-                margin={{ top: 60, right: 60, bottom: 90, left: 60 }}
-                valueFormat=".2f"
-                padAngle={0.02}
-                innerRadiusRatio={0.96}
-                innerRadiusOffset={0.02}
-                arcOpacity={1}
-                arcBorderWidth={1}
-                arcBorderColor={{ from: 'color', modifiers: [ [ 'darker', 0.4 ] ] }}
-                ribbonOpacity={0.5}
-                ribbonBorderWidth={1}
-                ribbonBorderColor={{ from: 'color', modifiers: [ [ 'darker', 0.4 ] ] }}
-                enableLabel={true}
-                label="id"
-                labelOffset={12}
-                labelRotation={-90}
-                labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1 ] ] }}
-                colors={{ scheme: 'nivo' }}
-                isInteractive={true}
-                arcHoverOpacity={1}
-                arcHoverOthersOpacity={0.25}
-                ribbonHoverOpacity={0.75}
-                ribbonHoverOthersOpacity={0.25}
-                animate={true}
-                motionStiffness={90}
-                motionDamping={7}
-            />
-            </div>
+                loading ?
+                <div className="min-h-screen flex flex-col items-center justify-center"><Loading message="Analyzing profile..." /></div>
+                : error ? <Error error={error} /> : 
+                <div className="h-screen p-4">
+                <ResponsiveChord
+                    matrix={featureMatrix}
+                    keys={artistNames}
+                    margin={{ top: 60, right: 60, bottom: 90, left: 60 }}
+                    valueFormat=".2f"
+                    padAngle={0.02}
+                    innerRadiusRatio={0.96}
+                    innerRadiusOffset={0.02}
+                    arcOpacity={1}
+                    arcBorderWidth={1}
+                    arcBorderColor={{ from: 'color', modifiers: [ [ 'darker', 0.4 ] ] }}
+                    ribbonOpacity={0.5}
+                    ribbonBorderWidth={1}
+                    ribbonBorderColor={{ from: 'color', modifiers: [ [ 'darker', 0.4 ] ] }}
+                    enableLabel={true}
+                    label="id"
+                    labelOffset={12}
+                    labelRotation={-90}
+                    labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1 ] ] }}
+                    colors={{ scheme: 'nivo' }}
+                    isInteractive={true}
+                    arcHoverOpacity={1}
+                    arcHoverOthersOpacity={0.25}
+                    ribbonHoverOpacity={0.75}
+                    ribbonHoverOthersOpacity={0.25}
+                    animate={true}
+                    motionStiffness={90}
+                    motionDamping={7}
+                />
+                </div>
             }
         </div>
     )
