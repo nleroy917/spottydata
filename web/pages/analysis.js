@@ -43,7 +43,6 @@ export default function Analysis() {
                     matrix={collaborationMatrix}
                     keys={artistNames}
                     margin={{ top: 60, right: 60, bottom: 90, left: 60 }}
-                    valueFormat=".2f"
                     padAngle={0.02}
                     innerRadiusRatio={0.96}
                     innerRadiusOffset={0.02}
