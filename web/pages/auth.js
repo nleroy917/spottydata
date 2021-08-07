@@ -210,10 +210,10 @@ export default function Auth() {
               <div className="-translate-y-16 w-full md:max-w-screen-lg">
                 <div className="flex flex-col justify-center items-center md:flex-row flex-wrap text-center text-3xl font-bold md:text-4xl">
                   <div
-                    onClick={() => router.push("/playlists")}
+                    onClick={() => router.push("/analysis")}
                     className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-blue-500 hover:text-blue-500 transition-all"
                   >
-                        My playlists
+                    Analysis
                   </div>
                   <div className="bg-white w-11/12 md:w-96 cursor-pointer m-4 p-8 rounded-lg shadow-sm border-2 border-black hover:shadow-lg hover:-translate-y-0.5 hover:border-green-500 hover:text-green-500 transition-all">
                     Search for music
