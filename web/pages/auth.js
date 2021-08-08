@@ -118,7 +118,7 @@ export default function Auth() {
         return (
             <div className="flex flex-col items-center justify-start bg-white min-h-screen">
             <SEO title={`${profile.display_name} | Profile`} />
-              <div className="h-40 md:h-64 w-full bg-gradient">
+              <div className="h-40 md:h-64 w-full bg-gradient border-b border-black">
                 <div className="p-1 md:p-4 flex flex-row items-center justify-between">
                     <Link href="/">
                         <span className="cursor-pointer">Home</span>
@@ -127,7 +127,7 @@ export default function Auth() {
                 </div>
                 <p className="md:mt-4 md:ml-4 ml-1 mt-1 text-6xl md:text-9xl font-extrabold opacity-10 truncate overflow-clip">{profile.display_name}</p>
               </div>
-              <div className="mx-4 p-4 rounded-lg shadow-lg border-2 border-black -translate-y-20 md:-translate-y-1/4 bg-white w-11/12 md:max-w-screen-lg">
+              <div className="mx-4 p-4 rounded-lg shadow-xl border-2 border-black -translate-y-20 md:-translate-y-1/4 bg-white w-11/12 md:max-w-screen-lg">
                <div className="flex flex-row items-start justify-between mb-4 border-b border-gray-200 pb-4">
                <div className="flex flex-row items-center">
                 <img 
@@ -198,18 +198,18 @@ export default function Auth() {
               <div className="-translate-y-20 md:-translate-y-24 w-11/12 md:max-w-screen-lg">
                   <div
                     onClick={() => router.push("/analysis")}
-                    className="w-full cursor-pointer my-4 p-3 rounded-lg shadow-lg border-2 border-black bg-black text-white hover:bg-white hover:text-black transition-all"
+                    className="w-full cursor-pointer my-4 p-3 rounded-lg shadow-xl border-2 border-black bg-black text-white hover:bg-white hover:text-black transition-all"
                   >
                     <p className="font-bold text-2xl md:text-3xl text-center">Run full analysis →</p>
                   </div>
                 </div>
                 <div className="-translate-y-20 md:-translate-y-24 w-11/12 md:max-w-screen-lg">
                   <div className="flex flex-col md:flex-row flex-wrap justify-start md:justify-between items-center md:items-stretch">
-                    <div className="w-full p-4 md:flex-1 md:mr-2 my-2 md:my-0 rounded-lg border-2 border-black shadow-lg">
+                    <div className="w-full p-4 md:flex-1 md:mr-2 my-2 md:my-0 rounded-lg border-2 border-black shadow-xl bg-white">
                       <div className="flex flex-row justify-between items-center border-b pb-2">
                         <p className="font-bold text-2xl md:text-3xl">Top artists</p>
                         <select
-                            className="text-xl p-1 border-2 border-black rounded-lg"
+                            className="text-xl p-1 border-2 border-black rounded-lg cursor-pointer shadow-sm"
                             onChange={e => {
                                 setArtistTimeFrame(e.target.value)
                             }}
@@ -251,11 +251,11 @@ export default function Auth() {
                           </tbody>
                         </table>
                     </div>
-                    <div className="w-full p-4 md:flex-1 md:ml-2 my-2 md:my-0 rounded-lg border-2 border-black shadow-lg">
+                    <div className="w-full p-4 md:flex-1 md:ml-2 my-2 md:my-0 rounded-lg border-2 border-black shadow-xl bg-white">
                       <div className="flex flex-row justify-between items-center border-b pb-2">
                         <p className="font-bold text-2xl md:text-3xl">Top Songs</p>
                         <select
-                            className="text-xl p-1 border-2 border-black rounded-lg"
+                            className="text-xl p-1 border-2 border-black rounded-lg cursor-pointer shadow-sm"
                             onChange={e => {
                                 setTrackTimeFrame(e.target.value)
                             }}
