@@ -3,8 +3,10 @@ from flask import Request
 from flask_cors import cross_origin
 from spottydata.analysis import Analyzer
 
-# @cross_origin()
-def analyze_profile(request: Request) -> dict:    
+@cross_origin()
+def analyze_profile(request: Request) -> dict:
+    
+    # extract access token and init analyzer
     access_token = request.headers['access_token']
     az = Analyzer(access_token=access_token)
     playlists = az.user_playlists()
@@ -23,5 +25,21 @@ def analyze_profile(request: Request) -> dict:
   		"artist_map": artist_map
 	}
 
-def test(req: Request) -> str:
-    return "Hello, world"
+#
+# Custom functions dispatcher for local development
+#
+def dispatcher(request):
+    path = request.path
+    
+    path = path[1:] # Remove prefix / from path
+    
+    # Introspect all methods for potential execution
+    potential_methods = globals().copy()
+    potential_methods.update(locals())
+    
+    # Try to acquire corresponding method associated to the URL path
+    method = potential_methods.get(path)
+    if not method:
+        raise NotImplementedError("URL Path %s not implemented" % path)
+    
+    return method(request)

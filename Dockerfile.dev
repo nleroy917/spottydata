@@ -1,27 +1,24 @@
-# use alpine linux with standard python-7
-FROM python:3.9-slim
+# use alpine linux with standard python-3.9
+FROM python:3.9-alpine
 
 # install necessities and c compilers for msSQL drivers compilation
-RUN apt-get -y update && apt-get -y upgrade && apt-get -y install g++ gcc musl-dev
+RUN apk update && apk upgrade && apk add g++ gcc
 
 # open up port 5000
 EXPOSE 5000
 
 # set working directory
-WORKDIR /api
+WORKDIR /server
 
 # copy files over
-COPY .env /api/.env
-COPY templates/ /api/templates/
-COPY static/ /api/static/
-COPY requirements.txt /api/requirements.txt
+COPY requirements.txt /server/requirements.txt
+
+# set env variables
+ENV FLASK_ENV development
+ENV DEBUG true
 
 # install python dependencies
 RUN pip install -r requirements.txt
 
-# set env variables
-ENV FLASK_ENV development
-ENV FLASK_APP api.py
-
-# spin up api server
-CMD ["flask", "run", "--host=0.0.0.0"]
+# spin up gcloud functions server
+CMD ["functions-framework", "--target=dispatcher", "--port=5000", "--debug"]

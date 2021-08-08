@@ -1,9 +1,9 @@
 version: '3'
 services:
     
-    # flask api/backend
-    api:
-        container_name: api
+    # functions server
+    functions:
+        container_name: functions
         restart: always
         ports:
             - "5000:5000"
@@ -11,8 +11,8 @@ services:
             context: ./
             dockerfile: ./Dockerfile.dev
         volumes:
-          - ./spottydata:/api/spottydata
-          - ./api.py:/api/api.py
+          - ./spottydata:/server/spottydata
+          - ./main.py:/server/main.py
         networks:
           - backend
 
@@ -31,9 +31,8 @@ services:
           - ./web/components:/client/components/
           - ./web/styles:/client/styles/
           - ./web/utils:/client/utils/
-
         depends_on: 
-            - "api"
+            - "functions"
         environment:
             - NODE_ENV=development
         networks:
