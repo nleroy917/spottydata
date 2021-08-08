@@ -91,18 +91,19 @@ export default function Auth() {
                 <Error error={error} />
             </div>
         )
-    } else if (authData === undefined || profile === undefined || playback === undefined) {
+    } else if (playback === undefined || authData === undefined || profile === undefined ) {
         // render a spinner
         return (
             <div className="min-h-screen flex flex-col justify-center items-center">
-                <SEO title="Spottydata"/>
+                <SEO title="Loading..."/>
                 <Loading message={loadingMessage} />
             </div>
         )
     } else {
+        // render profile page
         return (
             <div className="flex flex-col items-center justify-start bg-white min-h-screen">
-            <SEO title="Spottydata"/>
+            <SEO title={`${profile.display_name} | Profile`} />
               <div className="h-40 md:h-64 w-full bg-gradient">
                 <div className="p-4 flex flex-row items-center justify-between">
                     <Link href="/">
@@ -118,7 +119,7 @@ export default function Auth() {
                     <span className="text-green-500">{profile.display_name}</span>
                 </p>
                   {
-                    playback?.is_playing ? 
+                    playback.is_playing ? 
                     <div className="text-center animate-pulse text-xs px-2 py-1 text-green-600 bg-green-200 border-2 border-green-600 rounded-full">
                         Listening
                     </div> : 
@@ -130,7 +131,7 @@ export default function Auth() {
                 <div className="flex flex-col justify-start">
                   <p className="text-2xl font-bold md:text-3xl">Currently listening to: </p>
                   {
-                    playback !== undefined ?
+                    playback.is_playing ?
                       <>
                       <div className="flex flex-row items-center my-2">
                             <img
@@ -151,9 +152,12 @@ export default function Auth() {
                           </div>
                       </>
                       :
-                      <div className="flex flex-row items-center justify-center p-4 my-2">
+                      <div className="flex flex-col items-center justify-center p-4 my-2">
                           <p className="text-2xl text-gray-300 font-semibold">
                               No music playing{' '}<span className="opacity-50">💤</span>
+                          </p>
+                          <p className="text-2xl text-gray-300 font-semibold">
+                            ...play something to see some analysis!
                           </p>
                       </div>
                   }
