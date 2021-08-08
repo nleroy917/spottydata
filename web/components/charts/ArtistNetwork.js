@@ -4,7 +4,7 @@ const ArtistNetwork = ({collaborationMatrix, artistNames}) => {
         <ResponsiveChord
             matrix={collaborationMatrix}
             keys={artistNames}
-            margin={{ top: 30, right: 10, bottom: 45, left: 10 }}
+            margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
             padAngle={0.02}
             innerRadiusRatio={0.96}
             innerRadiusOffset={0.02}
@@ -19,7 +19,13 @@ const ArtistNetwork = ({collaborationMatrix, artistNames}) => {
             labelOffset={12}
             labelRotation={-120}
             labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1 ] ] }}
-            colors={{ scheme: 'nivo' }}
+            colors={[
+                '#6EE7B7', // green-300
+                '#93C5FD', // blue-300
+                '#FDE68A', // yellow-200
+                '#A78BFA', // purple-400
+                '#F472B6' // pink-400
+            ]}
             isInteractive={true}
             arcHoverOpacity={1}
             arcHoverOthersOpacity={0.25}

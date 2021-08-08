@@ -76,9 +76,9 @@ export default function Analysis() {
              <div className="w-full flex flex-col items-center justify-start">
                <div className="w-11/12 md:max-w-screen-xl -translate-y-8 md:-translate-y-12">
                     <div className="flex flex-col md:flex-row flex-wrap">
-                        <div className="bg-white border-2 border-black p-2 w-full md:w-1/2 rounded-lg shadow-xl">
+                        <div className="bg-white border-2 border-black p-2 w-full md:w-5/12 rounded-lg shadow-xl">
                           <p className="font-bold text-2xl md:text-4xl">Artist Network</p>
-                          <p>Look at your artist network</p>
+                          <p className="text-sm md:text-base text-gray-600">How are your artists connected? The below graph shows how ofter your artists are collaborating with each other on their tracks.</p>
                           <div className="h-80">
                             <ArtistNetwork
                               collaborationMatrix={analysis.collaboration_matrix}
