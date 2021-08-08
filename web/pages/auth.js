@@ -147,7 +147,7 @@ export default function Auth() {
                         Listening
                     </div> : 
                     <span className="text-center text-xs px-2 py-1 bg-gray-200 border-2 border-black rounded-full">
-                        Not playing
+                        Paused
                     </span>
                   }
                </div>
