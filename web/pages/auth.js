@@ -8,10 +8,6 @@ import { Loading } from '../components/loading';
 import { Header } from '../components/header';
 import SEO from '../components/seo';
 
-import arrow from '../public/arrow-right.png'
-import Image from 'next/image';
-
-
 export default function Auth() {
     // create router object
     const router = useRouter()
@@ -34,8 +30,6 @@ export default function Auth() {
     const [authData, setAuthData] = useState(cookies['authData'] || undefined)
     const [profile, setProfile] = useState(undefined)
     const [playback, setPlayback] = useState(undefined)
-    const [playlists, setPlaylists] = useState(undefined)
-    const [playlistAnalysis, setPlaylistAnalysis] = useState(undefined)
     const [loadingMessage, setLoadingMessage] = useState(undefined)
     const [error, setError] = useState(undefined)
 
@@ -70,29 +64,20 @@ export default function Auth() {
                 setCookie
             )
         }
-        if(authData !== undefined && playlists === undefined) {
-            setLoadingMessage("Fetching playlists...")
-            fetchPlaylists(
-                authData,
-                setPlaylists,
-                setError
-            )
-        }
-        if (playlists !== undefined && profile !== undefined) {
-            setLoadingMessage("Analyzing profile...")
-            setPlaylistAnalysis(playlistAnalysisBasic(playlists.filter(p => p.owner.display_name === profile.display_name)))
-        }
-    }, [authData, playlists])
+    }, [authData])
 
     /**
      * Playback watcher
      */
     useEffect(() => {
+        if(authData !== undefined) {
+            currentPlayback(authData, setPlayback, setError)
+        }
         let playbackCycle = setInterval(() => {
             if(authData !== undefined) {
                 currentPlayback(authData, setPlayback, setError)
             }
-        }, 5000) // run every five seconds
+        }, 3000) // run every five seconds
 
         // cleanup
         return () => clearInterval(playbackCycle)
@@ -106,7 +91,7 @@ export default function Auth() {
                 <Error error={error} />
             </div>
         )
-    } else if (authData === undefined || profile === undefined || playback === undefined || playlists === undefined) {
+    } else if (authData === undefined || profile === undefined || playback === undefined) {
         // render a spinner
         return (
             <div className="min-h-screen flex flex-col justify-center items-center">
@@ -133,7 +118,7 @@ export default function Auth() {
                     <span className="text-green-500">{profile.display_name}</span>
                 </p>
                   {
-                    playback.is_playing ? 
+                    playback?.is_playing ? 
                     <div className="text-center animate-pulse text-xs px-2 py-1 text-green-600 bg-green-200 border-2 border-green-600 rounded-full">
                         Listening
                     </div> : 
@@ -145,7 +130,7 @@ export default function Auth() {
                 <div className="flex flex-col justify-start">
                   <p className="text-2xl font-bold md:text-3xl">Currently listening to: </p>
                   {
-                      Object.keys(playback).length > 0 ?
+                    playback !== undefined ?
                       <>
                       <div className="flex flex-row items-center my-2">
                             <img
@@ -177,9 +162,9 @@ export default function Auth() {
               <div className="-translate-y-16 w-11/12 md:max-w-screen-lg">
                   <div
                     onClick={() => router.push("/analysis")}
-                    className="w-full cursor-pointer my-4 p-2 rounded-lg shadow-lg border-2 border-black bg-black text-white hover:bg-white hover:text-black transition-all"
+                    className="w-full cursor-pointer my-4 p-3 rounded-lg shadow-lg border-2 border-black bg-black text-white hover:bg-white hover:text-black transition-all"
                   >
-                    <p className="font-bold text-3xl md:text-4xl text-center">Run full analysis →</p>
+                    <p className="font-bold text-2xl md:text-3xl text-center">Run full analysis →</p>
                   </div>
                 </div>
             </div>   
