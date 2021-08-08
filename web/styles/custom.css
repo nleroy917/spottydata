@@ -34,3 +34,11 @@
 	left: 0px;
 	opacity: 0.5;
 }
+
+/* Selection color is tailwindcss green-300 */
+::selection {
+	background: #6EE7B7; /* WebKit/Blink Browsers */
+  }
+  ::-moz-selection {
+	background: #6EE7B7; /* Gecko Browsers */
+  }
