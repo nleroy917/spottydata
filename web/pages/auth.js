@@ -118,7 +118,7 @@ export default function Auth() {
         return (
             <div className="flex flex-col items-center justify-start bg-white min-h-screen">
             <SEO title={`${profile.display_name} | Profile`} />
-              <div className="h-40 md:h-64 w-full bg-gradient">
+              <div className="h-40 md:h-64 w-full bg-gradient border-b border-black">
                 <div className="p-1 md:p-4 flex flex-row items-center justify-between">
                     <Link href="/">
                         <span className="cursor-pointer">Home</span>
