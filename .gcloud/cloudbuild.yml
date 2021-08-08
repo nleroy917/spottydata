@@ -5,6 +5,6 @@ steps:
   - functions
   - deploy
   - analyze_profile
-  - --region=us_central1
+  - --region=us-central1
   - --source=.
   - --trigger-http
