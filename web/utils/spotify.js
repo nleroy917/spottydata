@@ -191,3 +191,86 @@ export const modeKeyToMode = (modeKey) => {
     }
     return mode
 }
+
+export const fetchTopData = (authData, setTop, setError) => {
+    let topData = {
+        artists: {
+            short_term: undefined,
+            medium_term: undefined,
+            long_term: undefined
+        },
+        tracks: {
+            short_term: undefined,
+            medium_term: undefined,
+            long_term: undefined
+        }
+    }
+
+    const hdrs = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + authData.access_token
+    }
+
+    // get top artist data
+    axios.get('https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=10', {headers: hdrs})
+    .then(res => {
+        topData.artists.short_term = res.data
+        setTop(topData)
+    })
+    .catch(err => {
+        setError(err)
+    })
+    axios.get('https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=10', {headers: hdrs})
+    .then(res => {
+        topData.artists.medium_term = res.data
+        setTop(topData)
+    })
+    .catch(err => {
+        setError(err)
+    })
+    axios.get('https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=10', {headers: hdrs})
+    .then(res => {
+        topData.artists.long_term = res.data
+        setTop(topData)
+    })
+    .catch(err => {
+        setError(err)
+    })
+
+    // get top tracks data
+    axios.get('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10', {headers: hdrs})
+    .then(res => {
+        topData.tracks.short_term = res.data
+        setTop(topData)
+    })
+    .catch(err => {
+        setError(err)
+    })
+    axios.get('https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=10', {headers: hdrs})
+    .then(res => {
+        topData.tracks.medium_term = res.data
+        setTop(topData)
+    })
+    .catch(err => {
+        setError(err)
+    })
+    axios.get('https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=10', {headers: hdrs})
+    .then(res => {
+        topData.tracks.long_term = res.data
+        setTop(topData)
+    })
+    .catch(err => {
+        setError(err)
+    })
+}
+
+export const verifyTopData = (topData) => {
+    return (
+        topData.artists.short_term !== undefined &&
+        topData.artists.medium_term !== undefined &&
+        topData.artists.long_term !== undefined &&
+        topData.tracks.short_term !== undefined &&
+        topData.tracks.medium_term !== undefined &&
+        topData.tracks.long_term !== undefined
+        )
+}
