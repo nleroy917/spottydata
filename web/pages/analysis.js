@@ -6,9 +6,15 @@ import { Error } from '../components/error';
 import { useRouter } from 'next/router';
 import { Header } from '../components/header';
 import { fetchProfile } from '../utils/spotify';
-import { ArtistNetwork } from '../components/charts';
+import SEO from '../components/seo';
+import { 
+    ArtistNetwork,
+    SongCalendar,
+    toolTips
+} from '../components/charts';
 
 import { test_data } from '../data/test_analysis_data';
+import ToolTip from '../components/tooltip';
 
 export default function Analysis() {
     const router = useRouter()
@@ -55,6 +61,7 @@ export default function Analysis() {
     } else {
         return (
             <div className="bg-white min-h-screen ">
+            <SEO title={`${profile.display_name} | Analysis`} />
              <div className="w-full bg-gradient flex flex-col items-center justify-start border-b border-black h-56">
               <div className="w-11/12 md:max-w-screen-xl">
                 <div className="flex flex-row justify-between items-start w-full py-2">
@@ -75,14 +82,22 @@ export default function Analysis() {
              </div>
              <div className="w-full flex flex-col items-center justify-start">
                <div className="w-11/12 md:max-w-screen-xl -translate-y-8 md:-translate-y-12">
-                    <div className="flex flex-col md:flex-row flex-wrap">
-                        <div className="bg-white border-2 border-black p-2 w-full md:w-5/12 rounded-lg shadow-xl">
-                          <p className="font-bold text-2xl md:text-4xl">Artist Network</p>
+                    <div className="flex flex-col md:flex-row md:justify-between flex-wrap">
+                        <div className="bg-white border-2 border-black p-2 w-full my-2 md:w-5/12 rounded-lg shadow-xl md:flex-1 md:mr-2">
+                          <p className="font-extrabold text-2xl md:text-4xl flex flex-row items-center">Artist network<span className="cursor-pointer"><ToolTip content={toolTips.artistNetwork}/></span></p>
                           <p className="text-sm md:text-base text-gray-600">How are your artists connected? The below graph shows how ofter your artists are collaborating with each other on their tracks.</p>
                           <div className="h-80">
                             <ArtistNetwork
                               collaborationMatrix={analysis.collaboration_matrix}
                               artistNames={analysis.artist_map}
+                            />
+                          </div>
+                        </div>
+                        <div className="bg-white border-2 border-black p-2 w-full my-2 md:w-5/12 rounded-lg shadow-xl md:flex-1 md:ml-2">
+                          <p className="font-extrabold text-2xl md:text-4xl">Song history</p>
+                          <div className="h-80">
+                            <SongCalendar
+                              data={analysis.calendar_coordinates}
                             />
                           </div>
                         </div>

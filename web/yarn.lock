@@ -107,6 +107,18 @@
     "@react-spring/web" "9.2.4"
     d3-shape "^1.3.5"
 
+"@nivo/calendar@^0.73.0":
+  version "0.73.0"
+  resolved "https://registry.yarnpkg.com/@nivo/calendar/-/calendar-0.73.0.tgz#bebd4cbbcbd7672bad5632d9a4d0cee28f03b6ae"
+  integrity sha512-loqJ16g8IgHJ4zf60ZaWhOE4NuMayG9TYZxHpjb77PKR7Zo/uu0CaWBOfh2fbv+9LbtsD1og1RllGzG80/IAGA==
+  dependencies:
+    "@nivo/legends" "0.73.0"
+    "@nivo/tooltip" "0.73.0"
+    d3-scale "^3.2.3"
+    d3-time "^1.0.10"
+    d3-time-format "^3.0.0"
+    lodash "^4.17.21"
+
 "@nivo/chord@^0.73.0":
   version "0.73.0"
   resolved "https://registry.yarnpkg.com/@nivo/chord/-/chord-0.73.0.tgz#d13443f256ffbf7128f3d0f040014e7931fda8cb"
@@ -190,6 +202,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@popperjs/core@^2.8.3":
+  version "2.9.3"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.9.3.tgz#8b68da1ebd7fc603999cf6ebee34a4899a14b88e"
+  integrity sha512-xDu17cEfh7Kid/d95kB6tZsLOmSWKCZKtprnhVepjsSaCij+lM3mItSJDuuHDMbCWTh8Ejmebwb+KONcCJ0eXQ==
+
 "@react-spring/animated@~9.2.0":
   version "9.2.4"
   resolved "https://registry.yarnpkg.com/@react-spring/animated/-/animated-9.2.4.tgz#062ecc0fdfef89f2541a42d8500428b70035f879"
@@ -234,6 +251,13 @@
     "@react-spring/core" "~9.2.0"
     "@react-spring/shared" "~9.2.0"
     "@react-spring/types" "~9.2.0"
+
+"@tippyjs/react@^4.2.5":
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/@tippyjs/react/-/react-4.2.5.tgz#9b5837db93a1cac953962404df906aef1a18e80d"
+  integrity sha512-YBLgy+1zznBNbx4JOoOdFXWMLXjBh9hLPwRtq3s8RRdrez2l3tPBRt2m2909wZd9S1KUeKjOOYYsnitccI9I3A==
+  dependencies:
+    tippy.js "^6.3.1"
 
 "@types/cookie@^0.3.3":
   version "0.3.3"
@@ -922,6 +946,11 @@ d3-shape@^1.3.5:
   integrity sha512-/eIQe/eR4kCQwq7yxi7z4c6qEXf2IYGcjoWB5OOQy4Tq9Uv39/947qlDcN2TLkiTzQWzvnsuYPB9TrWaNfipKQ==
   dependencies:
     d3-array "2"
+
+d3-time@^1.0.10:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.1.0.tgz#b1e19d307dae9c900b7e5b25ffc5dcc249a8a0f1"
+  integrity sha512-Xh0isrZ5rPYYdqhAVk8VLnMEidhz5aP7htAADH6MfzgmmicPkTo8LhkLxci61/lCB7n7UmE3bN0leRt+qvkLxA==
 
 data-uri-to-buffer@3.0.1:
   version "3.0.1"
@@ -2629,6 +2658,13 @@ timers-browserify@2.0.12, timers-browserify@^2.0.4:
   integrity sha512-9phl76Cqm6FhSX9Xe1ZUAMLtm1BLkKj2Qd5ApyWkXzsMRaA7dgr81kf4wJmQf/hAvg8EEyJxDo3du/0KlhPiKQ==
   dependencies:
     setimmediate "^1.0.4"
+
+tippy.js@^6.3.1:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-6.3.1.tgz#3788a007be7015eee0fd589a66b98fb3f8f10181"
+  integrity sha512-JnFncCq+rF1dTURupoJ4yPie5Cof978inW6/4S6kmWV7LL9YOSEVMifED3KdrVPEG+Z/TFH2CDNJcQEfaeuQww==
+  dependencies:
+    "@popperjs/core" "^2.8.3"
 
 tmp@^0.2.1:
   version "0.2.1"

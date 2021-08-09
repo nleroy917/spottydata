@@ -1,4 +1,5 @@
 import { ResponsiveChord } from '@nivo/chord'
+import { chartColors } from './colors'
 const ArtistNetwork = ({collaborationMatrix, artistNames}) => {
     return (
         <ResponsiveChord
@@ -19,13 +20,7 @@ const ArtistNetwork = ({collaborationMatrix, artistNames}) => {
             labelOffset={12}
             labelRotation={-120}
             labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1 ] ] }}
-            colors={[
-                '#6EE7B7', // green-300
-                '#93C5FD', // blue-300
-                '#FDE68A', // yellow-200
-                '#A78BFA', // purple-400
-                '#F472B6' // pink-400
-            ]}
+            colors={chartColors}
             isInteractive={true}
             arcHoverOpacity={1}
             arcHoverOthersOpacity={0.25}
