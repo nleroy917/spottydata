@@ -20,9 +20,13 @@ def analyze_profile(request: Request) -> dict:
     all_tracks_cleaned = az._clean_playlist_tracks(all_tracks)
     collaboration_matrix, artist_map = az.collaboration_matrix(all_tracks_cleaned, n=50)
     
+    all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=False)
+    calendar_coordinates = az.song_calendar(all_tracks_cleaned)
+    
     return {
 		"collaboration_matrix": collaboration_matrix,
-  		"artist_map": artist_map
+  		"artist_map": artist_map,
+        "calendar_coordinates": calendar_coordinates
 	}
 
 #

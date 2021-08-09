@@ -1,3 +1,4 @@
+from dateutil import parser
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -51,9 +52,12 @@ class Analyzer:
             
         return all_tracks
     
-    def _clean_playlist_tracks(self, tracks: list[dict]) -> list[dict]:
+    def _clean_playlist_tracks(self, tracks: list[dict], extract_tracks: bool = True) -> list[dict]:
         """Quick method to clean a list of tracks return from a playlist track request"""
-        tracks = [track['track'] for track in tracks if track['track'] is not None]
+        if extract_tracks:
+            tracks = [track['track'] for track in tracks if track['track'] is not None]
+        else:
+            tracks = [track for track in tracks if track['track'] is not None]
         return tracks
     
     def artists_from_tracks(self, tracks: list[dict]) -> list[dict]:
@@ -155,6 +159,44 @@ class Analyzer:
                         feature_matrix[artist_map.index(feature['name'])][artist_map.index(main_artist['name'])] += 1
 
         return feature_matrix, artist_map
+
+    def song_calendar(self, playlist_tracks: list[dict], user_additions_only: bool = True) -> list[dict]:
+        """
+        Take a list of playlist tracks that contain a "date-added" field
+        and convert them into a data structure capable of plotting with
+        the Nivo calendar chart.
+        
+        Analysis should only be done on tracks owned by the user.. otherwise
+        the data can be pretty skewed.
+        
+        Must convert all dates to YYYY-MM-DD format, then group based on that.
+        """
+        # filter if necessary
+        if user_additions_only:
+            playlist_tracks = filter(lambda t: t['added_by']['id'] == self.profile['id'], playlist_tracks)
+            
+        # convert all dates to YYYY-MM-DD format
+        # and populate dictionary
+        calendar_data = {}
+        for track in playlist_tracks:
+            d = parser.parse(track['added_at'])
+            d_formatted = d.strftime("%Y-%m-%d")
+            if d_formatted in calendar_data:
+                calendar_data[d_formatted] += 1
+            else:
+                calendar_data[d_formatted] = 1
+        
+        # convert dictionary to coordinates
+        calendar_coordinates = []
+        for date in calendar_data:
+            calendar_coordinates.append({
+                "value": calendar_data[date],
+                "day": date
+            })
+        
+        return calendar_coordinates
+        
+        
         
         
     
@@ -171,7 +213,7 @@ if __name__ == "__main__":
     
     # get all playlists
     az = Analyzer(**app_settings)
-    playlists = az.user_playlists(is_author=False)
+    playlists = az.user_playlists(is_author=True)
     
     # get all tracks
     all_tracks = []
@@ -181,26 +223,10 @@ if __name__ == "__main__":
         all_tracks += tracks
     print(f"Total: {len(all_tracks)}")
     
-    all_tracks_cleaned = az._clean_playlist_tracks(all_tracks)
-    
-    # get all artists
-    all_artists = az.artists_from_tracks(all_tracks_cleaned)
-    
-    # basic artist stats
-    artist_counts = {}
-    for artist in all_artists:
-        if artist['name'] not in artist_counts:
-            artist_counts[artist['name']] = 1
-        else:
-            artist_counts[artist['name']] += 1
-            
-    artist_counts = sorted(artist_counts.items(), key=lambda kv: kv[1], reverse=True)
-    for artist in artist_counts:
-        print(f"{artist[0]} -- {artist[1]}")
-    
-    collaboration_matrix, artist_map = az.collaboration_matrix(all_tracks_cleaned, n=100)
+    # set extract_tracks flag to False to keep playlist data
+    all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=False)
                 
-    
+    song_calendar = az.song_calendar(all_tracks_cleaned)
                     
             
             
