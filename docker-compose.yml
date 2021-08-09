@@ -11,8 +11,7 @@ services:
             context: ./
             dockerfile: ./Dockerfile.dev
         volumes:
-          - ./spottydata:/server/spottydata
-          - ./main.py:/server/main.py
+          - .:/server
         networks:
           - backend
 
