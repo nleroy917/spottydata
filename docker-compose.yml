@@ -11,8 +11,7 @@ services:
             context: ./
             dockerfile: ./Dockerfile.dev
         volumes:
-          - ./spottydata:/server/spottydata
-          - ./main.py:/server/main.py
+          - .:/server
         networks:
           - backend
 
@@ -31,6 +30,7 @@ services:
           - ./web/components:/client/components/
           - ./web/styles:/client/styles/
           - ./web/utils:/client/utils/
+          - ./web/data:/client/data
         depends_on: 
             - "functions"
         environment:
