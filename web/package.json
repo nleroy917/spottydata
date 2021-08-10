@@ -6,9 +6,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "@nivo/bar": "^0.73.1",
     "@nivo/calendar": "^0.73.0",
     "@nivo/chord": "^0.73.0",
     "@nivo/core": "^0.73.0",
+    "@nivo/pie": "^0.73.0",
     "@tippyjs/react": "^4.2.5",
     "axios": "^0.21.1",
     "next": "latest",

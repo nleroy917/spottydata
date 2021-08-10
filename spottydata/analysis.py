@@ -2,6 +2,11 @@ from dateutil import parser
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
+# debugger doesn't like relative imports
+# use try catch for local package importing
+try: from .utils import *
+except: from utils import *
+
 class Analyzer:
     """
     Object to run analysis on someones profile
@@ -62,7 +67,7 @@ class Analyzer:
     
     def artists_from_tracks(self, tracks: list[dict]) -> list[dict]:
         """
-        Retrieve a list of artists from a lsit of tracks
+        Retrieve a list of artists from a list of tracks
         """
         artist_ids = []
         for track in tracks:
@@ -108,6 +113,23 @@ class Analyzer:
         artist_counts_top_n = artist_counts[:n]
         
         return [a[0] for a in artist_counts_top_n]
+
+    def track_analysis(self, tracks: list[dict]) -> list[dict]:
+        """
+        Use the Spotify API to fetch analysis for a list of tracks
+        """
+        track_ids = [t['id'] for t in tracks]
+        
+        # tracks can only be analyzed in groups of 100
+        # so we must grouup them
+        grouped_ids = self._grouper(track_ids, 100)
+        all_analysis = []
+        for ids in grouped_ids:
+            analysis = self._sp.audio_features(ids)
+            all_analysis += (analysis)
+        
+        return all_analysis
+            
     
     def collaboration_matrix(self, tracks: list[dict], n: int = None) -> list[list]:
         """
@@ -195,11 +217,105 @@ class Analyzer:
             })
         
         return calendar_coordinates
-        
-        
-        
-        
     
+    def genre_counts(self, artists: list[dict], n: int = None) -> list[tuple]:
+        """
+        Collect the genres from a lsit of artists,
+        gather the genres and return a sorted list of
+        tuples with counts for each genre.
+        """
+        # create dictionary of counts
+        genre_counts = {}
+        for artist in artists:
+            for genre in artist['genres']:
+                genre = genre.title()
+                if genre not in genre_counts:
+                    genre_counts[genre] = 1
+                else:
+                    genre_counts[genre] += 1
+        
+        # sort the dictionary into a list of tuples
+        genre_counts_sorted = sorted(genre_counts.items(), key=lambda kv: kv[1], reverse=True)
+        
+        # slice if n was given
+        if n:
+            return genre_counts_sorted[:n]
+        else:
+            return genre_counts_sorted
+    
+    def key_counts(self, analysis: list[dict]) -> dict:
+        """
+        Create a dictionart of counts for keys both major and minor
+        """
+        # init a key count object
+        key_counts = {
+            "C": {
+                "Major": 0,
+                "Minor": 0
+            },
+            "C#": {
+                "Major": 0,
+                "Minor": 0
+            },
+            "D": {
+                "Major": 0,
+                "Minor": 0
+            },
+            "D#": {
+                "Major": 0,
+                "Minor": 0
+            },
+            "E": {
+                "Major": 0,
+                "Minor": 0
+            },
+            "F": {
+                "Major": 0,
+                "Minor": 0
+            },
+            "F#": {
+                "Major": 0,
+                "Minor": 0
+            },
+            "G": {
+                "Major": 0,
+                "Minor": 0
+            },
+            "G#": {
+                "Major": 0,
+                "Minor": 0
+            },
+            "A": {
+                "Major": 0,
+                "Minor": 0
+            },
+            "A#": {
+                "Major": 0,
+                "Minor": 0
+            },
+            "B": {
+                "Major": 0,
+                "Minor": 0
+            }
+        }
+        
+        # iterate through analysis
+        # objects and populate the
+        # key_counts object
+        for a in analysis:
+            # convert from id/ints to strings
+            key = key_int_to_str(a['key'])
+            mode = mode_int_to_mode(a['mode'])
+            if key == "No key" or mode == "No mode":
+                # skip this data
+                continue
+            key_counts[key][mode] += 1
+        
+        return key_counts
+
+###          ###
+# TESTING CODE #
+###          ###
 if __name__ == "__main__":
     from dotenv import load_dotenv
     import os
@@ -219,19 +335,13 @@ if __name__ == "__main__":
     all_tracks = []
     for playlist in playlists:
         tracks = az.playlist_tracks(playlist['id'])
-        print(f"{playlist['name']}: {len(tracks)}")
         all_tracks += tracks
-    print(f"Total: {len(all_tracks)}")
     
     # set extract_tracks flag to False to keep playlist data
-    all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=False)
-                
-    song_calendar = az.song_calendar(all_tracks_cleaned)
-                    
-            
-            
-            
-        
-        
-        
-        
+    all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=True)
+    
+    # fetch analysis and count keys
+    analysis = az.track_analysis(all_tracks_cleaned)
+    key_counts = az.key_counts(analysis)
+    
+    print(key_counts)

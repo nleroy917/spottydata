@@ -30,6 +30,7 @@ services:
           - ./web/components:/client/components/
           - ./web/styles:/client/styles/
           - ./web/utils:/client/utils/
+          - ./web/data:/client/data
         depends_on: 
             - "functions"
         environment:
