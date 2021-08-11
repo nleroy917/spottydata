@@ -7,12 +7,15 @@ const KeyChart = ({ data }) => {
             data={data}
             indexBy="Key"
             keys={["Major", "Minor"]}
-            margin={{ top: 30, right: 80, bottom: 50, left: 65 }}
+            margin={{ top: 30, right: 25, bottom: 75, left: 50 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
             valueFormat={{ format: '', enabled: false }}
             colors={chartColors}
+            borderWidth={2}
+            borderRadius={2}
+            borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
             axisTop={null}
             axisRight={null}
             axisBottom={{
@@ -37,11 +40,11 @@ const KeyChart = ({ data }) => {
             legends={[
                 {
                     dataFrom: 'keys',
-                    anchor: 'bottom-right',
-                    direction: 'column',
+                    anchor: 'bottom',
+                    direction: 'row',
                     justify: false,
-                    translateX: 120,
-                    translateY: 0,
+                    translateX: 30,
+                    translateY: 65,
                     itemsSpacing: 2,
                     itemWidth: 100,
                     itemHeight: 20,

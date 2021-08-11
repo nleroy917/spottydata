@@ -85,8 +85,8 @@ export default function Analysis() {
              <div className="w-full flex flex-col items-center justify-start">
                <div className="w-11/12 md:max-w-screen-xl -translate-y-8 md:-translate-y-12">
                     <div className="flex flex-col md:flex-row md:justify-between flex-wrap">
-                      <div className="bg-white border-2 border-black p-2 w-full my-2 md:w-5/12 rounded-lg shadow-xl md:flex-1 md:mr-2">
-                        <p className="font-extrabold text-3xl md:text-5xl">Artist network<span className="cursor-pointer"><ToolTip content={toolTips.artistNetwork}/></span></p>
+                      <div className="bg-white border-2 border-black p-2 w-full my-2 md:w-1/3 rounded-lg shadow-xl md:mr-2">
+                        <p className="font-extrabold text-3xl md:text-5xl mb-2">Artist network<span className="cursor-pointer"><ToolTip content={toolTips.artistNetwork}/></span></p>
                         <div className="h-80">
                           <ArtistNetwork
                             collaborationMatrix={analysis.collaboration_matrix}
@@ -95,7 +95,7 @@ export default function Analysis() {
                         </div>
                       </div>
                       <div className="bg-white border-2 border-black p-2 w-full my-2 md:w-5/12 rounded-lg shadow-xl md:flex-1 md:ml-2">
-                        <p className="font-extrabold text-3xl md:text-5xl">Song history</p>
+                        <p className="font-extrabold text-3xl md:text-5xl mb-2">Song history</p>
                         <div className="h-80">
                           <SongCalendar
                             data={analysis.calendar_coordinates}
@@ -104,16 +104,8 @@ export default function Analysis() {
                       </div>
                     </div>
                     <div className="flex flex-col md:flex-row md:justify-between flex-wrap">
-                        <div className="bg-white border-2 border-black p-2 w-full my-2 md:w-5/12 md:flex-1 rounded-lg shadow-xl md:mr-2">
-                          <p className="font-extrabold text-3xl md:text-5xl flex flex-row items-center">Top Genres<span className="cursor-pointer"><ToolTip content={toolTips.artistNetwork}/></span></p>
-                          <div className="h-80">
-                            <GenrePieChart
-                              data={analysis.top_genres}
-                            />
-                          </div>
-                        </div>
-                        <div className="bg-white border-2 border-black p-2 w-full my-2 md:w-5/12 md:flex-1 rounded-lg shadow-xl md:ml-2">
-                          <p className="font-extrabold text-3xl md:text-5xl flex flex-row items-center">Key Chart<span className="cursor-pointer"><ToolTip content={toolTips.artistNetwork}/></span></p>
+                      <div className="bg-white border-2 border-black p-2 w-full my-2 md:w-5/12 md:flex-1 rounded-lg shadow-xl md:mr-2">
+                          <p className="font-extrabold text-3xl md:text-5xl flex flex-row items-center mb-2">Key Chart<span className="cursor-pointer"><ToolTip content={toolTips.artistNetwork}/></span></p>
                           <div className="h-80">
                             <KeyChart
                               data={Object.keys(analysis.key_counts).map(key => {
@@ -124,6 +116,14 @@ export default function Analysis() {
                                 }
                               })}
                               keys={Object.keys(analysis.key_counts).map(key => key)}
+                            />
+                          </div>
+                        </div>
+                        <div className="bg-white border-2 border-black p-2 w-full my-2 md:w-1/3 rounded-lg shadow-xl md:ml-2">
+                          <p className="font-extrabold text-3xl md:text-5xl flex flex-row items-center mb-2">Top Genres<span className="cursor-pointer"><ToolTip content={toolTips.artistNetwork}/></span></p>
+                          <div className="h-80">
+                            <GenrePieChart
+                              data={analysis.top_genres}
                             />
                           </div>
                         </div>

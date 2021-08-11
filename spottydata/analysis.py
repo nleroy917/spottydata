@@ -243,6 +243,12 @@ class Analyzer:
         else:
             return genre_counts_sorted
     
+    def tempo_statistics(self, analysis: list[dict]) -> dict:
+        """
+        Gather descriptive statistics on
+        """
+        pass
+    
     def key_counts(self, analysis: list[dict]) -> dict:
         """
         Create a dictionart of counts for keys both major and minor
@@ -335,13 +341,30 @@ if __name__ == "__main__":
     all_tracks = []
     for playlist in playlists:
         tracks = az.playlist_tracks(playlist['id'])
+        # append the playlist meta data
+        # to the track objects
+        for i in range(len(tracks)):
+            tracks[i]['playlist'] = playlist
         all_tracks += tracks
     
     # set extract_tracks flag to False to keep playlist data
-    all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=True)
+    all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=False)
     
-    # fetch analysis and count keys
-    analysis = az.track_analysis(all_tracks_cleaned)
-    key_counts = az.key_counts(analysis)
+    # use newly cleaned tracks to gather the analysis
+    # since we are keeping playlist meta-data we need
+    # to a keep extraction of the track object since the
+    # track analysis method requires us to pass in a list
+    # of raw track objects
+    analysis = az.track_analysis([t['track'] for t in all_tracks_cleaned])
     
-    print(key_counts)
+    # assign the analysis data to each track
+    for i in range(len(all_tracks_cleaned)):
+        all_tracks_cleaned[i]['analysis'] = analysis[i]
+    
+    # we now have a list of all tracks with their corresponding
+    # playlist metadata and their analysis --
+    # -- this will help for creating a very 
+    # rich analysis that gives data down to the
+    # track level when inspecting our charts.
+    print(all_tracks_cleaned)
+

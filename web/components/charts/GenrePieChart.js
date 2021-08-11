@@ -5,14 +5,16 @@ const GenrePieChart = ({ data }) => {
     return (
       <ResponsivePie
           data={data}
-          margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+          margin={{ top: 30, right: 30, bottom: 20, left: 30 }}
           innerRadius={0.5}
-          padAngle={0.7}
+          padAngle={1}
           cornerRadius={3}
           colors={chartColors}
           activeOuterRadiusOffset={8}
-          borderWidth={1}
-          borderColor={{ from: 'color', modifiers: [ [ 'darker', 0.2 ] ] }}
+          borderWidth={2}
+          borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
+          arcLinkLabelsDiagonalLength={10}
+          arcLinkLabelsStraightLength={5}
           arcLinkLabelsSkipAngle={10}
           arcLinkLabelsTextColor="#333333"
           arcLinkLabelsThickness={2}
