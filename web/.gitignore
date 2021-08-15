@@ -31,3 +31,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# local test data
+/data/test_analysis_data.js

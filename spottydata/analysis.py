@@ -319,12 +319,67 @@ class Analyzer:
         
         return key_counts
 
+    def playlist_features(self, tracks: list[dict]) -> list[dict]:
+        """
+        This is a method meant to extract data for the Nivo
+        swarm plot. The data structure isn't identical to the 
+        one required for the plot, but allows dynamic manipulation
+        on the front-end for interesting visuals.
+        
+        :param: - tracks - a list of playlist track objects that
+                           contain the playlist meta-data and the
+                           track's analysis object. Right now the
+                           aggregation of this data is done manually
+                           but a function could be made in the future
+                           to facilitate this.
+        """
+        feature_data = {}
+        for track in tracks:
+            if track['playlist']['name'] not in feature_data:
+                # if playlist hasn't been accounted for, start a new 
+                # list of featurew data one and append the track meta
+                # data
+                feature_data[track['playlist']['name']] = [{
+                    "acousticness": track['analysis']['acousticness'],
+                    "danceability": track['analysis']['danceability'],
+                    "energy": track['analysis']['energy'],
+                    "instrumentalness": track['analysis']['instrumentalness'],
+                    "liveness": track['analysis']['liveness'],
+                    "loudness": track['analysis']['loudness'],
+                    "speechiness": track['analysis']['speechiness'],
+                    "tempo": track['analysis']['tempo'],
+                    "valence": track['analysis']['valence'],
+                    "track": track['track'],
+                    "playlist": track['playlist']
+                }]
+            # otherwise we are already creating a list of datapoints
+            # for a certain playlist so just append to it
+            else:
+                feature_data[track['playlist']['name']].append({
+                    "acousticness": track['analysis']['acousticness'],
+                    "danceability": track['analysis']['danceability'],
+                    "energy": track['analysis']['energy'],
+                    "instrumentalness": track['analysis']['instrumentalness'],
+                    "liveness": track['analysis']['liveness'],
+                    "loudness": track['analysis']['loudness'],
+                    "speechiness": track['analysis']['speechiness'],
+                    "tempo": track['analysis']['tempo'],
+                    "valence": track['analysis']['valence'],
+                    "track": track['track'],
+                    "playlist": track['playlist']
+                })
+        
+        return feature_data
+        
+        
 ###          ###
 # TESTING CODE #
 ###          ###
 if __name__ == "__main__":
     from dotenv import load_dotenv
     import os
+    import time
+    import psutil
     load_dotenv()
     
     app_settings = {
@@ -333,10 +388,16 @@ if __name__ == "__main__":
         'redirect_uri': os.getenv('SPOTIFY_REDIRECT_URI')
     }
     
+    # timer
+    START = time.time()
+    print(f"-----> Starting.")
+    
     # get all playlists
     az = Analyzer(**app_settings)
     playlists = az.user_playlists(is_author=True)
     
+    start = time.time()
+    print("-----> Gathering all tracks...", end="")
     # get all tracks
     all_tracks = []
     for playlist in playlists:
@@ -346,25 +407,65 @@ if __name__ == "__main__":
         for i in range(len(tracks)):
             tracks[i]['playlist'] = playlist
         all_tracks += tracks
+    stop = time.time()
+    print(f" done. ({round(stop-start,2)}s)")
     
+    start = time.time()
+    print("-----> Cleaning tracks...", end="")
     # set extract_tracks flag to False to keep playlist data
     all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=False)
+    stop = time.time()
+    print(f" done. ({round(stop-start,2)}s)")
     
-    # use newly cleaned tracks to gather the analysis
+    start = time.time()
+    print("-----> Gathering artists...", end="")
+    # use newly cleaned tracks to gather artist
+    # data for each track
+    all_artists = az.artists_from_tracks([t['track'] for t in all_tracks_cleaned])
+    stop = time.time()
+    print(f" done. ({round(stop-start,2)}s)")
+    
+    start = time.time()
+    print("-----> Gather raw track analysis data...", end="")
+    # use newly cleaned tracks to gather the analysis.
     # since we are keeping playlist meta-data we need
     # to a keep extraction of the track object since the
     # track analysis method requires us to pass in a list
     # of raw track objects
     analysis = az.track_analysis([t['track'] for t in all_tracks_cleaned])
+    stop = time.time()
+    print(f" done. ({round(stop-start,2)}s)")
     
+    start = time.time()
+    print("-----> Aggregating data...", end="")
     # assign the analysis data to each track
     for i in range(len(all_tracks_cleaned)):
         all_tracks_cleaned[i]['analysis'] = analysis[i]
+    stop = time.time()
+    print(f" done. ({round(stop-start,2)}s)")
     
+    start = time.time()
+    print("-----> Analyzing all tracks...", end="")
     # we now have a list of all tracks with their corresponding
     # playlist metadata and their analysis --
     # -- this will help for creating a very 
     # rich analysis that gives data down to the
     # track level when inspecting our charts.
-    print(all_tracks_cleaned)
+    collaboration_matrix, artist_map = az.collaboration_matrix([t['track'] for t in all_tracks_cleaned], n=50)
+    top_genres = az.genre_counts(all_artists, n=5)
+    key_counts = az.key_counts(t['analysis'] for t in all_tracks_cleaned)
+    calendar_coordinates = az.song_calendar(all_tracks_cleaned)
+    feature_data = az.playlist_features(all_tracks_cleaned)
+    stop = time.time()
+    print(f" done. ({round(stop-start,2)}s)")
+    
+    # timer
+    STOP = time.time()
+    MEM_FOOTPRINT = psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2
+          
+    print(f"-----> Done.")
+    print(f"-----> Execution time: {round(STOP-START, 2)} sec")
+    print(f"-----> Memory footprint: {round(MEM_FOOTPRINT,2)} mb")
+    
+    
 

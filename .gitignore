@@ -40,3 +40,4 @@ yarn-error.log*
 
 # vercel
 .vercel
+web/data/test_analysis_data.js

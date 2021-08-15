@@ -4,21 +4,41 @@ import { useEffect, useState } from 'react'
 import { Loading } from '../components/loading';
 import { Error } from '../components/error';
 import { useRouter } from 'next/router';
+import { useUserAgent as parseUserAgent } from "next-useragent";
 import { Header } from '../components/header';
 import { fetchProfile } from '../utils/spotify';
 import SEO from '../components/seo';
+
+// import layouts
+import {
+  ChartCard
+} from '../components/layout'
+
+// import charts
 import { 
     ArtistNetwork,
     GenrePieChart,
     KeyChart,
+    PlaylistFeatures,
     SongCalendar,
     toolTips
 } from '../components/charts';
 
 import { test_data } from '../data/test_analysis_data'
 import ToolTip from '../components/tooltip';
+import Select from 'react-select';;
 
-export default function Analysis() {
+export default function Analysis(props) {
+
+    // let ua;
+    // if (props.uaString) {
+    //   ua = parseUserAgent(props.uaString)
+    // } else {
+    //   ua = useUserAgent(window.navigator.userAgent)
+    // }
+
+    //console.log(ua)
+
     const router = useRouter()
     const [cookies, setCookie, ] = useCookies(['spottydata-credentials']);
 
@@ -26,6 +46,25 @@ export default function Analysis() {
     const [profile, setProfile] = useState(undefined)
     const [analysis, setAnalysis] = useState(undefined)
     const [error, setError] = useState(undefined)
+
+    // state for playlist feature plot
+    const [playlistSelection, setPlaylistSelection] = useState(undefined)
+    const [featureSelection, setFeatureSelection] = useState("valence")
+
+    const mapFeatureData = (playlistSelection) => {
+      let data = []
+      playlistSelection.forEach(p => {
+        data = data.concat(analysis.feature_data[p].map((dp, i) => {
+          return {
+            id: `${dp.track.name}`,
+            [featureSelection]: dp[featureSelection],
+            volume: 6,
+            group: p
+          }
+        }))
+      })
+      return data
+    }
 
     useEffect(() => {
         if(authData !== undefined && process.env.NODE_ENV !== 'development') {
@@ -85,23 +124,17 @@ export default function Analysis() {
              <div className="w-full flex flex-col items-center justify-start">
                <div className="w-11/12 md:max-w-screen-xl -translate-y-8 md:-translate-y-12">
                     <div className="flex flex-col md:flex-row md:justify-between flex-wrap">
-                      <div className="bg-white border-2 border-black p-2 w-full my-2 md:w-1/3 rounded-lg shadow-xl md:mr-2">
-                        <p className="font-extrabold text-3xl md:text-5xl mb-2">Artist network<span className="cursor-pointer"><ToolTip content={toolTips.artistNetwork}/></span></p>
-                        <div className="h-80">
+                      <ChartCard size="sm" title="Artist Network" tooltip={toolTips.artistNetwork}>
                           <ArtistNetwork
                             collaborationMatrix={analysis.collaboration_matrix}
                             artistNames={analysis.artist_map}
                           />
-                        </div>
-                      </div>
-                      <div className="bg-white border-2 border-black p-2 w-full my-2 md:w-5/12 rounded-lg shadow-xl md:flex-1 md:ml-2">
-                        <p className="font-extrabold text-3xl md:text-5xl mb-2">Song history</p>
-                        <div className="h-80">
+                      </ChartCard>
+                      <ChartCard size="md" title="Track history" tooltip={toolTips.artistNetwork}>
                           <SongCalendar
                             data={analysis.calendar_coordinates}
                           />
-                        </div>
-                      </div>
+                      </ChartCard>
                     </div>
                     <div className="flex flex-col md:flex-row md:justify-between flex-wrap">
                       <div className="bg-white border-2 border-black p-2 w-full my-2 md:w-5/12 md:flex-1 rounded-lg shadow-xl md:mr-2">
@@ -125,6 +158,86 @@ export default function Analysis() {
                             <GenrePieChart
                               data={analysis.top_genres}
                             />
+                          </div>
+                        </div>
+                    </div>
+                    <div className="flex flex-col md:flex-row md:justify-between flex-wrap">
+                      <div className="bg-white border-2 border-black px-2 pt-2 pb-10 w-full my-2 md:w-5/12 md:flex-1 rounded-lg shadow-xl">
+                          <p className="font-extrabold text-3xl md:text-5xl flex flex-row items-center mb-2">Playlist Features<span className="cursor-pointer"><ToolTip content={toolTips.artistNetwork}/></span></p>
+                          <div className="h-80">
+                              <div className="flex flex-row justify-start items-center mb-4">
+                              <select 
+                                  className="text-sm md:text-base px-1 py-2 mr-2 border border-black rounded-lg cursor-pointer hover:border-gray-300 shadow-sm"
+                                  onChange={e => setFeatureSelection(e.target.value)}
+                                >
+                                  {
+                                    [
+                                      "Acousticness", "Danceability", "Energy", 
+                                      "Instrumentalness", "Liveness", "Loudness", 
+                                      "Speechiness", "Tempo", "Valence"
+                                    ].map((f, i) => <option key={i} value={f.toLowerCase()}>{f}</option>)
+                                  }
+                                </select>
+                                <Select
+                                  isMulti={true}
+                                  // override styling of
+                                  // multiselect component
+                                  // to be in line with the
+                                  // tailwind css styling
+                                  theme={theme => ({
+                                    ...theme,
+                                    borderRadius: '0.5rem',
+                                    borderColor: 'black',
+                                    colors: {
+                                      ...theme.colors,
+                                      primary25: '#6EE7B7',
+                                      neutral20: 'black',
+                                      primary: 'black',
+                                      dangerLight: '#6EE7B7',
+                                      danger: '#059669'
+                                    },
+                                    multiValueLabel: (styles) => ({
+                                      ...styles,
+                                      maxWidth: '10px'
+                                    })
+                                  })}
+                                  className="w-full"
+                                  defaultValue={Object.keys(analysis.feature_data).slice(0,3).map(p => {
+                                    return {
+                                      label: p,
+                                      value: p
+                                    }
+                                  })}
+                                  onChange={(s) => {
+                                    if(s.length === 0) {
+                                      // do nothing
+                                    } else if(s.length > 5) {
+                                      alert('Maximum number of playlists is 5')
+                                    }
+                                    else {
+                                      setPlaylistSelection(s.map(s => s.label))
+                                    }
+                                  }}
+                                  options={Object.keys(analysis.feature_data).map(p => {
+                                    return {
+                                      value: p,
+                                      label: p
+                                    }
+                                  })}
+                                />
+                              </div>
+                              <PlaylistFeatures
+                                data={
+                                  playlistSelection ?
+                                  mapFeatureData(playlistSelection) :
+                                  mapFeatureData(Object.keys(analysis.feature_data).slice(0,3))
+                                }
+                                playlists={
+                                  playlistSelection || 
+                                  Object.keys(analysis.feature_data).slice(0,3)
+                                }
+                                feature={featureSelection}
+                              />
                           </div>
                         </div>
                     </div>

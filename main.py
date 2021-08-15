@@ -15,33 +15,40 @@ def analyze_profile(request: Request) -> dict:
     all_tracks = []
     for playlist in playlists:
         tracks = az.playlist_tracks(playlist['id'])
+        # append the playlist meta data
+        # to the track objects
+        for i in range(len(tracks)):
+            tracks[i]['playlist'] = playlist
         all_tracks += tracks
     
-    # clean tracks --
-    # - remove None's
-    # - extract out the track object
-    all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=True)
-    
-    # get all analysis
-    analysis = az.track_analysis(all_tracks_cleaned)
-    
-    # gather all artists
-    all_artists = az.artists_from_tracks(all_tracks_cleaned)
-    
-    # generate artist collaboration matrix
-    # and calculate top genres
-    # and get key counts
-    collaboration_matrix, artist_map = az.collaboration_matrix(all_tracks_cleaned, n=50)
-    top_genres = az.genre_counts(all_artists, n=5)
-    key_counts = az.key_counts(analysis)
-    
-    
-    # reinit clean tracks
-    # remove None's and DO NOT extract
-    # the track object
-    # needed to retain time info
+    # set extract_tracks flag to False to keep playlist data
     all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=False)
+    
+    # use newly cleaned tracks to gather artist
+    # data for each track
+    all_artists = az.artists_from_tracks([t['track'] for t in all_tracks_cleaned])
+    
+    # use newly cleaned tracks to gather the analysis.
+    # since we are keeping playlist meta-data we need
+    # to a keep extraction of the track object since the
+    # track analysis method requires us to pass in a list
+    # of raw track objects
+    analysis = az.track_analysis([t['track'] for t in all_tracks_cleaned])
+    
+    # assign the analysis data to each track
+    for i in range(len(all_tracks_cleaned)):
+        all_tracks_cleaned[i]['analysis'] = analysis[i]
+    
+    # we now have a list of all tracks with their corresponding
+    # playlist metadata and their analysis --
+    # -- this will help for creating a very 
+    # rich analysis that gives data down to the
+    # track level when inspecting our charts.
+    collaboration_matrix, artist_map = az.collaboration_matrix([t['track'] for t in all_tracks_cleaned], n=50)
+    top_genres = az.genre_counts(all_artists, n=5)
+    key_counts = az.key_counts(t['analysis'] for t in all_tracks_cleaned)
     calendar_coordinates = az.song_calendar(all_tracks_cleaned)
+    playlist_feature_data = az.playlist_features(all_tracks_cleaned)
     
     return {
 		"collaboration_matrix": collaboration_matrix,
@@ -52,7 +59,8 @@ def analyze_profile(request: Request) -> dict:
             "label": g[0],
             "value": g[1]
         } for g in top_genres],
-        "key_counts": key_counts
+        "key_counts": key_counts,
+        "feature_data": playlist_feature_data
 	}
 
 #
