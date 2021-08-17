@@ -33,11 +33,7 @@ import {
     toolTips
 } from '../components/charts';
 
-// conditionally load the test data in the
-// development server.
-if(process.env.NODE_ENV === 'development') {
-  import { test_data } from '../data/test_analysis_data'
-}
+// import { test_data } from '../data/test_analysis_data'
 
 export default function Analysis(props) {
 
