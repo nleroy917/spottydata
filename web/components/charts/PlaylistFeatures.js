@@ -34,7 +34,7 @@ const PlaylistFeatures = ({ data, feature, playlists }) => {
                     ]
                 ]
             }}
-            margin={{ top: 30, right: 30, bottom: 50, left: 70 }}
+            margin={{ top: 30, right: 30, bottom: 90, left: 70 }}
             axisLeft={{
                 orient: 'left',
                 tickSize: 10,
