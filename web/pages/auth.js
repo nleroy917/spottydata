@@ -3,10 +3,13 @@ import {useCookies} from 'react-cookie';
 import { useRouter } from 'next/router'
 import Link from "next/link";
 import { currentPlayback, fetchAccessToken, fetchPlaylists, fetchProfile, fetchTopData, keyCodeToKey, modeKeyToMode, playlistAnalysisBasic, verifyTopData } from '../utils/spotify';
-import { Error } from '../components/error';
 import { Loading } from '../components/loading';
-import { Header } from '../components/header';
-import SEO from '../components/seo';
+
+import {
+  Error,
+  Header,
+  SEO
+} from '../components/layout'
 
 export default function Auth() {
     // create router object
@@ -121,7 +124,7 @@ export default function Auth() {
               <div className="h-40 md:h-64 w-full bg-gradient border-b border-black">
                 <div className="p-1 md:p-4 flex flex-row items-center justify-between">
                     <Link href="/">
-                        <span className="cursor-pointer">Home</span>
+                        <span className="cursor-pointer font-bold">← Home</span>
                     </Link>
                     <Header />
                 </div>

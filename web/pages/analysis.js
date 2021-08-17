@@ -2,11 +2,8 @@ import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { useEffect, useState } from 'react'
 import { Loading } from '../components/loading';
-import { Error } from '../components/error';
 import { useRouter } from 'next/router';
-import { Header } from '../components/header';
 import { fetchProfile } from '../utils/spotify';
-import SEO from '../components/seo';
 
 // import analysis helper
 // functions
@@ -14,7 +11,10 @@ import { mapFeatureData } from '../utils/analysis';
 
 // import layouts
 import {
-  ChartCard
+  ChartCard,
+  Error,
+  Header,
+  SEO
 } from '../components/layout'
 
 // import control structures
@@ -147,7 +147,7 @@ export default function Analysis(props) {
                             />
                           </ChartCard>
                         </div>
-                        <div className="w-full my-2 md:w-1/3 md:ml-2">
+                        <div className="w-full my-2 md:w-5/12 md:ml-2">
                           <ChartCard title="Top Genres">
                             <GenrePieChart
                               data={analysis.top_genres}

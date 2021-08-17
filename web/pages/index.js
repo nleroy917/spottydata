@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import Head from 'next/head'
 import Link from 'next/link'
-import { Header } from '../components/header'
-import SEO from '../components/seo'
+
+import {
+  SEO,
+  Header
+} from '../components/layout'
 
 // construct log in link
 const base_url =  'https://accounts.spotify.com/authorize?'
@@ -100,7 +102,7 @@ export default function Home() {
         <div className="flex flex-row items-center justify-between md:justify-evenly">
           <div>Created by Nathan LeRoy</div>
           <div>© 2021</div>
-          <div>Report an Issue</div>
+          <div><Link href="https://github.com/nleroy917/spottydata/issues">Report an Issue</Link></div>
         </div>
       </footer>
     </div>
