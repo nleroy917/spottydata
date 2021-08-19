@@ -5,6 +5,9 @@ import Link from "next/link";
 import { currentPlayback, fetchAccessToken, fetchPlaylists, fetchProfile, fetchTopData, keyCodeToKey, modeKeyToMode, verifyTopData } from '../utils/spotify';
 import { Loading } from '../components/loading';
 
+// telemetry
+import * as ga from '../utils/ga';
+
 import {
   Error,
   Header,
@@ -22,6 +25,12 @@ export default function Auth() {
     const params = router.query
     if (params.error === "access_denied") {
         if(process.browser) {
+            // log cancelation
+            ga.event({
+              action: "cancel_authentication",
+              params: null
+            })
+            // send user home
             router.push("/")
         }
     }
