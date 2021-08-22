@@ -44,14 +44,9 @@ const Auth = () => {
         if(process.browser) {
             // log cancelation
             ga.event({
-<<<<<<< HEAD:web/pages/auth.tsx
               category: 'auth',
               action: 'click',
               label: 'cancel_authentication',
-=======
-              action: "cancel_authentication",
-              params: null
->>>>>>> master:web/pages/auth.js
             })
             // send user home
             router.push("/")
