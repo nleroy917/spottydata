@@ -1,6 +1,17 @@
-import Select from 'react-select';
+import { FC } from 'react';
+import { Dispatch, SetStateAction } from 'react';
+import Select, { Theme } from 'react-select';
 
-export const PlaylistSelector = ({defaultSelection, setPlaylistSelection, options}) => {
+interface Props {
+  defaultSelection: {value: string, label: string}[],
+  setPlaylistSelection: Dispatch<SetStateAction<string[] | undefined>>,
+  options: {label: string, value: string}[]
+}
+
+export const PlaylistSelector: FC<Props> = (props) => {
+
+    const { defaultSelection, setPlaylistSelection, options} = props
+    
     return (
         <Select
           isMulti={true}
@@ -8,10 +19,8 @@ export const PlaylistSelector = ({defaultSelection, setPlaylistSelection, option
           // multiselect component
           // to be in line with the
           // tailwind css styling
-          theme={theme => ({
+          theme={(theme: Theme): Theme => ({
             ...theme,
-            borderRadius: '0.5rem',
-            borderColor: 'black',
             colors: {
               ...theme.colors,
               primary25: '#6EE7B7',
@@ -19,11 +28,7 @@ export const PlaylistSelector = ({defaultSelection, setPlaylistSelection, option
               primary: 'black',
               dangerLight: '#6EE7B7',
               danger: '#059669'
-            },
-            multiValueLabel: (styles) => ({
-              ...styles,
-              maxWidth: '10px'
-            })
+            }
           })}
           className="w-full"
           defaultValue={defaultSelection}

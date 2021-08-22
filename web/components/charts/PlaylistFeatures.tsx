@@ -1,13 +1,21 @@
 import { ResponsiveSwarmPlotCanvas } from '@nivo/swarmplot'
+import { FC } from 'react'
+import { PlaylistFeatureAnalysisDatapoint } from '../../utils/analysis'
 import { chartColors } from './colors'
 
-const PlaylistFeatures = ({ data, feature, playlists }) => {
+interface Props {
+    data: PlaylistFeatureAnalysisDatapoint[],
+    feature: string,
+    playlists: string[]
+}
+
+const PlaylistFeatures: FC<Props> = (props) => {
+    const { data, feature, playlists } = props
     return (
         <ResponsiveSwarmPlotCanvas
             data={data}
             groups={playlists}
             colors={chartColors}
-            identity="id"
             value={feature}
             valueFormat=".2f"
             valueScale={{ 
@@ -36,7 +44,6 @@ const PlaylistFeatures = ({ data, feature, playlists }) => {
             }}
             margin={{ top: 30, right: 30, bottom: 90, left: 70 }}
             axisLeft={{
-                orient: 'left',
                 tickSize: 10,
                 tickPadding: 5,
                 tickRotation: 0,

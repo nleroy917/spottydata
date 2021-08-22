@@ -1,6 +1,16 @@
 import { ResponsiveChord } from '@nivo/chord'
+import { FC } from 'react'
 import { chartColors } from './colors'
-const ArtistNetwork = ({collaborationMatrix, artistNames}) => {
+
+interface Props {
+    collaborationMatrix: [][],
+    artistNames: string[]
+}
+
+const ArtistNetwork: FC<Props> = (props) => {
+
+    const { collaborationMatrix, artistNames } = props
+
     return (
         <ResponsiveChord
             matrix={collaborationMatrix}
@@ -20,6 +30,7 @@ const ArtistNetwork = ({collaborationMatrix, artistNames}) => {
             labelOffset={12}
             labelRotation={-120}
             labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1 ] ] }}
+            layers={['ribbons', 'arcs', 'labels', 'legends']}
             colors={chartColors}
             isInteractive={true}
             arcHoverOpacity={1}

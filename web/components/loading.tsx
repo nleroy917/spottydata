@@ -1,7 +1,13 @@
 import Image from 'next/image';
+import { FC } from 'react';
 import music_note from '../public/music_note.png'
 
-export const Loading = ({message}) => {
+interface Props {
+    message: string
+}
+
+export const Loading: FC<Props> = (props) => {
+    const { message } = props
     return (
         <div className="flex flex-col justify-center items-center h-48">
           <div className="animate-bounce">

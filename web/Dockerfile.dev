@@ -18,6 +18,8 @@ WORKDIR /client
 COPY ./package*.json ./
 COPY ./.env.local ./.env.local
 COPY *.config.js ./
+COPY tsconfig.json ./
+COPY ./*.ts ./
 
 # install dependencies
 RUN yarn install

@@ -1,4 +1,6 @@
+import { AxiosResponse } from "axios"
 import Link from "next/link"
+import { FC } from "react"
 
 const ErrorHeader = () => {
     return (
@@ -8,7 +10,17 @@ const ErrorHeader = () => {
     )
 }
 
-const ErrorMessage = ({error}) => {
+export interface ErrorObject {
+    response?: AxiosResponse
+    stack?: Error
+}
+
+interface ErrorMessageProps {
+    error: ErrorObject,
+}
+
+const ErrorMessage: FC<ErrorMessageProps> = (props) => {
+    const { error } = props
     if(error.response) {
         return (
             <div>
@@ -41,12 +53,17 @@ const ErrorMessage = ({error}) => {
             </div>
         )
     } else {
-        console.log(error)
         return (
-            <div className="p-4 border-2 border-green-500 rounded-md bg-green-200 shadow-md mx-6 font-bold">
+            <div className="p-4 border-2 border-green-500 rounded-md bg-green-200 shadow-md mx-6 font-bold text-center">
                 <code>
                     {
                         error.toString()
+                    }
+                </code>
+                <br></br>
+                <code>
+                    {
+                        error.stack
                     }
                 </code>
                 <div className="flex flex-row justify-center mt-4">
@@ -66,7 +83,12 @@ const ErrorMessage = ({error}) => {
     }
 }
 
-export const Error = ({error}) => {
+interface ErrorProps {
+    error: ErrorObject
+}
+
+export const Error: FC<ErrorProps> = (props) => {
+    const { error } = props
     return (
         <div className="min-h-screen flex flex-col justify-center items-center">
             <ErrorHeader />

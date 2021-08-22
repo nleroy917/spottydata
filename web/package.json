@@ -13,6 +13,9 @@
     "@nivo/pie": "^0.73.0",
     "@nivo/swarmplot": "^0.73.0",
     "@tippyjs/react": "^4.2.5",
+    "@types/node": "^16.7.1",
+    "@types/react": "^17.0.19",
+    "@types/spotify-api": "^0.0.11",
     "axios": "^0.21.1",
     "next": "latest",
     "next-useragent": "^2.6.0",
@@ -22,8 +25,10 @@
     "react-select": "^4.3.1"
   },
   "devDependencies": {
+    "@types/react-select": "^4.0.17",
     "autoprefixer": "^10.3.1",
     "postcss": "^8.3.6",
-    "tailwindcss": "^2.2.7"
+    "tailwindcss": "^2.2.7",
+    "typescript": "^4.3.5"
   }
 }

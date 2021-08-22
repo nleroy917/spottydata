@@ -1,9 +1,15 @@
 import Tippy from '@tippyjs/react';
-const ToolTip = ({content}) => {
+import { ReactNode, FC } from 'react';
+
+interface Props {
+    content: ReactNode
+}
+
+const ToolTip: FC<Props> = (props) => {
     const Info = () => {
         return (
             <div className="p-2 bg-white border border-black rounded-md text-sm text-gray-700 italic">
-                {content}
+                {props.content}
             </div>
         )
     }

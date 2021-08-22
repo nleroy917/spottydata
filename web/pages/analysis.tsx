@@ -32,34 +32,27 @@ import {
     SongCalendar,
     toolTips
 } from '../components/charts';
+import { AuthData, ProfileAnalysis } from '..';
+import { ErrorObject } from '../components/layout/Error';
 
 // import { test_data } from '../data/test_analysis_data'
 
-export default function Analysis(props) {
-
-    // let ua;
-    // if (props.uaString) {
-    //   ua = parseUserAgent(props.uaString)
-    // } else {
-    //   ua = useUserAgent(window.navigator.userAgent)
-    // }
-
-    //console.log(ua)
+export default function Analysis() {
 
     const router = useRouter()
     const [cookies, setCookie, ] = useCookies(['spottydata-credentials']);
 
-    const [authData, setAuthData] = useState(cookies['authData'])
-    const [profile, setProfile] = useState(undefined)
-    const [analysis, setAnalysis] = useState(undefined)
-    const [error, setError] = useState(undefined)
+    const [authData, setAuthData] = useState<AuthData>(cookies['authData'])
+    const [profile, setProfile] = useState<SpotifyApi.UserObjectPublic | undefined>(undefined)
+    const [analysis, setAnalysis] = useState<ProfileAnalysis | undefined>(undefined)
+    const [error, setError] = useState<ErrorObject | undefined>(undefined)
 
     // state for playlist feature plot
-    const [playlistSelection, setPlaylistSelection] = useState(undefined)
-    const [featureSelection, setFeatureSelection] = useState("valence")
+    const [playlistSelection, setPlaylistSelection] = useState<string[] | undefined>(undefined)
+    const [featureSelection, setFeatureSelection] = useState<string>("valence")
 
     useEffect(() => {
-        if(authData !== undefined && process.env.NODE_ENV !== 'development') {
+        if(authData !== undefined) {
             let hdrs = {
                 access_token: authData['access_token']
             }
@@ -70,8 +63,6 @@ export default function Analysis(props) {
             .catch(err => {
                 setError(err)
             })
-        } else {
-            setAnalysis(test_data)
         }
         if(authData !== undefined) {
             fetchProfile(
@@ -117,7 +108,7 @@ export default function Analysis(props) {
                <div className="w-11/12 md:max-w-screen-xl -translate-y-8 md:-translate-y-12">
                     <div className="flex flex-col md:flex-row md:justify-between flex-wrap">
                       <div className="w-full md:w-1/3 md:mr-2">
-                        <ChartCard size="sm" title="Artist Network" tooltip={toolTips.artistNetwork}>
+                        <ChartCard title="Artist Network" tooltip={toolTips.artistNetwork}>
                             <ArtistNetwork
                               collaborationMatrix={analysis.collaboration_matrix}
                               artistNames={analysis.artist_map}
@@ -125,7 +116,7 @@ export default function Analysis(props) {
                         </ChartCard>
                       </div>
                       <div className="w-full md:w-5/12 md:ml-2 md:flex-1">
-                        <ChartCard size="md" title="Track history" tooltip={toolTips.artistNetwork}>
+                        <ChartCard title="Track history" tooltip={toolTips.artistNetwork}>
                             <SongCalendar
                               data={analysis.calendar_coordinates}
                             />
@@ -143,7 +134,6 @@ export default function Analysis(props) {
                                   Minor: analysis.key_counts[key].Minor
                                 }
                               })}
-                              keys={Object.keys(analysis.key_counts).map(key => key)}
                             />
                           </ChartCard>
                         </div>

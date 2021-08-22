@@ -1,7 +1,18 @@
 import { ResponsiveBar } from '@nivo/bar'
+import { FC } from 'react'
+import { KeyCounts } from '../..'
 import { chartColors } from './colors'
 
-const KeyChart = ({ data }) => {
+interface Props {
+    data: {
+        Key: string,
+        Major: number,
+        Minor: number
+    }[]
+}
+
+const KeyChart: FC<Props> = (props) => {
+    const { data } = props
     return (
         <ResponsiveBar
             data={data}
@@ -11,7 +22,6 @@ const KeyChart = ({ data }) => {
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            valueFormat={{ format: '', enabled: false }}
             colors={chartColors}
             borderWidth={2}
             borderRadius={2}

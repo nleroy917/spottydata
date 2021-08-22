@@ -1,7 +1,14 @@
 import { ResponsiveCalendar } from '@nivo/calendar'
+import { FC } from 'react'
+import { CalendarCoordinate } from '../..'
 import { chartColors } from './colors'
 
-const SongCalendar = ({ data }) => {
+interface Props {
+    data: CalendarCoordinate[]
+}
+
+const SongCalendar: FC<Props> = (props) => {
+    const { data } = props
     return (
       <ResponsiveCalendar
           data={data}
