@@ -12,10 +12,11 @@ const ErrorHeader = () => {
 
 export interface ErrorObject {
     response?: AxiosResponse
+    stack?: Error
 }
 
 interface ErrorMessageProps {
-    error: ErrorObject
+    error: ErrorObject,
 }
 
 const ErrorMessage: FC<ErrorMessageProps> = (props) => {
@@ -53,10 +54,16 @@ const ErrorMessage: FC<ErrorMessageProps> = (props) => {
         )
     } else {
         return (
-            <div className="p-4 border-2 border-green-500 rounded-md bg-green-200 shadow-md mx-6 font-bold">
+            <div className="p-4 border-2 border-green-500 rounded-md bg-green-200 shadow-md mx-6 font-bold text-center">
                 <code>
                     {
                         error.toString()
+                    }
+                </code>
+                <br></br>
+                <code>
+                    {
+                        error.stack
                     }
                 </code>
                 <div className="flex flex-row justify-center mt-4">

@@ -1,14 +1,15 @@
 import { Dispatch, SetStateAction } from 'react';
-import axios from 'axios'
+import axios, { AxiosAdapter, AxiosResponse } from 'axios'
 import { AuthData, AuthPayload } from '..';
+import { ErrorObject } from '../components/layout/Error';
 
 export const fetchAccessToken = (
-    authCode: string, 
-    clientID: string, 
+    authCode: string,
+    clientID: string,
     clientSecret: string,
-    redirectURI: string, 
+    redirectURI: string,
     dataSetter: Dispatch<SetStateAction<AuthData>>, 
-    setError: Dispatch<SetStateAction<object>>, 
+    setError: Dispatch<SetStateAction<ErrorObject | undefined>>, 
     setCookie: Function
 ) => {
     
@@ -46,8 +47,8 @@ export const fetchAccessToken = (
 
 export const fetchProfile = (
     authData: AuthData, 
-    dataSetter: Dispatch<SetStateAction<SpotifyApi.UserObjectPublic>>, 
-    setError: Dispatch<SetStateAction<object>>, 
+    dataSetter: Dispatch<SetStateAction<SpotifyApi.UserObjectPublic | undefined>>, 
+    setError: Dispatch<SetStateAction<ErrorObject | undefined>>, 
     setCookie: Function
 ) => {
     const hdrs = {
@@ -72,9 +73,14 @@ export const fetchProfile = (
     })
 }
 
+export interface CurrentSongWithAnalysis extends SpotifyApi.CurrentlyPlayingObject{
+    item: SpotifyApi.TrackObjectFull
+    analysis: SpotifyApi.AudioFeaturesObject
+}
+
 export const currentPlayback = (
     authData: AuthData, 
-    dataSetter: Dispatch<SetStateAction<SpotifyApi.PlaybackObject | {} >>, 
+    dataSetter: Dispatch<SetStateAction<CurrentSongWithAnalysis | undefined >>, 
     setError: Function
 ) => {
     const hdrs = {
@@ -82,9 +88,12 @@ export const currentPlayback = (
         'Authorization': 'Bearer ' + authData.access_token
     }
     axios.get('https://api.spotify.com/v1/me/player/currently-playing', {headers: hdrs})
-    .then(res => {
+    .then((res: AxiosResponse) => {
+        let data: SpotifyApi.CurrentlyPlayingObject = res.data
         if (res.data === "") {
-            dataSetter({})
+            dataSetter(undefined)
+        } else if(res.data.item.type !== "track") {
+            dataSetter(undefined)
         } else {
             let current = res.data
             axios.get(`https://api.spotify.com/v1/audio-features/${current.item.id}`, {headers: hdrs})
@@ -106,8 +115,8 @@ export const currentPlayback = (
 
 export const fetchPlaylists = (
     authData: AuthData, 
-    dataSetter: Dispatch<SetStateAction<SpotifyApi.PlaylistObjectFull[]>>, 
-    setError: Function
+    dataSetter: Dispatch<SetStateAction<SpotifyApi.PlaylistObjectFull[] | undefined>>, 
+    setError: Dispatch<SetStateAction<ErrorObject | undefined>>
 ) => {
 
     let playlists: SpotifyApi.PlaylistObjectFull[] = []
@@ -219,34 +228,22 @@ export const modeKeyToMode = (modeKey: number) => {
 
 export interface TopData  {
     artists: {
-        short_term: SpotifyApi.PlaylistObjectFull[],
-        medium_term: SpotifyApi.PlaylistObjectFull[],
-        long_term: SpotifyApi.PlaylistObjectFull[]
+        [term: string]: SpotifyApi.UsersTopArtistsResponse
     },
     tracks: {
-        short_term: SpotifyApi.PlaylistObjectFull[],
-        medium_term: SpotifyApi.PlaylistObjectFull[],
-        long_term: SpotifyApi.PlaylistObjectFull[]
+        [term: string]: SpotifyApi.UsersTopTracksResponse
     }
 }
 
 export const fetchTopData = (
     authData: AuthData, 
-    setTop: Dispatch<SetStateAction<object>>, 
-    setError: Function
+    setTop: Dispatch<SetStateAction<TopData | undefined>>, 
+    setError: Dispatch<SetStateAction<ErrorObject | undefined>>
 ) => {
 
-    let topData = {
-        artists: {
-            short_term: undefined,
-            medium_term: undefined,
-            long_term: undefined
-        },
-        tracks: {
-            short_term: undefined,
-            medium_term: undefined,
-            long_term: undefined
-        }
+    let topData: TopData = {
+        artists: {},
+        tracks: {}
     }
 
     const hdrs = {
@@ -307,13 +304,17 @@ export const fetchTopData = (
     })
 }
 
-export const verifyTopData = (topData: TopData) => {
-    return (
-        topData.artists.short_term !== undefined &&
-        topData.artists.medium_term !== undefined &&
-        topData.artists.long_term !== undefined &&
-        topData.tracks.short_term !== undefined &&
-        topData.tracks.medium_term !== undefined &&
-        topData.tracks.long_term !== undefined
+export const verifyTopData = (topData: TopData | undefined) => {
+    if(topData === undefined) {
+        return false
+    } else {
+      return (
+          topData.artists.short_term !== undefined &&
+          topData.artists.medium_term !== undefined &&
+          topData.artists.long_term !== undefined &&
+          topData.tracks.short_term !== undefined &&
+          topData.tracks.medium_term !== undefined &&
+          topData.tracks.long_term !== undefined
         )
+    }
 }

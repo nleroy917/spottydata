@@ -3,15 +3,18 @@ import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router'
 import Link from "next/link";
 
+
 // helpers
 import { 
   currentPlayback, 
+  CurrentSongWithAnalysis, 
   fetchAccessToken, 
   fetchPlaylists, 
   fetchProfile, 
   fetchTopData, 
   keyCodeToKey, 
   modeKeyToMode, 
+  TopData, 
   verifyTopData 
 } from '../utils/spotify';
 
@@ -25,8 +28,10 @@ import {
   Header,
   SEO
 } from '../components/layout'
+import { AuthData } from '..';
+import { ErrorObject } from '../components/layout/Error';
 
-export default function Auth() {
+const Auth = () => {
     // create router object
     const router = useRouter()
 
@@ -38,28 +43,34 @@ export default function Auth() {
     if (params.error === "access_denied") {
         if(process.browser) {
             // log cancelation
-            // ga.event({
-            //   action: "cancel_authentication",
-            //   params: null
-            // })
+            ga.event({
+              category: 'auth',
+              action: 'click',
+              label: 'cancel_authentication',
+            })
             // send user home
             router.push("/")
         }
     }
 
     // extract authorization code
-    const authCode = params.code
+    let authCode: string | undefined
+    if(Array.isArray(params.code)) {
+      authCode = params.code[0]
+    } else {
+      authCode = params.code
+    }
 
     // state management
-    const [authData, setAuthData] = useState(cookies['authData'] || undefined)
-    const [profile, setProfile] = useState(undefined)
-    const [playlists, setPlaylists] = useState(undefined)
-    const [playback, setPlayback] = useState(undefined)
-    const [top, setTop] = useState(undefined)
-    const [artistTimeFrame, setArtistTimeFrame] = useState('short_term')
-    const [trackTimeFrame, setTrackTimeFrame] = useState('short_term')
-    const [loadingMessage, setLoadingMessage] = useState(undefined)
-    const [error, setError] = useState(undefined)
+    const [authData, setAuthData] = useState<AuthData>(cookies['authData'] || undefined)
+    const [profile, setProfile] = useState<SpotifyApi.UserObjectPublic | undefined>(undefined)
+    const [playlists, setPlaylists] = useState<SpotifyApi.PlaylistObjectFull[] | undefined>(undefined)
+    const [playback, setPlayback] = useState<CurrentSongWithAnalysis | undefined>(undefined)
+    const [top, setTop] = useState<TopData | undefined>(undefined)
+    const [artistTimeFrame, setArtistTimeFrame] = useState<string>('short_term')
+    const [trackTimeFrame, setTrackTimeFrame] = useState<string>('short_term')
+    const [loadingMessage, setLoadingMessage] = useState<string>("")
+    const [error, setError] = useState<ErrorObject | undefined>(undefined)
 
     /**
      * Drive access token fetching
@@ -68,10 +79,10 @@ export default function Auth() {
         if(authCode !== undefined && authData === undefined) {
             setLoadingMessage("Authenting...")
             fetchAccessToken(
-                authCode,
-                process.env.NEXT_PUBLIC_CLIENT_ID,
-                process.env.NEXT_PUBLIC_CLIENT_SECRET,
-                process.env.NEXT_PUBLIC_REDIRECT_URI,
+                authCode || "",
+                process.env.NEXT_PUBLIC_CLIENT_ID || "",
+                process.env.NEXT_PUBLIC_CLIENT_SECRET || "",
+                process.env.NEXT_PUBLIC_REDIRECT_URI || "",
                 setAuthData,
                 setError,
                 setCookie
@@ -129,7 +140,7 @@ export default function Auth() {
                 <Error error={error} />
             </div>
         )
-    } else if (playback === undefined || authData === undefined || profile === undefined || playlists === undefined || !verifyTopData(top) ) {
+    } else if (playback === undefined || authData === undefined || profile === undefined || playlists === undefined || !verifyTopData(top) || top === undefined) {
         // render a spinner
         return (
             <div className="min-h-screen flex flex-col justify-center items-center">
@@ -158,7 +169,7 @@ export default function Auth() {
                    className="rounded-lg border-2 border-black shadow-md mr-4"
                    height={75}
                    width={75}
-                   src={profile.images[0].url}
+                   src={profile.images ? profile.images[0].url : ""}
                  />
                  <p className="font-extrabold text-2xl md:text-4xl">
                      Welcome,{' '}
@@ -176,7 +187,7 @@ export default function Auth() {
                   }
                </div>
                <div className="flex flex-row flex-wrap items-start justify-start mb-4 border-b border-gray-200 pb-4 font-bold text-lg md:text-xl">
-                  <p className="mr-4">Followers:{' '}<span className="text-purple-500">{profile.followers.total}</span></p>
+                  <p className="mr-4">Followers:{' '}<span className="text-purple-500">{profile.followers ? profile.followers.total : '0'}</span></p>
                   <p className="mr-4">Playlists:{' '}<span className="text-red-500">{playlists.length}</span></p>
                   <p className="mr-4">Total tracks:{' '}
                     <span className="text-yellow-500">
@@ -332,3 +343,5 @@ export default function Auth() {
         )   
     }
 }
+
+export default Auth

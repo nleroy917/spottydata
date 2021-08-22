@@ -1,8 +1,8 @@
 export interface GAEventData {
   action: string,
   category: string,
-  label: string,
-  value: string | number
+  label?: string,
+  value?: string | number
 }
 
 // log the pageview with their URL

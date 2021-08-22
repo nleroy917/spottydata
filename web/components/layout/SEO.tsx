@@ -2,8 +2,8 @@ import Head from 'next/head'
 import { FC } from 'react'
 
 interface Props {
-  title: string,
-  desc: string
+  title?: string,
+  desc?: string
 }
 
 const SEO: FC<Props> = (props) => {
