@@ -18,9 +18,7 @@ const payload = {
 }
 
 // convert payload to query string
-const qs = Object.keys(payload)
-          .map(key => `${key}=${payload[key]}`)
-          .join('&');
+const qs = `client_id=${payload.client_id}&response_type=${payload.response_type}&scope=${payload.scope}&redirect_uri=${payload.redirect_uri}&show_dialog=${payload.show_dialog}`
 
 const authorize_url = base_url + qs
 
