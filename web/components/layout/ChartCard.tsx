@@ -3,9 +3,8 @@ import { ReactNode } from "react"
 import ToolTip from "../tooltip"
 
 interface Props {
-  chilren: ReactNode,
   title: string,
-  tooltip: string
+  tooltip?: string
 }
 
 const ChartCard: FC<Props> = (props) => {

@@ -3,8 +3,8 @@ import { Dispatch, SetStateAction } from 'react';
 import Select, { Theme } from 'react-select';
 
 interface Props {
-  defaultSelection: string[],
-  setPlaylistSelection: Dispatch<SetStateAction<string[]>>,
+  defaultSelection: {value: string, label: string}[],
+  setPlaylistSelection: Dispatch<SetStateAction<string[] | undefined>>,
   options: {label: string, value: string}[]
 }
 
