@@ -1,8 +1,20 @@
 import { useEffect, useState } from 'react';
-import {useCookies} from 'react-cookie';
+import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router'
 import Link from "next/link";
-import { currentPlayback, fetchAccessToken, fetchPlaylists, fetchProfile, fetchTopData, keyCodeToKey, modeKeyToMode, verifyTopData } from '../utils/spotify';
+
+// helpers
+import { 
+  currentPlayback, 
+  fetchAccessToken, 
+  fetchPlaylists, 
+  fetchProfile, 
+  fetchTopData, 
+  keyCodeToKey, 
+  modeKeyToMode, 
+  verifyTopData 
+} from '../utils/spotify';
+
 import { Loading } from '../components/loading';
 
 // telemetry
@@ -26,10 +38,10 @@ export default function Auth() {
     if (params.error === "access_denied") {
         if(process.browser) {
             // log cancelation
-            ga.event({
-              action: "cancel_authentication",
-              params: null
-            })
+            // ga.event({
+            //   action: "cancel_authentication",
+            //   params: null
+            // })
             // send user home
             router.push("/")
         }

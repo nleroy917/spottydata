@@ -1,6 +1,12 @@
 import Head from 'next/head'
+import { FC } from 'react'
 
-const SEO = (props) => {
+interface Props {
+  title: string,
+  desc: string
+}
+
+const SEO: FC<Props> = (props) => {
     return (
             <Head>
               <title>{props.title || "Spottydata.com"}</title>

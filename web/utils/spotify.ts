@@ -1,22 +1,30 @@
+import { Dispatch, SetStateAction } from 'react';
 import axios from 'axios'
+import { AuthData, AuthPayload } from '..';
 
-export const fetchAccessToken = (authCode, clientID, clientSecret, redirectURI, dataSetter, setError, setCookie) => {
+export const fetchAccessToken = (
+    authCode: string, 
+    clientID: string, 
+    clientSecret: string,
+    redirectURI: string, 
+    dataSetter: Dispatch<SetStateAction<AuthData>>, 
+    setError: Dispatch<SetStateAction<object>>, 
+    setCookie: Function
+) => {
     
     const hdrs = {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'Basic ' + btoa(clientID + ':' + clientSecret)
     }
 
-    const body = {
+    const body: AuthPayload = {
         grant_type: 'authorization_code',
         code: authCode,
         redirect_uri: redirectURI
     }
     
     // convert payload to query string
-    const qs = Object.keys(body)
-                .map(key => `${key}=${body[key]}`)
-                .join('&');
+    const qs = `grant_type=${body.grant_type}&code=${body.code}&redirect_uri=${body.redirect_uri}`
 
     axios.post('https://accounts.spotify.com/api/token', qs, {headers: hdrs})
     .then(res => {
@@ -36,11 +44,17 @@ export const fetchAccessToken = (authCode, clientID, clientSecret, redirectURI, 
 
 }
 
-export const fetchProfile = (authData, dataSetter, setError, setCookie) => {
+export const fetchProfile = (
+    authData: AuthData, 
+    dataSetter: Dispatch<SetStateAction<SpotifyApi.UserObjectPublic>>, 
+    setError: Dispatch<SetStateAction<object>>, 
+    setCookie: Function
+) => {
     const hdrs = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + authData.access_token
     }
+
     axios.get('https://api.spotify.com/v1/me', {headers: hdrs})
     .then(res => {
         setCookie(
@@ -58,7 +72,11 @@ export const fetchProfile = (authData, dataSetter, setError, setCookie) => {
     })
 }
 
-export const currentPlayback = (authData, dataSetter, setError) => {
+export const currentPlayback = (
+    authData: AuthData, 
+    dataSetter: Dispatch<SetStateAction<SpotifyApi.PlaybackObject | {} >>, 
+    setError: Function
+) => {
     const hdrs = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + authData.access_token
@@ -86,13 +104,20 @@ export const currentPlayback = (authData, dataSetter, setError) => {
     })
 }
 
-export const fetchPlaylists = (authData, dataSetter, setError) => {
-    let playlists = []
+export const fetchPlaylists = (
+    authData: AuthData, 
+    dataSetter: Dispatch<SetStateAction<SpotifyApi.PlaylistObjectFull[]>>, 
+    setError: Function
+) => {
+
+    let playlists: SpotifyApi.PlaylistObjectFull[] = []
+
     const hdrs = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + authData.access_token
     }
-    const getPlaylists = (url) => {
+
+    const getPlaylists = (url: string) => {
         axios.get(url, {headers: hdrs})
         .then(res => {
             if (res.data.next) {
@@ -110,7 +135,7 @@ export const fetchPlaylists = (authData, dataSetter, setError) => {
     getPlaylists('https://api.spotify.com/v1/me/playlists?limit=50')
 }
 
-export const playlistAnalysisBasic = (playlists) => {
+export const playlistAnalysisBasic = (playlists: SpotifyApi.PlaylistObjectFull[]) => {
     let analysis = {
         longestPlaylist: playlists[0],
         shortestPlaylist: playlists[0],
@@ -132,7 +157,7 @@ export const playlistAnalysisBasic = (playlists) => {
     return analysis
 }
 
-export const keyCodeToKey = (keyCode) => {
+export const keyCodeToKey = (keyCode: number) => {
     let key = ""
     switch(keyCode) {
         case 0:
@@ -177,7 +202,7 @@ export const keyCodeToKey = (keyCode) => {
     return key
 }
 
-export const modeKeyToMode = (modeKey) => {
+export const modeKeyToMode = (modeKey: number) => {
     let mode = ""
     switch(modeKey) {
         case 0:
@@ -192,7 +217,25 @@ export const modeKeyToMode = (modeKey) => {
     return mode
 }
 
-export const fetchTopData = (authData, setTop, setError) => {
+export interface TopData  {
+    artists: {
+        short_term: SpotifyApi.PlaylistObjectFull[],
+        medium_term: SpotifyApi.PlaylistObjectFull[],
+        long_term: SpotifyApi.PlaylistObjectFull[]
+    },
+    tracks: {
+        short_term: SpotifyApi.PlaylistObjectFull[],
+        medium_term: SpotifyApi.PlaylistObjectFull[],
+        long_term: SpotifyApi.PlaylistObjectFull[]
+    }
+}
+
+export const fetchTopData = (
+    authData: AuthData, 
+    setTop: Dispatch<SetStateAction<object>>, 
+    setError: Function
+) => {
+
     let topData = {
         artists: {
             short_term: undefined,
@@ -264,7 +307,7 @@ export const fetchTopData = (authData, setTop, setError) => {
     })
 }
 
-export const verifyTopData = (topData) => {
+export const verifyTopData = (topData: TopData) => {
     return (
         topData.artists.short_term !== undefined &&
         topData.artists.medium_term !== undefined &&

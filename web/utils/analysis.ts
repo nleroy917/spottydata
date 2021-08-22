@@ -1,6 +1,19 @@
-export const mapFeatureData = (analysis, playlistSelection, featureSelection) => {
+import { ProfileAnalysis } from ".."
+
+export interface PlaylistFeatureAnalysisDatapoint {
+  id: string,
+  volume: number,
+  group: string,
+  [featureSelection: string]: number | string
+}
+
+export const mapFeatureData = (
+  analysis: ProfileAnalysis, 
+  playlistSelection: string[], 
+  featureSelection: string
+) => {
     // start new array
-    let data = []
+    let data: PlaylistFeatureAnalysisDatapoint[] = []
 
     // loop through each playlist selected
     playlistSelection.forEach(p => {

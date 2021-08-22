@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, FC } from "react";
 import { useCookies } from "react-cookie"
 
-export const Header = () => {
+export const Header: FC = () => {
     // access cookies
     const [cookies, , removeCookie] = useCookies(['spottydata-credentials']);
     const [profile, setProfile] = useState(cookies['profile'])

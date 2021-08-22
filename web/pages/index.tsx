@@ -52,7 +52,7 @@ export default function Home() {
               onMouseLeave={() => setHoverGo(false)}
             >
               <Link href={authorize_url}>
-                <button 
+                <button
                   className="w-56 md:w-48 rounded-lg border-2 border-black hover:bg-black hover:text-white hover:shadow-sm my-2 mx-2 px-8 py-4 md:py-2 text-xl font-bold transition-all"
                 >
                   Lets Go

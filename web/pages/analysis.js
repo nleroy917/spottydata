@@ -59,7 +59,7 @@ export default function Analysis(props) {
     const [featureSelection, setFeatureSelection] = useState("valence")
 
     useEffect(() => {
-        if(authData !== undefined && process.env.NODE_ENV !== 'development') {
+        if(authData !== undefined) {
             let hdrs = {
                 access_token: authData['access_token']
             }
@@ -70,8 +70,6 @@ export default function Analysis(props) {
             .catch(err => {
                 setError(err)
             })
-        } else {
-            setAnalysis(test_data)
         }
         if(authData !== undefined) {
             fetchProfile(
