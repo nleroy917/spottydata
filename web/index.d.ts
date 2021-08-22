@@ -36,6 +36,13 @@ export interface TopGenre {
     value: number
 }
 
+export interface KeyCounts {
+    [key: string]: {
+        Major: number,
+        Minor: number
+    }
+}
+
 // interface for a profiles entire analysis
 // this is returned from the Google Cloud Functions
 export interface ProfileAnalysis {
@@ -45,12 +52,7 @@ export interface ProfileAnalysis {
     feature_data: {
         [playlist: string]: PlaylistTrackFeatureObject[]
     },
-    key_counts: {
-        [key: string]: {
-            Major: number,
-            Minor: number
-        }
-    },
+    key_counts: KeyCounts
     top_genres: TopGenre[]
 }
 
