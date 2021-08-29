@@ -2,6 +2,8 @@
 /// <reference types="@types/react" />
 /// <reference types="@types/react-select" />
 
+declare module '*.png';
+
 // interface for CalendarCoordinates -- the datapoint
 // required for the nivo calendar plot
 export interface CalendarCoordinate {
