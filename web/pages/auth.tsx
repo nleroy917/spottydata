@@ -8,14 +8,14 @@ import Link from "next/link";
 import { 
   currentPlayback, 
   CurrentSongWithAnalysis, 
-  fetchAccessToken, 
+  fetchAccessToken,
   fetchPlaylists, 
   fetchProfile, 
   fetchTopData, 
   keyCodeToKey, 
   modeKeyToMode, 
   TopData, 
-  verifyTopData 
+  fetchingTopData 
 } from '../utils/spotify';
 
 import { Loading } from '../components/loading';
@@ -140,8 +140,9 @@ const Auth = () => {
                 <Error error={error} />
             </div>
         )
-    } else if (playback === undefined || authData === undefined || profile === undefined || playlists === undefined || !verifyTopData(top) || top === undefined) {
+    } else if (authData === undefined || profile === undefined || playlists === undefined || fetchingTopData(top) || top === undefined) {
         // render a spinner
+        // console.log(fetchingTopData(top))
         return (
             <div className="min-h-screen flex flex-col justify-center items-center">
                 <SEO title="Loading..."/>
@@ -150,6 +151,7 @@ const Auth = () => {
         )
     } else {
         // render profile page
+        //console.log(fetchingTopData(top))
         return (
             <div className="flex flex-col items-center justify-start bg-white min-h-screen">
             <SEO title={`${profile.display_name} | Profile`} />
@@ -177,7 +179,7 @@ const Auth = () => {
                  </p>
                </div>
                   {
-                    playback.is_playing ? 
+                    playback?.is_playing ? 
                     <div className="text-center animate-pulse text-xs px-2 py-1 text-green-600 bg-green-200 border-2 border-green-600 rounded-full">
                         Listening
                     </div> : 
@@ -198,7 +200,7 @@ const Auth = () => {
                 <div className="flex flex-col justify-start">
                   <p className="text-2xl font-bold md:text-3xl">Currently listening to: </p>
                   {
-                    playback.is_playing ?
+                    playback ?
                       <>
                       <div className="flex flex-row items-center my-2">
                             <img
@@ -257,9 +259,9 @@ const Auth = () => {
                       <table>
                           <tbody>
                           {
-                            top.artists[artistTimeFrame].items.map((a, i) => {
+                            top.artists[artistTimeFrame]?.items.map((a, i) => {
                                 return (
-                                    <tr className="md:text-lg my-2">
+                                    <tr className="md:text-lg my-2" key={i}>
                                       <td className="font-bold text-2xl p-1">
                                         {i+1}.
                                       </td>
@@ -303,9 +305,9 @@ const Auth = () => {
                         <table>
                           <tbody>
                           {
-                            top.tracks[trackTimeFrame].items.map((t, i) => {
+                            top.tracks[trackTimeFrame]?.items.map((t, i) => {
                                 return (
-                                    <tr className="text-base md:text-lg">
+                                    <tr className="text-base md:text-lg" key={i}>
                                       <td className="font-bold text-2xl p-1">
                                         {i+1}.
                                       </td>

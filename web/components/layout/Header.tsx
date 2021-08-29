@@ -18,10 +18,10 @@ export const Header: FC = () => {
     }
 
     return (
-        <header className="h-8 items-center">
+        <header className="items-center text-sm md:text-base">
             {
                 profile ?
-                <p className="mb-0">Logged in as{' '}<span className="font-bold">{profile.display_name}</span>{' | '}
+                <p className="mb-0"><span className="font-bold">{profile.display_name}</span>{' | '}
                     <span className="text-blue-600 cursor-pointer" onClick={clearCookies}>Logout</span>
                 </p>
                 : <div></div>

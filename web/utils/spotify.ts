@@ -80,7 +80,7 @@ export interface CurrentSongWithAnalysis extends SpotifyApi.CurrentlyPlayingObje
 
 export const currentPlayback = (
     authData: AuthData, 
-    dataSetter: Dispatch<SetStateAction<CurrentSongWithAnalysis | undefined >>, 
+    dataSetter: Dispatch<SetStateAction<CurrentSongWithAnalysis | undefined>>, 
     setError: Function
 ) => {
     const hdrs = {
@@ -89,12 +89,13 @@ export const currentPlayback = (
     }
     axios.get('https://api.spotify.com/v1/me/player/currently-playing', {headers: hdrs})
     .then((res: AxiosResponse) => {
-        let data: SpotifyApi.CurrentlyPlayingObject = res.data
-        if (res.data === "") {
+        let data: SpotifyApi.CurrentlyPlayingObject | string = res.data
+        if (typeof(data) === "string") {
             dataSetter(undefined)
-        } else if(res.data.item.type !== "track") {
+        } else if (data.currently_playing_type !== "track") {
             dataSetter(undefined)
         } else {
+            // dataSetter(undefined)
             let current = res.data
             axios.get(`https://api.spotify.com/v1/audio-features/${current.item.id}`, {headers: hdrs})
             .then(res => {
@@ -304,17 +305,8 @@ export const fetchTopData = (
     })
 }
 
-export const verifyTopData = (topData: TopData | undefined) => {
+export const fetchingTopData = (topData: TopData | undefined) => {
     if(topData === undefined) {
-        return false
-    } else {
-      return (
-          topData.artists.short_term !== undefined &&
-          topData.artists.medium_term !== undefined &&
-          topData.artists.long_term !== undefined &&
-          topData.tracks.short_term !== undefined &&
-          topData.tracks.medium_term !== undefined &&
-          topData.tracks.long_term !== undefined
-        )
+        return true
     }
 }
