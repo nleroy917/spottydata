@@ -1,6 +1,6 @@
 module.exports = {
     images: {
-      disableStaticImages: true,
+      disableStaticImages: false,
       domains: [
           'i.scdn.co', 
           'dailymix-images.scdn.co',

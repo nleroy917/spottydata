@@ -25,8 +25,8 @@
     "index.d.ts",
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "pages/auth.js"  ],
+    "**/*.tsx", 
+    "pages/auth.js"  ],
   "exclude": [
     "node_modules"
   ]

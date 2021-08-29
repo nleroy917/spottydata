@@ -8,8 +8,6 @@ import {
 import axios, { AxiosResponse } from 'axios'
 
 import landing_card from '../public/landing_card.png'
-import artist_map from '../public/artist_map.png'
-import genre_chart from '../public/genres.png'
 
 // construct log in link
 const base_url =  'https://accounts.spotify.com/authorize?'
