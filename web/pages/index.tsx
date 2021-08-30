@@ -87,7 +87,7 @@ export default function Home() {
           </div>
           <div className="w-11/12 my-4 flex flex-col justify-center items-center md:items-start">
             <p className="md:w-7/12 mb-2 text-sm md:text-base text-center md:text-left">
-              Spottydata is a <span className="font-bold text-green-500">Spotify profile analysis tool.</span> Spotty will analyze all of the music, artists, and albums across all playlists on your Spotify profile and give you rich insights into the genres you listen to, how frequently your facorits artsits collaborate, and the audio features of your music. Click below to get started!
+              Spottydata is a <span className="font-bold text-green-500">Spotify profile analysis tool.</span> Spotty will analyze all of the music, artists, and albums across all playlists on your Spotify profile and give you rich insights into the genres you listen to, how frequently your favorite artists collaborate, as well as a look at the audio features of your music. Click below to get started!
             </p>
             <div>
               <Link href={authorize_url}>
