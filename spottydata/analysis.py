@@ -29,6 +29,10 @@ class Analyzer:
         """Groups a list into a list of subllists of length n"""
         return [list[i:i+n] for i in range(0, len(list), n)]
     
+    def _filter_items(self, items: list) -> list:
+        """Filter out None objects from a list"""
+        return [i for i in items if i is not None]
+    
     def user_playlists(self, is_author: bool = False) -> list[dict]:
         """Get list of user's playlists - iterate until all are fetched"""
         
@@ -118,7 +122,7 @@ class Analyzer:
         """
         Use the Spotify API to fetch analysis for a list of tracks
         """
-        track_ids = [t['id'] for t in tracks]
+        track_ids = self._filter_items([t['id'] for t in tracks])
         
         # tracks can only be analyzed in groups of 100
         # so we must grouup them
