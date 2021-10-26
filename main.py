@@ -21,6 +21,9 @@ def analyze_profile(request: Request) -> dict:
             tracks[i]['playlist'] = playlist
         all_tracks += tracks
     
+    # remove None objects from the begining.
+    all_tracks = az._filter_items(all_tracks)
+    
     # set extract_tracks flag to False to keep playlist data
     all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=False)
     
