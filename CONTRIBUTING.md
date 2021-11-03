@@ -21,12 +21,12 @@ Both the python api and the React frontend have specific environment variables t
 2. You will need a `.env` file inside `web/` (That is `web/.env`)
 3. You can choose to create a python virtual environment or not - this is optional
 4. Run `pip install -r requirements.txt`
-5. `cd` into `web/` and run `npm install`
+5. `cd` into `web/` and run `yarn install`
 6. From the root of the repository set an environment variable `FLASK_ENV=development` (**Windows:** `set FLASK_ENV=development`, **MacOS:** `export FLASK_ENV=development`)
 7. **Start the development API** by running `python api.py`
 8. `cd` into `web/`
-9. **Install** the node modules by running `npm install`
-10. **Start the UI** by running `npm start`
+9. **Install** the node modules by running `yarn install`
+10. **Start the UI** by running `yarn start`
 
 # Coding Standards
 I don't really have any preference for coding paradigms, but I will ask that if you contribute to the frontend in any capacity please only use hooks and functional components for the react code.

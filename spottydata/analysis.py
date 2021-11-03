@@ -384,6 +384,8 @@ if __name__ == "__main__":
     import os
     import time
     import psutil
+    import sys
+    import json
     load_dotenv()
     
     app_settings = {
@@ -421,6 +423,13 @@ if __name__ == "__main__":
     stop = time.time()
     print(f" done. ({round(stop-start,2)}s)")
     
+    # simulate large track list
+    print(f"-----> Num tracks (pre-sim): {len(all_tracks_cleaned)}")
+    all_tracks_cleaned += all_tracks_cleaned
+    all_tracks_cleaned += all_tracks_cleaned
+    all_tracks_cleaned += all_tracks_cleaned
+    print(f"-----> Num tracks (post-sim): {len(all_tracks_cleaned)}")
+
     start = time.time()
     print("-----> Gathering artists...", end="")
     # use newly cleaned tracks to gather artist
@@ -459,17 +468,30 @@ if __name__ == "__main__":
     top_genres = az.genre_counts(all_artists, n=5)
     key_counts = az.key_counts(t['analysis'] for t in all_tracks_cleaned)
     calendar_coordinates = az.song_calendar(all_tracks_cleaned)
-    feature_data = az.playlist_features(all_tracks_cleaned)
+    playlist_feature_data = az.playlist_features(all_tracks_cleaned)
     stop = time.time()
     print(f" done. ({round(stop-start,2)}s)")
     
     # timer
     STOP = time.time()
     MEM_FOOTPRINT = psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2
+    RES_SIZE = sys.getsizeof(json.dumps({
+		"collaboration_matrix": collaboration_matrix,
+  		"artist_map": artist_map,
+        "calendar_coordinates": calendar_coordinates,
+        "top_genres": [{
+            "id": g[0],
+            "label": g[0],
+            "value": g[1]
+        } for g in top_genres],
+        "key_counts": key_counts,
+        "feature_data": playlist_feature_data
+	})) * 1e-6
           
     print(f"-----> Done.")
     print(f"-----> Execution time: {round(STOP-START, 2)} sec")
     print(f"-----> Memory footprint: {round(MEM_FOOTPRINT,2)} mb")
+    print(f"-----> Response size: {round(RES_SIZE,2)} mb")
     
     
 
