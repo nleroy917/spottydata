@@ -19,6 +19,7 @@ The Spotify API requires [OAuth 2.0 authentication](https://oauth.net/articles/a
 In the `web/` directory, you can run:
 
 `yarn install`
+
 `yarn dev`
 
 Runs the app in the development mode.  
