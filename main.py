@@ -14,7 +14,7 @@ def analyze_profile(request: Request) -> dict:
     # get all tracks
     all_tracks = []
     for playlist in playlists:
-        tracks = az.playlist_tracks(playlist['id'])
+        tracks = az.playlist_tracks(playlist['id'], remove_local=True)
         # append the playlist meta data
         # to the track objects
         for i in range(len(tracks)):
