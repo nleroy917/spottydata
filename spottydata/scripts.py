@@ -9,8 +9,8 @@ load_dotenv()
 def run_analysis(all_tracks_cleaned):
     # timer
     START = time.time()
-    print(f"\t-----> Starting.")
-    print(f"\t-----> Total tracks: {len(all_tracks_cleaned)}")
+    print(f"-----> Starting.")
+    print(f"-----> Total tracks: {len(all_tracks_cleaned)}")
 
     start = time.time()
     print("\t-----> Gathering artists...", end="")
