@@ -1,3 +1,6 @@
+import sys
+import json
+
 def key_int_to_str(key: int) -> str:
     """
     Convert spotify's 'pitch class notation' to
@@ -25,3 +28,15 @@ def mode_int_to_mode(key: int) -> str:
         "1": "Major"
     }
     return switcher.get(str(key), "No mode")
+
+def meta_analysis(analysis: dict) -> None:
+    """
+    Generate a meta-profile of the analysis package
+    with data on size and memory footprint
+    """
+    for feature in analysis:
+        size = sys.getsizeof(json.dumps(analysis[feature])) * 1e-6
+        print(f"-----> Size of {feature}: {size} MB")
+    
+    total_size = sys.getsizeof(json.dumps(analysis)) * 1e-6
+    print(f"-----> Total response size: {total_size}")
