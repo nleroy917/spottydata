@@ -67,9 +67,9 @@ class Analyzer:
     def _clean_playlist_tracks(self, tracks: list[dict], extract_tracks: bool = True) -> list[dict]:
         """Quick method to clean a list of tracks return from a playlist track request"""
         if extract_tracks:
-            tracks = [track['track'] for track in tracks if track['track'] is not None and track['track']['id'] is not None]
+            tracks = [track['track'] for track in tracks if track['track'] is not None]
         else:
-            tracks = [track for track in tracks if track['track'] is not None and track['track']['id'] is not None]
+            tracks = [track for track in tracks if track['track'] is not None]
         return tracks
     
     def artists_from_tracks(self, tracks: list[dict]) -> list[dict]:
@@ -426,7 +426,7 @@ if __name__ == "__main__":
     # get all tracks
     all_tracks = []
     for playlist in playlists:
-        tracks = az.playlist_tracks(playlist['id'])
+        tracks = az.playlist_tracks(playlist['id'], remove_local=True)
         # append the playlist meta data
         # to the track objects
         for i in range(len(tracks)):
@@ -436,7 +436,7 @@ if __name__ == "__main__":
     print(f" done. ({round(stop-start,2)}s)")
     
     start = time.time()
-    print("-----> Cleaning tracks...", end="")
+    print(f"-----> Cleaning tracks... (n={len(all_tracks)})", end="")
     # set extract_tracks flag to False to keep playlist data
     all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=False)
     stop = time.time()
