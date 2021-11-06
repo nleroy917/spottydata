@@ -49,7 +49,7 @@ class Analyzer:
         else:
             return all_playlists
 
-    def playlist_tracks(self, id: str) -> list[dict]:
+    def playlist_tracks(self, id: str, remove_local=True) -> list[dict]:
         """Get a list of tracks in a playlist -- iterate until all are fetched"""
         all_tracks = []
         tracks = self._sp.playlist_tracks(id, limit=100)
@@ -58,15 +58,18 @@ class Analyzer:
         while tracks['next']:
             tracks = self._sp.next(tracks)
             all_tracks += tracks['items']
-            
+        
+        if remove_local:
+            all_tracks = [t for t in all_tracks if t['is_local'] is False]
+
         return all_tracks
     
     def _clean_playlist_tracks(self, tracks: list[dict], extract_tracks: bool = True) -> list[dict]:
         """Quick method to clean a list of tracks return from a playlist track request"""
         if extract_tracks:
-            tracks = [track['track'] for track in tracks if track['track'] is not None]
+            tracks = [track['track'] for track in tracks if track['track'] is not None and track['track']['id'] is not None]
         else:
-            tracks = [track for track in tracks if track['track'] is not None]
+            tracks = [track for track in tracks if track['track'] is not None and track['track']['id'] is not None]
         return tracks
     
     def artists_from_tracks(self, tracks: list[dict]) -> list[dict]:
