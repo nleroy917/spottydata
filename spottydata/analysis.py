@@ -85,7 +85,7 @@ class Analyzer:
                 all_artists += artists['artists']
             return all_artists
         else:
-            return self._sp.artists(artist_ids)
+            return self._sp.artists(artist_ids)['artists']
     
     def genres_from_artists(self, artists: list[dict]) -> list[dict]:
         all_genres = []
@@ -438,12 +438,6 @@ if __name__ == "__main__":
     all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=False)
     stop = time.time()
     print(f" done. ({round(stop-start,2)}s)")
-    
-    # simulate large track list
-    print(f"-----> Num tracks (pre-sim): {len(all_tracks_cleaned)}")
-    all_tracks_cleaned += all_tracks_cleaned
-    all_tracks_cleaned += all_tracks_cleaned
-    print(f"-----> Num tracks (post-sim): {len(all_tracks_cleaned)}")
 
     start = time.time()
     print("-----> Gathering artists...", end="")

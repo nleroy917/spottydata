@@ -36,7 +36,7 @@ def meta_analysis(analysis: dict) -> None:
     """
     for feature in analysis:
         size = sys.getsizeof(json.dumps(analysis[feature])) * 1e-6
-        print(f"-----> Size of {feature}: {size} MB")
+        print(f"-----> Size of {feature}: {round(size, 4)} MB")
     
     total_size = sys.getsizeof(json.dumps(analysis)) * 1e-6
-    print(f"-----> Total response size: {total_size}")
+    print(f"-----> Total response size: {round(total_size, 4)}")
