@@ -85,7 +85,7 @@ class Analyzer:
                 all_artists += artists['artists']
             return all_artists
         else:
-            return self._sp.artists(artist_ids)
+            return self._sp.artists(artist_ids)['artists']
     
     def genres_from_artists(self, artists: list[dict]) -> list[dict]:
         all_genres = []
@@ -329,6 +329,16 @@ class Analyzer:
         swarm plot. The data structure isn't identical to the 
         one required for the plot, but allows dynamic manipulation
         on the front-end for interesting visuals.
+
+        (Note: Nov. 6th, 2021 -- I profiled the analysis package,
+                                 and the data here makes up about
+                                 99% of the memory footpring of the
+                                 package. Completely removing the
+                                 playlist metadata doesn't break
+                                 the UI so it is going to be removed
+                                 here. As well, the track meta-data
+                                 needs to be minimized.
+        )
         
         :param: - tracks - a list of playlist track objects that
                            contain the playlist meta-data and the
@@ -353,8 +363,11 @@ class Analyzer:
                     "speechiness": track['analysis']['speechiness'],
                     "tempo": track['analysis']['tempo'],
                     "valence": track['analysis']['valence'],
-                    "track": track['track'],
-                    "playlist": track['playlist']
+                    # only extract out necessary meta-data
+                    # to minimize size of data structure
+                    "track": {
+                        "name": track["track"]["name"]
+                    },
                 }]
             # otherwise we are already creating a list of datapoints
             # for a certain playlist so just append to it
@@ -369,8 +382,11 @@ class Analyzer:
                     "speechiness": track['analysis']['speechiness'],
                     "tempo": track['analysis']['tempo'],
                     "valence": track['analysis']['valence'],
-                    "track": track['track'],
-                    "playlist": track['playlist']
+                    # only extract out necessary meta-data
+                    # to minimize size of data structure
+                    "track": {
+                        "name": track["track"]["name"]
+                    },
                 })
         
         return feature_data
@@ -422,13 +438,6 @@ if __name__ == "__main__":
     all_tracks_cleaned = az._clean_playlist_tracks(all_tracks, extract_tracks=False)
     stop = time.time()
     print(f" done. ({round(stop-start,2)}s)")
-    
-    # simulate large track list
-    print(f"-----> Num tracks (pre-sim): {len(all_tracks_cleaned)}")
-    all_tracks_cleaned += all_tracks_cleaned
-    all_tracks_cleaned += all_tracks_cleaned
-    all_tracks_cleaned += all_tracks_cleaned
-    print(f"-----> Num tracks (post-sim): {len(all_tracks_cleaned)}")
 
     start = time.time()
     print("-----> Gathering artists...", end="")
@@ -472,10 +481,7 @@ if __name__ == "__main__":
     stop = time.time()
     print(f" done. ({round(stop-start,2)}s)")
     
-    # timer
-    STOP = time.time()
-    MEM_FOOTPRINT = psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2
-    RES_SIZE = sys.getsizeof(json.dumps({
+    ANALYSIS_PAYLOAD = {
 		"collaboration_matrix": collaboration_matrix,
   		"artist_map": artist_map,
         "calendar_coordinates": calendar_coordinates,
@@ -486,12 +492,17 @@ if __name__ == "__main__":
         } for g in top_genres],
         "key_counts": key_counts,
         "feature_data": playlist_feature_data
-	})) * 1e-6
+	}
+
+    # timer
+    STOP = time.time()
+    MEM_FOOTPRINT = psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2
+    RES_SIZE = sys.getsizeof(json.dumps(ANALYSIS_PAYLOAD)) * 1e-6
           
     print(f"-----> Done.")
     print(f"-----> Execution time: {round(STOP-START, 2)} sec")
     print(f"-----> Memory footprint: {round(MEM_FOOTPRINT,2)} mb")
-    print(f"-----> Response size: {round(RES_SIZE,2)} mb")
+    meta_analysis(ANALYSIS_PAYLOAD)
     
     
 
