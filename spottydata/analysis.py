@@ -227,7 +227,7 @@ class Analyzer:
     
     def genre_counts(self, artists: list[dict], n: int = None) -> list[tuple]:
         """
-        Collect the genres from a lsit of artists,
+        Collect the genres from a list of artists,
         gather the genres and return a sorted list of
         tuples with counts for each genre.
         """
