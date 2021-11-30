@@ -7,7 +7,6 @@ import Link from "next/link";
 // helpers
 import { 
   currentPlayback, 
-  CurrentSongWithAnalysis, 
   fetchAccessToken,
   fetchPlaylists, 
   fetchProfile, 
@@ -15,7 +14,9 @@ import {
   keyCodeToKey, 
   modeKeyToMode, 
   TopData, 
-  fetchingTopData 
+  fetchingTopData, 
+  CurrentSongWithFeatures,
+  currentPlaybackAnalysis
 } from '../utils/spotify';
 
 import { Loading } from '../components/loading';
@@ -30,6 +31,9 @@ import {
 } from '../components/layout'
 import { AuthData } from '..';
 import { ErrorObject } from '../components/layout/Error';
+import { useInterval } from '../utils/useInterval';
+import { secondsToMinutesSeconds } from '../utils/_helpers';
+import { VisualizerCore } from '../components/visualizer';
 
 const Auth = () => {
     // create router object
@@ -65,12 +69,34 @@ const Auth = () => {
     const [authData, setAuthData] = useState<AuthData>(cookies['authData'] || undefined)
     const [profile, setProfile] = useState<SpotifyApi.UserObjectPublic | undefined>(undefined)
     const [playlists, setPlaylists] = useState<SpotifyApi.PlaylistObjectFull[] | undefined>(undefined)
-    const [playback, setPlayback] = useState<CurrentSongWithAnalysis | undefined>(undefined)
+    const [playback, setPlayback] = useState<CurrentSongWithFeatures | undefined>(undefined)
+    const [playbackAnalysis, setPlaybackAnalysis] = useState<SpotifyApi.AudioAnalysisResponse | undefined>(undefined)
     const [top, setTop] = useState<TopData | undefined>(undefined)
     const [artistTimeFrame, setArtistTimeFrame] = useState<string>('short_term')
     const [trackTimeFrame, setTrackTimeFrame] = useState<string>('short_term')
     const [loadingMessage, setLoadingMessage] = useState<string>("")
     const [error, setError] = useState<ErrorObject | undefined>(undefined)
+
+    /**
+     * Interval for playback
+     */
+    useInterval(() => {
+        // only fetch the playback when the
+        // authData has been acquired
+        if(authData !== undefined) {
+            currentPlayback(authData, setPlayback, setError)
+        }
+        // fetch audio analysis when playback 
+        // is acheived and we are playing audio on Spotify.
+        if(playback?.is_playing) {
+          currentPlaybackAnalysis(
+            authData,
+            setPlaybackAnalysis,
+            setError,
+            playback
+          )
+        }
+    }, 1000)
 
     /**
      * Drive access token fetching
@@ -121,15 +147,7 @@ const Auth = () => {
     useEffect(() => {
         if(authData !== undefined) {
             currentPlayback(authData, setPlayback, setError)
-        }
-        let playbackCycle = setInterval(() => {
-            if(authData !== undefined) {
-                currentPlayback(authData, setPlayback, setError)
-            }
-        }, 3000) // run every five seconds
-
-        // cleanup
-        return () => clearInterval(playbackCycle)
+        }  
     }, [authData])
 
     if(error) {
@@ -144,7 +162,7 @@ const Auth = () => {
         // render a spinner
         // console.log(fetchingTopData(top))
         return (
-            <div className="min-h-screen flex flex-col justify-center items-center">
+            <div className="flex flex-col items-center justify-center min-h-screen">
                 <SEO title="Loading..."/>
                 <Loading message={loadingMessage} />
             </div>
@@ -153,42 +171,42 @@ const Auth = () => {
         // render profile page
         //console.log(fetchingTopData(top))
         return (
-            <div className="flex flex-col items-center justify-start bg-white min-h-screen">
+            <div className="flex flex-col items-center justify-start min-h-screen bg-white">
             <SEO title={`${profile.display_name} | Profile`} />
-              <div className="h-40 md:h-64 w-full bg-gradient border-b border-black">
-                <div className="p-1 md:p-4 flex flex-row items-center justify-between">
+              <div className="w-full h-40 border-b border-black md:h-64 bg-gradient">
+                <div className="flex flex-row items-center justify-between p-1 md:p-4">
                     <Link href="/">
-                        <span className="cursor-pointer font-bold">← Home</span>
+                        <span className="font-bold cursor-pointer">← Home</span>
                     </Link>
                     <Header />
                 </div>
-                <p className="md:mt-4 md:ml-4 ml-1 mt-1 text-6xl md:text-9xl font-extrabold opacity-10 truncate overflow-clip">{profile.display_name}</p>
+                <p className="mt-1 ml-1 text-6xl font-extrabold truncate md:mt-4 md:ml-4 md:text-9xl opacity-10 overflow-clip">{profile.display_name}</p>
               </div>
-              <div className="mx-4 p-4 rounded-lg shadow-xl border-2 border-black -translate-y-20 md:-translate-y-1/4 bg-white w-11/12 md:max-w-screen-lg">
-               <div className="flex flex-row items-start justify-between mb-4 border-b border-gray-200 pb-4">
+              <div className="w-11/12 p-4 mx-4 -translate-y-20 bg-white border-2 border-black rounded-lg shadow-xl md:-translate-y-1/4 md:max-w-screen-lg">
+               <div className="flex flex-row items-start justify-between pb-4 mb-4 border-b border-gray-200">
                <div className="flex flex-row items-center">
                 <img 
-                   className="rounded-lg border-2 border-black shadow-md mr-4"
+                   className="mr-4 border-2 border-black rounded-lg shadow-md"
                    height={75}
                    width={75}
                    src={profile.images ? profile.images[0].url : ""}
                  />
-                 <p className="font-extrabold text-2xl md:text-4xl">
+                 <p className="text-2xl font-extrabold md:text-4xl">
                      Welcome,{' '}
                      <span className="text-green-500">{profile.display_name}</span>
                  </p>
                </div>
                   {
                     playback?.is_playing ? 
-                    <div className="text-center animate-pulse text-xs px-2 py-1 text-green-600 bg-green-200 border-2 border-green-600 rounded-full">
+                    <div className="px-2 py-1 text-xs text-center text-green-600 bg-green-200 border-2 border-green-600 rounded-full animate-pulse">
                         Listening
                     </div> : 
-                    <span className="text-center text-xs px-2 py-1 bg-gray-200 border-2 border-black rounded-full">
+                    <span className="px-2 py-1 text-xs text-center bg-gray-200 border-2 border-black rounded-full">
                         Paused
                     </span>
                   }
                </div>
-               <div className="flex flex-row flex-wrap items-start justify-start mb-4 border-b border-gray-200 pb-4 font-bold text-lg md:text-xl">
+               <div className="flex flex-row flex-wrap items-start justify-start pb-4 mb-4 text-lg font-bold border-b border-gray-200 md:text-xl">
                   <p className="mr-4">Followers:{' '}<span className="text-purple-500">{profile.followers ? profile.followers.total : '0'}</span></p>
                   <p className="mr-4">Playlists:{' '}<span className="text-red-500">{playlists.length}</span></p>
                   <p className="mr-4">Total tracks:{' '}
@@ -204,49 +222,70 @@ const Auth = () => {
                       <>
                       <div className="flex flex-row items-center my-2">
                             <img
-                                className="rounded-lg border-2 border-black shadow-md"
+                                className="border-2 border-black rounded-lg shadow-md"
                                 height={75}
                                 width={75}
                                 src={playback.item.album.images[0].url}
                             />
                            <div className="ml-2">
-                            <p className="text-xl md:text-2xl font-semibold">{playback.item.name}</p>
+                            <p className="text-xl font-semibold md:text-2xl">{playback.item.name}</p>
                             <p className="text-base italic">{playback.item.artists[0].name}</p>
                            </div>
                           </div>
-                          <div className="my-2 flex flex-col md:flex-row text-lg md:text-2xl">
-                              <p>Song Key: <span className="mr-4 font-bold text-blue-500">{keyCodeToKey(playback.analysis.key)}</span></p>
-                              <p>Tempo: <span className="mr-4 font-bold text-green-500">{Math.round(playback.analysis.tempo)} bpm</span></p>
-                              <p>Mode: <span className="mr-4 font-bold text-red-500">{modeKeyToMode(playback.analysis.mode)}</span></p>
+                          <div className="flex flex-col my-2 text-lg md:flex-row md:text-2xl">
+                              <p>Song Key: <span className="mr-4 font-bold text-blue-500">{keyCodeToKey(playback.features.key)}</span></p>
+                              <p>Tempo: <span className="mr-4 font-bold text-green-500">{Math.round(playback.features.tempo)} bpm</span></p>
+                              <p>Mode: <span className="mr-4 font-bold text-red-500">{modeKeyToMode(playback.features.mode)}</span></p>
                           </div>
+                          {
+                            playback.progress_ms ?
+                            <div>
+                              <div className="flex flex-row items-center">
+                                <span className="mr-2 text-base text-gray-400">
+                                  {secondsToMinutesSeconds(playback.progress_ms/1000)}
+                                </span>
+                                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                  <div className="bg-green-400 h-2.5 rounded-full" style={{width: `${(playback.progress_ms/playback.item.duration_ms*100)}%`}}></div>
+                                </div>
+                                <span className="ml-2 text-base text-gray-400">
+                                  {secondsToMinutesSeconds(playback.item.duration_ms/1000)}
+                                </span>
+                              </div>
+                              <VisualizerCore
+                                playback={playback}
+                                analysis={playbackAnalysis}
+                              />
+                            </div>
+                            : <div></div>
+                          }
                       </>
                       :
-                      <div className="flex flex-col items-center justify-center p-4 my-2 text-center">
-                          <p className="text-2xl text-gray-300 font-semibold">
+                      <div className="flex flex-col items-center justify-center p-4 my-6 text-center">
+                          <p className="text-2xl font-semibold text-gray-300">
                               No music playing{' '}<span className="opacity-50">💤</span>
                           </p>
-                          <p className="text-2xl text-gray-300 font-semibold">
+                          <p className="text-2xl font-semibold text-gray-300">
                             ...play something to see some analysis!
                           </p>
                       </div>
                   }
                 </div>
               </div>
-              <div className="-translate-y-20 md:-translate-y-24 w-11/12 md:max-w-screen-lg">
+              <div className="w-11/12 -translate-y-20 md:-translate-y-24 md:max-w-screen-lg">
                   <div
                     onClick={() => router.push("/analysis")}
-                    className="w-full cursor-pointer my-4 p-3 rounded-lg shadow-xl border-2 border-black bg-black text-white hover:bg-white hover:text-black transition-all"
+                    className="w-full p-3 my-4 text-white transition-all bg-black border-2 border-black rounded-lg shadow-xl cursor-pointer hover:border-green-400 hover:bg-white hover:text-green-400"
                   >
-                    <p className="font-bold text-2xl md:text-3xl text-center">Run full analysis →</p>
+                    <p className="text-2xl font-bold text-center md:text-3xl">Run full analysis →</p>
                   </div>
                 </div>
-                <div className="-translate-y-20 md:-translate-y-24 w-11/12 md:max-w-screen-lg">
-                  <div className="flex flex-col md:flex-row flex-wrap justify-start md:justify-between items-center md:items-stretch">
-                    <div className="w-full p-4 md:flex-1 md:mr-2 my-2 md:my-0 rounded-lg border-2 border-black shadow-xl bg-white">
-                      <div className="flex flex-row justify-between items-center border-b pb-2">
-                        <p className="font-bold text-2xl md:text-3xl">Top artists</p>
+                <div className="w-11/12 -translate-y-20 md:-translate-y-24 md:max-w-screen-lg">
+                  <div className="flex flex-col flex-wrap items-center justify-start md:flex-row md:justify-between md:items-stretch">
+                    <div className="w-full p-4 my-2 bg-white border-2 border-black rounded-lg shadow-xl md:flex-1 md:mr-2 md:my-0">
+                      <div className="flex flex-row items-center justify-between pb-2 border-b">
+                        <p className="text-2xl font-bold md:text-3xl">Top artists</p>
                         <select
-                            className="text-xl p-1 border-2 border-black rounded-lg cursor-pointer shadow-sm"
+                            className="p-1 text-xl border-2 border-black rounded-lg shadow-sm cursor-pointer"
                             onChange={e => {
                                 setArtistTimeFrame(e.target.value)
                             }}
@@ -261,13 +300,13 @@ const Auth = () => {
                           {
                             top.artists[artistTimeFrame]?.items.map((a, i) => {
                                 return (
-                                    <tr className="md:text-lg my-2" key={i}>
-                                      <td className="font-bold text-2xl p-1">
+                                    <tr className="my-2 md:text-lg" key={i}>
+                                      <td className="p-1 text-2xl font-bold">
                                         {i+1}.
                                       </td>
-                                      <td className="m-2 p-1">
+                                      <td className="p-1 m-2">
                                         <img
-                                           className="rounded-md border border-black"
+                                           className="border border-black rounded-md"
                                            src={a.images[0].url}
                                            style={{
                                                objectFit: 'cover',
@@ -288,11 +327,11 @@ const Auth = () => {
                           </tbody>
                         </table>
                     </div>
-                    <div className="w-full p-4 md:flex-1 md:ml-2 my-2 md:my-0 rounded-lg border-2 border-black shadow-xl bg-white">
-                      <div className="flex flex-row justify-between items-center border-b pb-2">
-                        <p className="font-bold text-2xl md:text-3xl">Top Songs</p>
+                    <div className="w-full p-4 my-2 bg-white border-2 border-black rounded-lg shadow-xl md:flex-1 md:ml-2 md:my-0">
+                      <div className="flex flex-row items-center justify-between pb-2 border-b">
+                        <p className="text-2xl font-bold md:text-3xl">Top Songs</p>
                         <select
-                            className="text-xl p-1 border-2 border-black rounded-lg cursor-pointer shadow-sm"
+                            className="p-1 text-xl border-2 border-black rounded-lg shadow-sm cursor-pointer"
                             onChange={e => {
                                 setTrackTimeFrame(e.target.value)
                             }}
@@ -308,14 +347,14 @@ const Auth = () => {
                             top.tracks[trackTimeFrame]?.items.map((t, i) => {
                                 return (
                                     <tr className="text-base md:text-lg" key={i}>
-                                      <td className="font-bold text-2xl p-1">
+                                      <td className="p-1 text-2xl font-bold">
                                         {i+1}.
                                       </td>
-                                      <td className="m-2 p-1" style={{
+                                      <td className="p-1 m-2" style={{
                                           minWidth: '50px'
                                       }}>
                                         <img
-                                           className="rounded-md border border-black"
+                                           className="border border-black rounded-md"
                                            src={t.album.images[0].url}
                                            style={{
                                                objectFit: 'cover',
@@ -324,11 +363,11 @@ const Auth = () => {
                                            }}
                                         />
                                       </td>
-                                      <td className="max-w-min p-1">
+                                      <td className="p-1 max-w-min">
                                           <p className="mb-0 text-base">
                                             {t.name}
                                           </p>
-                                          <p className="text-gray-500 italic text-xs md:text-base">
+                                          <p className="text-xs italic text-gray-500 md:text-base">
                                             {t.artists[0].name}
                                           </p>
                                       </td>

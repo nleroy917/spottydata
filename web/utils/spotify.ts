@@ -3,6 +3,13 @@ import axios, { AxiosAdapter, AxiosResponse } from 'axios'
 import { AuthData, AuthPayload } from '..';
 import { ErrorObject } from '../components/layout/Error';
 
+const _makeHeaders = (authData: AuthData) => {
+    return ({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + authData.access_token
+    })
+}
+
 export const fetchAccessToken = (
     authCode: string,
     clientID: string,
@@ -51,12 +58,8 @@ export const fetchProfile = (
     setError: Dispatch<SetStateAction<ErrorObject | undefined>>, 
     setCookie: Function
 ) => {
-    const hdrs = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + authData.access_token
-    }
 
-    axios.get('https://api.spotify.com/v1/me', {headers: hdrs})
+    axios.get('https://api.spotify.com/v1/me', {headers: _makeHeaders(authData)})
     .then(res => {
         setCookie(
         'profile',
@@ -73,41 +76,66 @@ export const fetchProfile = (
     })
 }
 
-export interface CurrentSongWithAnalysis extends SpotifyApi.CurrentlyPlayingObject{
+export interface CurrentSongWithFeatures extends SpotifyApi.CurrentlyPlayingObject{
     item: SpotifyApi.TrackObjectFull
-    analysis: SpotifyApi.AudioFeaturesObject
+    features: SpotifyApi.AudioFeaturesObject
 }
 
 export const currentPlayback = (
     authData: AuthData, 
-    dataSetter: Dispatch<SetStateAction<CurrentSongWithAnalysis | undefined>>, 
+    dataSetter: Dispatch<SetStateAction<CurrentSongWithFeatures | undefined>>, 
     setError: Function
 ) => {
     const hdrs = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + authData.access_token
     }
-    axios.get('https://api.spotify.com/v1/me/player/currently-playing', {headers: hdrs})
+    axios.get(`/api/now-playing?access-token=${authData.access_token}`)
     .then((res: AxiosResponse) => {
         let data: SpotifyApi.CurrentlyPlayingObject | string = res.data
         if (typeof(data) === "string") {
             dataSetter(undefined)
+
+        // skip playing a podcast or anything else.
         } else if (data.currently_playing_type !== "track") {
             dataSetter(undefined)
+
+        // if playing a track, get the analysis and features.
         } else {
-            // dataSetter(undefined)
+            // get audio features
             let current = res.data
-            axios.get(`https://api.spotify.com/v1/audio-features/${current.item.id}`, {headers: hdrs})
+            axios.get(`https://api.spotify.com/v1/audio-features/${current.item.id}`, {headers: _makeHeaders(authData)})
             .then(res => {
                 dataSetter({
                     ...current,
-                    analysis: res.data
+                    features: res.data
                 })
             })
             .catch(err => {
                 setError(err)
             })
         }
+    })
+    .catch(err => {
+        setError(err)
+    })
+}
+
+export const currentPlaybackAnalysis = (
+    authData: AuthData,
+    dataSetter: Dispatch<SetStateAction<SpotifyApi.AudioAnalysisResponse | undefined>>,
+    setError: Dispatch<SetStateAction<ErrorObject | undefined>>,
+    playback: CurrentSongWithFeatures
+) => {
+
+    const hdrs = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + authData.access_token
+    }
+
+    axios.get(`https://api.spotify.com/v1/audio-analysis/${playback.item.id}`, {headers: _makeHeaders(authData)})
+    .then(res => {
+        dataSetter(res.data)
     })
     .catch(err => {
         setError(err)
@@ -247,10 +275,7 @@ export const fetchTopData = (
         tracks: {}
     }
 
-    const hdrs = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + authData.access_token
-    }
+    const hdrs = _makeHeaders(authData)
 
     // get top artist data
     axios.get('https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=10', {headers: hdrs})
