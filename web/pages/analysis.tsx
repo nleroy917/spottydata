@@ -78,19 +78,19 @@ export default function Analysis() {
         return <Error error={error} />
     } else if (authData === undefined || analysis === undefined || profile === undefined) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center min-h-screen">
               <Loading message="Analyzing profile..." />
             </div>
         )
     } else {
         return (
-            <div className="bg-white min-h-screen ">
+            <div className="min-h-screen bg-white ">
             <SEO title={`${profile.display_name} | Analysis`} />
-             <div className="w-full bg-gradient flex flex-col items-center justify-start border-b border-black h-56">
+             <div className="flex flex-col items-center justify-start w-full h-56 border-b border-black bg-gradient">
               <div className="w-11/12 md:max-w-screen-xl">
-                <div className="flex flex-row justify-between items-start w-full py-2">
+                <div className="flex flex-row items-start justify-between w-full py-2">
                     <button
-                        className="rounded-lg bg-black font-bold text-white text-bold text-sm md:text-base py-1 md:py-2 px-2 md:px-4 hover:bg-white hover:text-black border-2 border-black transition-all"
+                        className="px-2 py-1 text-sm font-bold text-white transition-all bg-black border-2 border-black rounded-lg text-bold md:text-base md:py-2 md:px-4 hover:bg-white hover:text-black"
                         onClick={() => router.push("/auth")}
                     >
                         Back
@@ -98,16 +98,16 @@ export default function Analysis() {
                     <Header />
                 </div>
                 <div className="w-full my-2">
-                  <p className="font-extrabold text-4xl md:text-7xl">
+                  <p className="text-4xl font-extrabold md:text-7xl">
                     A look at{' '}<span className="text-green-500">{profile.display_name}'s</span>{' '}profile.
                   </p>
                 </div>
               </div>
              </div>
-             <div className="w-full flex flex-col items-center justify-start">
-               <div className="w-11/12 md:max-w-screen-xl -translate-y-8 md:-translate-y-12">
-                    <div className="flex flex-col md:flex-row md:justify-between flex-wrap">
-                      <div className="w-full md:w-1/3 md:mr-2">
+             <div className="flex flex-col items-center justify-start w-full">
+               <div className="w-11/12 -translate-y-8 md:max-w-screen-xl md:-translate-y-12">
+                    <div className="flex flex-col flex-wrap lg:flex-row lg:justify-between">
+                      <div className="w-full lg:w-1/3 lg:mr-2">
                         <ChartCard title="Artist Network" tooltip={toolTips.artistNetwork}>
                             <ArtistNetwork
                               collaborationMatrix={analysis.collaboration_matrix}
@@ -115,17 +115,17 @@ export default function Analysis() {
                             />
                         </ChartCard>
                       </div>
-                      <div className="w-full md:w-5/12 md:ml-2 md:flex-1">
-                        <ChartCard title="Track history" tooltip={toolTips.artistNetwork}>
+                      <div className="w-full lg:w-5/12 lg:ml-2 lg:flex-1">
+                        <ChartCard title="Track history" tooltip={toolTips.songCalendar}>
                             <SongCalendar
                               data={analysis.calendar_coordinates}
                             />
                         </ChartCard>
                       </div> 
                     </div>
-                    <div className="flex flex-col md:flex-row md:justify-between flex-wrap">
-                      <div className="w-full my-2 md:w-5/12 md:flex-1 md:mr-2">
-                          <ChartCard title="Key Chart">
+                    <div className="flex flex-col flex-wrap lg:flex-row lg:justify-between">
+                      <div className="w-full my-2 lg:w-5/12 lg:flex-1 lg:mr-2">
+                          <ChartCard title="Key Chart" tooltip={toolTips.keyChart}>
                             <KeyChart
                               data={Object.keys(analysis.key_counts).map(key => {
                                 return {
@@ -137,18 +137,18 @@ export default function Analysis() {
                             />
                           </ChartCard>
                         </div>
-                        <div className="w-full my-2 md:w-5/12 md:ml-2">
-                          <ChartCard title="Top Genres">
+                        <div className="w-full my-2 lg:w-5/12 lg:ml-2">
+                          <ChartCard title="Top Genres" tooltip={toolTips.genreChart}>
                             <GenrePieChart
                               data={analysis.top_genres}
                             />
                           </ChartCard>
                         </div>
                     </div>
-                    <div className="flex flex-col md:flex-row md:justify-between flex-wrap">
+                    <div className="flex flex-col flex-wrap md:flex-row md:justify-between">
                       <div className="w-full my-2">
-                          <ChartCard title="Playlist Features">
-                              <div className="flex flex-row justify-start items-center mb-4">
+                          <ChartCard title="Playlist Features" tooltip={toolTips.featureChart}>
+                              <div className="flex flex-col items-center justify-start mb-4 md:flex-row">
                                 <FeatureSelector setFeatureSelection={setFeatureSelection} />
                                 <PlaylistSelector
                                   defaultSelection={

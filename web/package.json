@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@types/react-select": "^4.0.17",
+    "@types/spotify-web-api-node": "^5.0.4",
     "autoprefixer": "^10.3.1",
     "postcss": "^8.3.6",
     "tailwindcss": "^2.2.7",

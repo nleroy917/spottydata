@@ -6,7 +6,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         SpotifyApi.setAccessToken(req.query['access-token'] as string)
         return new Promise<void>(resolve => {
             SpotifyApi.getMyCurrentPlayingTrack()
-            .then(qres => {
+            .then((qres) => {
                 res.status(200).json(qres.body)
                 res.end()
                 return resolve()

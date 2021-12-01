@@ -3,6 +3,36 @@ import { FC } from 'react'
 import { PlaylistFeatureAnalysisDatapoint } from '../../utils/analysis'
 import { chartColors } from './colors'
 
+function _generateScale(feature: string) {
+    let scale
+    switch(feature) {
+        case "tempo":
+            scale = { 
+                type: 'linear', 
+                min: 0, 
+                max: 200, 
+                reverse: false 
+            }
+            break
+        case "loudness":
+            scale = { 
+                type: 'linear', 
+                min: 0, 
+                max: 60, 
+                reverse: false 
+            }
+            break
+        default:
+            scale = { 
+                type: 'linear', 
+                min: 0, 
+                max: 200, 
+                reverse: false 
+            }
+    }
+    return scale
+}
+
 interface Props {
     data: PlaylistFeatureAnalysisDatapoint[],
     feature: string,
@@ -18,12 +48,6 @@ const PlaylistFeatures: FC<Props> = (props) => {
             colors={chartColors}
             value={feature}
             valueFormat=".2f"
-            valueScale={{ 
-                type: 'linear', 
-                min: 0, 
-                max: feature === "tempo" ? 200 : 1, 
-                reverse: false 
-            }}
             size={{ key: 'volume', values: [ 4, 20 ], sizes: [ 6, 20 ] }}
             forceStrength={4}
             useMesh={true}

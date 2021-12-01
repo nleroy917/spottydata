@@ -25,7 +25,10 @@ export const mapFeatureData = (
       data = data.concat(analysis.feature_data[p].map(dp => {
         return {
           id: `${dp.track.name}`,
-          [featureSelection]: dp[featureSelection],
+          // we need to check for loudness which is
+          // given as negative values... and the swarm plot
+          // can't handle negative values
+          [featureSelection]: featureSelection === "loudness" ? Math.abs(dp[featureSelection]) : dp[featureSelection],
           volume: 6,
           group: p
         }

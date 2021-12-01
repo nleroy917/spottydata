@@ -176,7 +176,7 @@ const Auth = () => {
               <div className="w-full h-40 border-b border-black md:h-64 bg-gradient">
                 <div className="flex flex-row items-center justify-between p-1 md:p-4">
                     <Link href="/">
-                        <span className="font-bold cursor-pointer">← Home</span>
+                        <span className="font-bold transition-all cursor-pointer hover:text-green-400">← Home</span>
                     </Link>
                     <Header />
                 </div>
@@ -251,10 +251,10 @@ const Auth = () => {
                                   {secondsToMinutesSeconds(playback.item.duration_ms/1000)}
                                 </span>
                               </div>
-                              <VisualizerCore
+                              {/* <VisualizerCore
                                 playback={playback}
                                 analysis={playbackAnalysis}
-                              />
+                              /> */}
                             </div>
                             : <div></div>
                           }

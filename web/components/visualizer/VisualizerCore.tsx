@@ -9,8 +9,11 @@ interface VisualizerCoreProps {
 
 export const VisualizerCore: FC<VisualizerCoreProps> = (props) => {
 
-    const [currentSegment, setCurrentSegment] = useState<Segment>(
-        findNearestSegment(props.playback.progress_ms, props.analysis.segments)
+    const [currentSegment, setCurrentSegment] = useState<Segment | undefined>(() => {
+        if(props.analysis) {
+           return findNearestSegment(props.playback.progress_ms, props.analysis.segments)
+        }
+    }  
     )
 
     useEffect(() => {

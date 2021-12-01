@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 import {
   SEO,
@@ -8,6 +9,7 @@ import {
 import axios, { AxiosResponse } from 'axios'
 
 import landing_card from '../public/landing_card.png'
+import { useRouter } from 'next/router'
 
 // construct log in link
 const base_url =  'https://accounts.spotify.com/authorize?'
@@ -17,7 +19,9 @@ const payload = {
 	response_type: 'code',
 	scope: 'playlist-read-private playlist-read-collaborative user-top-read user-library-read user-read-playback-state user-read-recently-played',
 	redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI,
-	show_dialog: true
+  // show dialog if inside the development environment
+  // for debugging purposes.
+	show_dialog: process.env.NODE_ENV === "development"
 }
 
 // convert payload to query string
@@ -27,7 +31,9 @@ const authorize_url = base_url + qs
 
 export default function Home() {
 
-  const [showNotice, setShowNotice] = useState<boolean>(true)
+  const router = useRouter();
+
+  const [showNotice, setShowNotice] = useState<boolean>(false)
   const [starCount, setStartCount] = useState<number>(0)
 
   useEffect(() => {
@@ -57,31 +63,40 @@ export default function Home() {
           </button>
         </div>
       <SEO />
-      <div className="fixed top-0 flex flex-row items-center justify-between w-full px-4 py-4 xs:px-0 md:max-w-screen-xl">
-        <div className="flex flex-row items-center">
-          <div>
+      <main className="w-11/12 md:max-w-screen-xl">
+      <div className="flex flex-row items-center justify-center w-full lg:justify-start xs:px-0 md:max-w-screen-xl">
+        <div className="flex flex-col items-center justify-start md:flex-row w-100">
+          <div className="flex flex-row items-center my-1 md:my-0">
             <Link href="https://github.com/nleroy917/spottydata">
               <button 
-                className="px-2 py-1 text-sm font-bold text-white transition-all bg-black border-2 border-black rounded-l-lg hover:text-green-400"
+                className="px-2 py-1 text-xs font-bold text-white transition-all bg-black border-2 border-black rounded-l-lg md:text-sm hover:text-green-400"
               >
                 ★ Star
               </button>
               </Link>
               <Link href="https://github.com/nleroy917/spottydata/stargazers">
               <button 
-                className="px-2 py-1 mr-2 text-sm font-bold transition-all border-2 border-l-0 border-black rounded-r-lg md:px-6 hover:text-green-400 hover:border-green-400"
+                className="px-2 py-1 mr-2 text-xs font-bold transition-all border-2 border-l-0 border-black rounded-r-lg md:text-sm md:px-6 hover:text-green-400 hover:border-green-400"
               >
                 {' '}{starCount}
               </button>
             </Link>
           </div>
-          </div>
-        <Header />
+          <button className="flex flex-row items-center px-2 py-1 transition-all bg-green-300 border-2 border-black rounded-lg hover:bg-green-500"
+            onClick={() => router.push("https://open.spotify.com/user/nleroy917?si=e902e8b373aa4a7d")}
+          >
+              <Image
+                src="/Spotify_Logo_CMYK_Black.png"
+                width="15px"
+                height="15px"
+              />
+              <span className="ml-2 text-xs font-bold md:text-sm">Follow me on Spotify</span>
+          </button>
+        </div>
       </div>
-      <main className="w-11/12 md:max-w-screen-xl">
-        <div className="flex flex-col items-start justify-center mb-12">
+        <div className="flex flex-col items-center justify-center mb-12 md:items-start">
           <div className="mb-1">
-            <p className="mb-4 text-6xl font-bold text-center lg:text-7xl">
+            <p className="mt-2 mb-4 text-4xl font-bold text-center sm:text-5xl md:text-6xl lg:text-7xl">
               Welcome to <span className="text-green-400">SpottyData</span>
             </p>
           </div>
@@ -92,7 +107,7 @@ export default function Home() {
             <div>
               <Link href={authorize_url}>
                 <button
-                  className="w-48 px-8 py-2 mt-4 mb-2 mr-2 text-xl font-bold transition-all border-2 border-black rounded-lg hover:bg-black hover:text-white hover:shadow-sm"
+                  className="w-48 px-8 py-2 mt-4 mb-2 mr-2 text-xl font-bold transition-all bg-green-300 border-2 border-black rounded-lg hover:bg-green-500"
                 >
                   Lets Go
                 </button>
@@ -125,7 +140,7 @@ export default function Home() {
         </div>
       </main>
       <footer className="fixed bottom-0 w-full p-4 text-xs md:text-base">
-        <div className="flex flex-row items-center justify-between md:justify-evenly">
+        <div className="flex flex-row items-center justify-center text-center md:justify-evenly">
           <div>Created by Nathan LeRoy</div>
           <div>© 2021</div>
           <div><Link href="https://github.com/nleroy917/spottydata/issues">Report an Issue</Link></div>

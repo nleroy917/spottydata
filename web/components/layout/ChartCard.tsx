@@ -10,9 +10,12 @@ interface Props {
 const ChartCard: FC<Props> = (props) => {
   const { children, title, tooltip } = props
   return(
-      <div className="bg-white border-2 border-black p-2 my-2 rounded-lg shadow-xl">
-        <p className="font-extrabold text-3xl md:text-5xl mb-2">{title}<span className="cursor-pointer"><ToolTip content={tooltip}/></span></p>
-        <div className="h-80 md:h-96">
+      <div className="p-2 my-2 bg-white border-2 border-black rounded-lg shadow-xl">
+        <div className="flex flex-row items-center">
+          <div className="mb-2 text-3xl font-extrabold md:text-5xl">{title}</div>
+          <div className="cursor-pointer"><ToolTip content={tooltip}/></div>
+        </div>
+        <div className="md:h-96">
             {children}
         </div>
       </div>
