@@ -10,7 +10,7 @@ interface Props {
 export const FeatureSelector: FC<Props> = (props) => {
     return (
         <select 
-          className="px-1 py-2 my-1 mr-2 text-sm border border-black rounded-lg shadow-sm cursor-pointer md:text-base hover:border-gray-300"
+          className="w-full px-1 py-2 my-1 text-sm border border-black rounded-lg shadow-sm cursor-pointer md:mr-2 md:w-min md:text-base hover:border-gray-300"
           onChange={e => {
             // telemetry
             ga.event({

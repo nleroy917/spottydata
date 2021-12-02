@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 import {
   SEO,
-  Header
+  Footer
 } from '../components/layout'
 import axios, { AxiosResponse } from 'axios'
 
@@ -139,13 +139,7 @@ export default function Home() {
             />
         </div>
       </main>
-      <footer className="fixed bottom-0 w-full p-4 text-xs md:text-base">
-        <div className="flex flex-row items-center justify-center text-center md:justify-evenly">
-          <div>Created by Nathan LeRoy</div>
-          <div>© 2021</div>
-          <div><Link href="https://github.com/nleroy917/spottydata/issues">Report an Issue</Link></div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

@@ -152,7 +152,7 @@ export default function Analysis() {
                                 <FeatureSelector setFeatureSelection={setFeatureSelection} />
                                 <PlaylistSelector
                                   defaultSelection={
-                                    Object.keys(analysis.feature_data).slice(0,3).map(p => {
+                                    Object.keys(analysis.feature_data).slice(0,2).map(p => {
                                       return {
                                         label: p,
                                         value: p
@@ -174,11 +174,11 @@ export default function Analysis() {
                                 data={
                                   playlistSelection ?
                                   mapFeatureData(analysis, playlistSelection, featureSelection) :
-                                  mapFeatureData(analysis, Object.keys(analysis.feature_data).slice(0,3), featureSelection)
+                                  mapFeatureData(analysis, Object.keys(analysis.feature_data).slice(0,2), featureSelection)
                                 }
                                 playlists={
                                   playlistSelection || 
-                                  Object.keys(analysis.feature_data).slice(0,3)
+                                  Object.keys(analysis.feature_data).slice(0,2)
                                 }
                                 feature={featureSelection}
                               />
