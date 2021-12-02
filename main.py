@@ -42,6 +42,11 @@ def analyze_profile(request: Request) -> dict:
     for i in range(len(all_tracks_cleaned)):
         all_tracks_cleaned[i]['analysis'] = analysis[i]
     
+    # clean out tracks that contain None analysis
+    # not sure why this occurs, but we can just omit those
+    # tracks altogether
+    all_tracks_cleaned = [t for t in all_tracks_cleaned if t['analysis'] is not None]
+    
     # we now have a list of all tracks with their corresponding
     # playlist metadata and their analysis --
     # -- this will help for creating a very 

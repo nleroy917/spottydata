@@ -33,8 +33,15 @@ class Analyzer:
         """Filter out None objects from a list"""
         return [i for i in items if i is not None]
     
-    def user_playlists(self, is_author: bool = False) -> list[dict]:
-        """Get list of user's playlists - iterate until all are fetched"""
+    def user_playlists(self, is_author: bool = False, include_spotify_authored: bool = True) -> list[dict]:
+        """
+            Get list of user's playlists - iterate until all are fetched
+            we can choose to omit playlists that they simply follow and have
+            not authored.
+            As well, we can choose to include playlists authored by spotify --
+            this includes things like Spotify Wrapped, On Repeat, Daily Drive,
+            etc.
+        """
         
         all_playlists = []
         playlists = self._sp.current_user_playlists(limit=50)
@@ -43,9 +50,17 @@ class Analyzer:
         while playlists['next']:
             playlists = self._sp.next(playlists)
             all_playlists += playlists['items']
+        
+        # generate author list
+        authors = {
+            'Spotify': include_spotify_authored,
+            self.profile['id']: is_author
+        }
+
+        authors_to_include = [a for a in authors if authors[a] == True]
             
         if is_author == True:
-            return filter(lambda p: p['owner']['display_name'] == self.profile['display_name'], all_playlists)
+            return filter(lambda p: p['owner']['display_name'] in authors_to_include, all_playlists)
         else:
             return all_playlists
 
@@ -231,6 +246,7 @@ class Analyzer:
         gather the genres and return a sorted list of
         tuples with counts for each genre.
         """
+        artists = self._filter_items(artists)
         # create dictionary of counts
         genre_counts = {}
         for artist in artists:
@@ -260,6 +276,7 @@ class Analyzer:
         """
         Create a dictionart of counts for keys both major and minor
         """
+
         # init a key count object
         key_counts = {
             "C": {
@@ -468,6 +485,9 @@ if __name__ == "__main__":
         all_tracks_cleaned[i]['analysis'] = analysis[i]
     stop = time.time()
     print(f" done. ({round(stop-start,2)}s)")
+
+    # clean out tracks that contain None analysis
+    all_tracks_cleaned = [t for t in all_tracks_cleaned if t['analysis'] is not None]
     
     start = time.time()
     print("-----> Analyzing all tracks...", end="")
