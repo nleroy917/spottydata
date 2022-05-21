@@ -1,3 +1,11 @@
 export const secondsToMinutesSeconds = (time: number) => {
-    return Math.floor(time / 60) + ":" + (time % 60 ? Math.round(time % 60) : '00')
+  let min = Math.floor(time / 60).toString()
+  let sec = Math.round(time % 60)
+  let secStr
+  if (sec < 10) {
+    secStr = '0' + sec.toString()
+  } else {
+    secStr = sec.toString()
+  }
+  return min + ':' + secStr
 }

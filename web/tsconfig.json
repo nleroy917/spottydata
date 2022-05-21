@@ -19,14 +19,16 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "incremental": true
   },
   "include": [
     "index.d.ts",
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx", 
-    "pages/auth.js"  ],
+    "**/*.tsx",
+    "pages/auth.js"
+  ],
   "exclude": [
     "node_modules"
   ]

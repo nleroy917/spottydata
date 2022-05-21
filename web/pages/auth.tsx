@@ -13,7 +13,7 @@ import {
   keyCodeToKey,
   modeKeyToMode,
   TopData,
-  fetchingTopData,
+  isFetchingTopData,
   CurrentSongWithFeatures,
   currentPlaybackAnalysis,
 } from '../utils/spotify'
@@ -28,7 +28,7 @@ import { AuthData } from '..'
 import { ErrorObject } from '../components/layout/Error'
 import { useInterval } from '../utils/useInterval'
 import { secondsToMinutesSeconds } from '../utils/_helpers'
-import { VisualizerCore } from '../components/visualizer'
+import TopArtistsAndTracks from '../components/charts/TopArtistsAndTracks'
 
 const Auth = () => {
   // create router object
@@ -149,11 +149,11 @@ const Auth = () => {
     authData === undefined ||
     profile === undefined ||
     playlists === undefined ||
-    fetchingTopData(top) ||
+    isFetchingTopData(top) ||
     top === undefined
   ) {
     // render a spinner
-    // console.log(fetchingTopData(top))
+    // console.log(isFetchingTopData(top))
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <SEO title="Loading..." />
@@ -162,7 +162,7 @@ const Auth = () => {
     )
   } else {
     // render profile page
-    //console.log(fetchingTopData(top))
+    //console.log(isFetchingTopData(top))
     return (
       <div className="flex flex-col items-center justify-start min-h-screen bg-white">
         <SEO title={`${profile.display_name} | Profile`} />
@@ -320,98 +320,13 @@ const Auth = () => {
             </p>
           </div>
         </div>
-        <div className="w-11/12 -translate-y-20 md:-translate-y-24 md:max-w-screen-lg">
-          <div className="flex flex-col flex-wrap items-center justify-start md:flex-row md:justify-between md:items-stretch">
-            <div className="w-full p-4 my-2 bg-white border-2 border-black rounded-lg shadow-xl md:flex-1 md:mr-2 md:my-0">
-              <div className="flex flex-row items-center justify-between pb-2 border-b">
-                <p className="text-2xl font-bold md:text-3xl">Top artists</p>
-                <select
-                  className="p-1 text-xl border-2 border-black rounded-lg shadow-sm cursor-pointer"
-                  onChange={(e) => {
-                    setArtistTimeFrame(e.target.value)
-                  }}
-                >
-                  <option value="short_term">4 weeks</option>
-                  <option value="medium_term">6 months</option>
-                  <option value="long_term">All time</option>
-                </select>
-              </div>
-              <table>
-                <tbody>
-                  {top.artists[artistTimeFrame]?.items.map((a, i) => {
-                    return (
-                      <tr className="my-2 md:text-lg" key={i}>
-                        <td className="p-1 text-2xl font-bold">{i + 1}.</td>
-                        <td className="p-1 m-2">
-                          <img
-                            className="border border-black rounded-md"
-                            src={a.images[0].url}
-                            style={{
-                              objectFit: 'cover',
-                              height: '50px',
-                              width: '50px',
-                            }}
-                          />
-                        </td>
-                        <td className="p-1">
-                          <p>{a.name}</p>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <div className="w-full p-4 my-2 bg-white border-2 border-black rounded-lg shadow-xl md:flex-1 md:ml-2 md:my-0">
-              <div className="flex flex-row items-center justify-between pb-2 border-b">
-                <p className="text-2xl font-bold md:text-3xl">Top Songs</p>
-                <select
-                  className="p-1 text-xl border-2 border-black rounded-lg shadow-sm cursor-pointer"
-                  onChange={(e) => {
-                    setTrackTimeFrame(e.target.value)
-                  }}
-                >
-                  <option value="short_term">4 weeks</option>
-                  <option value="medium_term">6 months</option>
-                  <option value="long_term">All time</option>
-                </select>
-              </div>
-              <table>
-                <tbody>
-                  {top.tracks[trackTimeFrame]?.items.map((t, i) => {
-                    return (
-                      <tr className="text-base md:text-lg" key={i}>
-                        <td className="p-1 text-2xl font-bold">{i + 1}.</td>
-                        <td
-                          className="p-1 m-2"
-                          style={{
-                            minWidth: '50px',
-                          }}
-                        >
-                          <img
-                            className="border border-black rounded-md"
-                            src={t.album.images[0].url}
-                            style={{
-                              objectFit: 'cover',
-                              height: '50px',
-                              width: '50px',
-                            }}
-                          />
-                        </td>
-                        <td className="p-1 max-w-min">
-                          <p className="mb-0 text-base">{t.name}</p>
-                          <p className="text-xs italic text-gray-500 md:text-base">
-                            {t.artists[0].name}
-                          </p>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <TopArtistsAndTracks
+          setArtistTimeFrame={setArtistTimeFrame}
+          setTrackTimeFrame={setTrackTimeFrame}
+          artistTimeFrame={artistTimeFrame}
+          trackTimeFrame={trackTimeFrame}
+          top={top}
+        />
       </div>
     )
   }
