@@ -1,29 +1,25 @@
-import { FC, useState, useEffect } from "react"
-import { CurrentSongWithFeatures } from "../../utils/spotify"
-import { findNearestSegment, Segment } from "./_analyzer"
+import { FC, useState, useEffect } from 'react'
+import { CurrentSongWithFeatures } from '../../utils/spotify'
+import { findNearestSegment, Segment } from './_analyzer'
 
 interface VisualizerCoreProps {
-    playback: CurrentSongWithFeatures
-    analysis: SpotifyApi.AudioAnalysisResponse | undefined
+  playback: CurrentSongWithFeatures
+  analysis: SpotifyApi.AudioAnalysisResponse | undefined
 }
 
 export const VisualizerCore: FC<VisualizerCoreProps> = (props) => {
+  // const [currentSegment, setCurrentSegment] = useState<Segment | undefined>(() => {
+  //     if(props.analysis) {
+  //        return findNearestSegment(props.playback.progress_ms, props.analysis.segments
+  //     }
+  // }
+  // )
 
-    // const [currentSegment, setCurrentSegment] = useState<Segment | undefined>(() => {
-    //     if(props.analysis) {
-    //        return findNearestSegment(props.playback.progress_ms, props.analysis.segments
-    //     }
-    // }  
-    // )
+  useEffect(() => {}, [props.playback])
 
-    useEffect(() => {
-        
-    }, [props.playback])
-
-
-    return (
-        <div>
-        {/* {
+  return (
+    <div>
+      {/* {
             JSON.stringify(
                 {
                     playhead: props.playback.progress_ms,
@@ -31,6 +27,6 @@ export const VisualizerCore: FC<VisualizerCoreProps> = (props) => {
                 }, null, 2
             )
         } */}
-        </div>
-    )
+    </div>
+  )
 }

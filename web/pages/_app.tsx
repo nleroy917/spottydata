@@ -2,7 +2,7 @@ import 'tailwindcss/tailwind.css'
 import '../styles/custom.css'
 
 // import Google Analytics utility functions
-import * as ga from '../utils/ga';
+import * as ga from '../utils/ga'
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
