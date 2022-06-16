@@ -29,6 +29,7 @@ import { ErrorObject } from '../components/layout/Error'
 import { useInterval } from '../utils/useInterval'
 import { secondsToMinutesSeconds } from '../utils/_helpers'
 import TopArtistsAndTracks from '../components/charts/TopArtistsAndTracks'
+import { getSongData, searchForSongId } from '../utils/genius'
 
 const Auth = () => {
   // create router object
@@ -81,6 +82,14 @@ const Auth = () => {
   const [trackTimeFrame, setTrackTimeFrame] = useState<string>('short_term')
   const [loadingMessage, setLoadingMessage] = useState<string>('')
   const [error, setError] = useState<ErrorObject | undefined>(undefined)
+  const [showMoreInfo, setShowMoreInfo] = useState<boolean>(false)
+  const [geniusSongId, setGeniusSongId] = useState<string | undefined>(
+    undefined
+  )
+  const [geniusSongData, setGeniusSongData] = useState<object>({})
+  const [songDescription, setSongDescription] = useState<string>('')
+  const [songWriters, setSongWriters] = useState<object[]>([])
+  const [songProducers, setSongProducers] = useState<object[]>([])
 
   /**
    * Interval for playback
@@ -96,6 +105,10 @@ const Auth = () => {
     if (playback?.is_playing) {
       currentPlaybackAnalysis(authData, setPlaybackAnalysis, setError, playback)
     }
+
+    if (playback) {
+      searchForSongId(playback, geniusSongId, setGeniusSongId)
+    }
   }, 1000)
 
   /**
@@ -103,7 +116,7 @@ const Auth = () => {
    */
   useEffect(() => {
     if (authCode !== undefined && authData === undefined) {
-      setLoadingMessage('Authenting...')
+      setLoadingMessage('Authenticating...')
       fetchAccessToken(
         authCode || '',
         process.env.NEXT_PUBLIC_CLIENT_ID || '',
@@ -136,6 +149,37 @@ const Auth = () => {
       currentPlayback(authData, setPlayback, setError)
     }
   }, [authData])
+
+  /**
+   * Song ID watcher
+   */
+  useEffect(() => {
+    if (geniusSongId) {
+      getSongData(geniusSongId, setGeniusSongData)
+    }
+  }, [geniusSongId])
+
+  /**
+   * Change genius annotations
+   */
+  useEffect(() => {
+    if (Object.keys(geniusSongData).length > 0) {
+      const desc = geniusSongData.response.song.description.html
+      if (desc === '<p>?</p>') {
+        setSongDescription(
+          "<p className='font-italic'>No Genius information found :(</p>"
+        )
+      } else {
+        setSongDescription(desc)
+      }
+
+      const writers = geniusSongData.response.song.writer_artists
+      setSongWriters(writers)
+
+      const producers = geniusSongData.response.song.producer_artists
+      setSongProducers(producers)
+    }
+  }, [geniusSongData])
 
   if (error) {
     // render the error
@@ -179,7 +223,7 @@ const Auth = () => {
             {profile.display_name}
           </p>
         </div>
-        <div className="w-11/12 p-4 mx-4 -translate-y-20 bg-white border-2 border-black rounded-lg shadow-xl md:-translate-y-1/4 md:max-w-screen-lg">
+        <div className="w-11/12 p-4 mx-4 -translate-y-20 bg-white border-2 border-black rounded-lg shadow-xl md:-translate-y-26 md:max-w-screen-lg md:mb-4">
           <div className="flex flex-row items-start justify-between pb-4 mb-4 border-b border-gray-200">
             <div className="flex flex-row items-center">
               <img
@@ -267,7 +311,7 @@ const Auth = () => {
                 </div>
                 {playback.progress_ms ? (
                   <div>
-                    <div className="flex flex-row items-center">
+                    <div className="flex flex-row items-center ">
                       <span className="mr-2 text-base text-gray-400">
                         {secondsToMinutesSeconds(playback.progress_ms / 1000)}
                       </span>
@@ -289,10 +333,53 @@ const Auth = () => {
                         )}
                       </span>
                     </div>
-                    {/* <VisualizerCore
-                                playback={playback}
-                                analysis={playbackAnalysis}
-                              /> */}
+                    <div className="flex flex-col items-center mt-4">
+                      <button
+                        onClick={() => setShowMoreInfo(!showMoreInfo)}
+                        className="bg-black text-white shadow-sm hover:shadow-md w-24 px-2 py-1 border-2 border-black rounded-lg hover:-translate-y-0.5 transition-all"
+                      >
+                        {showMoreInfo ? 'Close' : 'More Info'}
+                      </button>
+                      {showMoreInfo ? (
+                        <div className="flex flex-col items-start w-full p-4 my-2 overflow-scroll border border-black rounded-lg shadow-md align-start">
+                          <div className="mb-4 italic">
+                            Powered by{' '}
+                            <span className="p-1 mx-1 not-italic font-bold bg-yellow-300 border-2 border-black rounded-md">
+                              Genius
+                            </span>
+                          </div>
+                          <p className="text-lg font-bold text-red-500">
+                            Song Description:
+                          </p>
+                          <div
+                            className="mb-1"
+                            dangerouslySetInnerHTML={{
+                              __html: songDescription,
+                            }}
+                          />
+                          <p className="text-lg font-bold text-green-500">
+                            Written by:
+                          </p>
+                          {songWriters.length > 0 ? (
+                            songWriters.map((a) => <p key={a.name}>{a.name}</p>)
+                          ) : (
+                            <p>No song writers found :(</p>
+                          )}
+                          <p className="text-lg font-bold text-blue-500">
+                            Produced by:
+                          </p>
+                          {songProducers.length > 0 ? (
+                            songProducers.map((p) => (
+                              <p key={p.name}>{p.name}</p>
+                            ))
+                          ) : (
+                            <p>No producers found :(</p>
+                          )}
+                        </div>
+                      ) : (
+                        <div></div>
+                      )}
+                    </div>
                   </div>
                 ) : (
                   <div></div>
