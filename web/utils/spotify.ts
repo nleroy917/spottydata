@@ -1,9 +1,8 @@
 import { Dispatch, SetStateAction } from 'react'
-import axios, { AxiosAdapter, AxiosResponse } from 'axios'
-import { AuthData, AuthPayload } from '..'
+import axios, { AxiosResponse } from 'axios'
 import { ErrorObject } from '../components/layout/Error'
 
-const _makeHeaders = (authData: AuthData) => {
+const _makeHeaders = (authData: Spottydata.AuthData) => {
   return {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + authData.access_token,
@@ -15,7 +14,7 @@ export const fetchAccessToken = (
   clientID: string,
   clientSecret: string,
   redirectURI: string,
-  dataSetter: Dispatch<SetStateAction<AuthData>>,
+  dataSetter: Dispatch<SetStateAction<Spottydata.AuthData>>,
   setError: Dispatch<SetStateAction<ErrorObject | undefined>>,
   setCookie: Function
 ) => {
@@ -24,7 +23,7 @@ export const fetchAccessToken = (
     Authorization: 'Basic ' + btoa(clientID + ':' + clientSecret),
   }
 
-  const body: AuthPayload = {
+  const body: Spottydata.AuthPayload = {
     grant_type: 'authorization_code',
     code: authCode,
     redirect_uri: redirectURI,
@@ -48,7 +47,7 @@ export const fetchAccessToken = (
 }
 
 export const fetchProfile = (
-  authData: AuthData,
+  authData: Spottydata.AuthData,
   dataSetter: Dispatch<SetStateAction<SpotifyApi.UserObjectPublic | undefined>>,
   setError: Dispatch<SetStateAction<ErrorObject | undefined>>,
   setCookie: Function
@@ -74,7 +73,7 @@ export interface CurrentSongWithFeatures
 }
 
 export const currentPlayback = (
-  authData: AuthData,
+  authData: Spottydata.AuthData,
   dataSetter: Dispatch<SetStateAction<CurrentSongWithFeatures | undefined>>,
   setError: Function
 ) => {
@@ -118,7 +117,7 @@ export const currentPlayback = (
 }
 
 export const currentPlaybackAnalysis = (
-  authData: AuthData,
+  authData: Spottydata.AuthData,
   dataSetter: Dispatch<
     SetStateAction<SpotifyApi.AudioAnalysisResponse | undefined>
   >,
@@ -143,7 +142,7 @@ export const currentPlaybackAnalysis = (
 }
 
 export const fetchPlaylists = (
-  authData: AuthData,
+  authData: Spottydata.AuthData,
   dataSetter: Dispatch<
     SetStateAction<SpotifyApi.PlaylistObjectFull[] | undefined>
   >,
@@ -269,7 +268,7 @@ export interface TopData {
 }
 
 export const fetchTopData = (
-  authData: AuthData,
+  authData: Spottydata.AuthData,
   setTop: Dispatch<SetStateAction<TopData | undefined>>,
   setError: Dispatch<SetStateAction<ErrorObject | undefined>>
 ) => {

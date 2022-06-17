@@ -1,10 +1,9 @@
 import { ResponsiveCalendar } from '@nivo/calendar'
 import { FC } from 'react'
-import { CalendarCoordinate } from '../..'
 import { chartColors } from './colors'
 
 interface Props {
-  data: CalendarCoordinate[]
+  data: Spottydata.CalendarCoordinate[]
 }
 
 const SongCalendar: FC<Props> = (props) => {

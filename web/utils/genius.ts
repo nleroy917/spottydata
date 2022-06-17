@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { Dispatch, SetStateAction } from 'react'
-import { SearchResponse, SongResponse } from '..'
 import { CurrentSongWithFeatures } from './spotify'
 
 const GENIUS_BASE = 'https://api.genius.com'
@@ -24,7 +23,7 @@ export const searchForSongId = (
   dataSetter: Dispatch<SetStateAction<number | undefined>>
 ) => {
   interface GeniusResponse {
-    data: SearchResponse
+    data: GeniusApi.SearchResponse
   }
   const query = `${playback.item.name} ${playback.item.artists[0].name}`
   axios
@@ -50,10 +49,10 @@ export const searchForSongId = (
  */
 export const getSongData = (
   songId: number,
-  dataSetter: Dispatch<SetStateAction<SongResponse | undefined>>
+  dataSetter: Dispatch<SetStateAction<GeniusApi.SongResponse | undefined>>
 ) => {
   interface GeniusResponse {
-    data: SongResponse
+    data: GeniusApi.SongResponse
   }
   axios
     .get(

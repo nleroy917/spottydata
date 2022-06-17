@@ -24,7 +24,6 @@ import { Loading } from '../components/loading'
 import * as ga from '../utils/ga'
 
 import { Error, Header, SEO } from '../components/layout'
-import { AuthData, Artist, SongResponse } from '..'
 import { ErrorObject } from '../components/layout/Error'
 import { useInterval } from '../utils/useInterval'
 import { secondsToMinutesSeconds } from '../utils/_helpers'
@@ -63,7 +62,7 @@ const Auth = () => {
   }
 
   // state management
-  const [authData, setAuthData] = useState<AuthData>(
+  const [authData, setAuthData] = useState<Spottydata.AuthData>(
     cookies['authData'] || undefined
   )
   const [profile, setProfile] = useState<
@@ -88,11 +87,11 @@ const Auth = () => {
     undefined
   )
   const [geniusSongData, setGeniusSongData] = useState<
-    SongResponse | undefined
+    GeniusApi.SongResponse | undefined
   >(undefined)
   const [songDescription, setSongDescription] = useState<string>('')
-  const [songWriters, setSongWriters] = useState<Artist[]>([])
-  const [songProducers, setSongProducers] = useState<Artist[]>([])
+  const [songWriters, setSongWriters] = useState<GeniusApi.Artist[]>([])
+  const [songProducers, setSongProducers] = useState<GeniusApi.Artist[]>([])
 
   /**
    * Interval for playback

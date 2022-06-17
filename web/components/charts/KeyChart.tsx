@@ -1,6 +1,5 @@
 import { ResponsiveBar } from '@nivo/bar'
 import { FC } from 'react'
-import { KeyCounts } from '../..'
 import { chartColors } from './colors'
 
 interface Props {

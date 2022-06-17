@@ -24,7 +24,6 @@ import {
   SongCalendar,
   toolTips,
 } from '../components/charts'
-import { AuthData, ProfileAnalysis } from '..'
 import { ErrorObject } from '../components/layout/Error'
 
 // import { test_data } from '../data/test_analysis_data'
@@ -33,13 +32,15 @@ export default function Analysis() {
   const router = useRouter()
   const [cookies, setCookie] = useCookies(['spottydata-credentials'])
 
-  const [authData, setAuthData] = useState<AuthData>(cookies['authData'])
+  const [authData, setAuthData] = useState<Spottydata.AuthData>(
+    cookies['authData']
+  )
   const [profile, setProfile] = useState<
     SpotifyApi.UserObjectPublic | undefined
   >(undefined)
-  const [analysis, setAnalysis] = useState<ProfileAnalysis | undefined>(
-    undefined
-  )
+  const [analysis, setAnalysis] = useState<
+    Spottydata.ProfileAnalysis | undefined
+  >(undefined)
   const [error, setError] = useState<ErrorObject | undefined>(undefined)
 
   // state for playlist feature plot

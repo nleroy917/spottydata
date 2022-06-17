@@ -1,12 +1,11 @@
 import { Dispatch, SetStateAction } from 'react'
 import { FC } from 'react'
-import { Artist } from '../..'
 
 interface Props {
   setShowMoreInfo: Dispatch<SetStateAction<boolean>>
   songDescription: string
-  songWriters: Artist[]
-  songProducers: Artist[]
+  songWriters: GeniusApi.Artist[]
+  songProducers: GeniusApi.Artist[]
 }
 
 const GeniusInfo: FC<Props> = (props) => {

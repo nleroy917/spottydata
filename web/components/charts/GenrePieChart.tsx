@@ -1,10 +1,9 @@
 import { ResponsivePie } from '@nivo/pie'
 import { FC } from 'react'
-import { TopGenre } from '../..'
 import { chartColors } from './colors'
 
 interface Props {
-  data: TopGenre[]
+  data: Spottydata.TopGenre[]
 }
 
 const GenrePieChart: FC<Props> = (props) => {
