@@ -24,12 +24,13 @@ import { Loading } from '../components/loading'
 import * as ga from '../utils/ga'
 
 import { Error, Header, SEO } from '../components/layout'
-import { AuthData } from '..'
+import { AuthData, Artist, SongResponse } from '..'
 import { ErrorObject } from '../components/layout/Error'
 import { useInterval } from '../utils/useInterval'
 import { secondsToMinutesSeconds } from '../utils/_helpers'
 import TopArtistsAndTracks from '../components/charts/TopArtistsAndTracks'
 import { getSongData, searchForSongId } from '../utils/genius'
+import GeniusInfo from '../components/genius/GeniusInfo'
 
 const Auth = () => {
   // create router object
@@ -83,13 +84,15 @@ const Auth = () => {
   const [loadingMessage, setLoadingMessage] = useState<string>('')
   const [error, setError] = useState<ErrorObject | undefined>(undefined)
   const [showMoreInfo, setShowMoreInfo] = useState<boolean>(false)
-  const [geniusSongId, setGeniusSongId] = useState<string | undefined>(
+  const [geniusSongId, setGeniusSongId] = useState<number | undefined>(
     undefined
   )
-  const [geniusSongData, setGeniusSongData] = useState<object>({})
+  const [geniusSongData, setGeniusSongData] = useState<
+    SongResponse | undefined
+  >(undefined)
   const [songDescription, setSongDescription] = useState<string>('')
-  const [songWriters, setSongWriters] = useState<object[]>([])
-  const [songProducers, setSongProducers] = useState<object[]>([])
+  const [songWriters, setSongWriters] = useState<Artist[]>([])
+  const [songProducers, setSongProducers] = useState<Artist[]>([])
 
   /**
    * Interval for playback
@@ -106,6 +109,7 @@ const Auth = () => {
       currentPlaybackAnalysis(authData, setPlaybackAnalysis, setError, playback)
     }
 
+    // if we have playback, search for a genius song id
     if (playback) {
       searchForSongId(playback, geniusSongId, setGeniusSongId)
     }
@@ -160,10 +164,13 @@ const Auth = () => {
   }, [geniusSongId])
 
   /**
-   * Change genius annotations
+   * Change genius annotations when the id changes
    */
   useEffect(() => {
-    if (Object.keys(geniusSongData).length > 0) {
+    if (
+      geniusSongData !== undefined &&
+      Object.keys(geniusSongData).length > 0
+    ) {
       const desc = geniusSongData.response.song.description.html
       if (desc === '<p>?</p>') {
         setSongDescription(
@@ -334,48 +341,24 @@ const Auth = () => {
                       </span>
                     </div>
                     <div className="flex flex-col items-center mt-4">
-                      <button
-                        onClick={() => setShowMoreInfo(!showMoreInfo)}
-                        className="bg-black text-white shadow-sm hover:shadow-md w-24 px-2 py-1 border-2 border-black rounded-lg hover:-translate-y-0.5 transition-all"
-                      >
-                        {showMoreInfo ? 'Close' : 'More Info'}
-                      </button>
+                      {!showMoreInfo ? (
+                        <button
+                          onClick={() => setShowMoreInfo(!showMoreInfo)}
+                          className="bg-black text-white shadow-sm hover:shadow-md w-24 px-2 py-1 border-2 border-black rounded-lg hover:-translate-y-0.5 transition-all"
+                        >
+                          {showMoreInfo ? 'Close' : 'More Info'}
+                        </button>
+                      ) : (
+                        <div></div>
+                      )}
+
                       {showMoreInfo ? (
-                        <div className="flex flex-col items-start w-full p-4 my-2 overflow-scroll border border-black rounded-lg shadow-md align-start">
-                          <div className="mb-4 italic">
-                            Powered by{' '}
-                            <span className="p-1 mx-1 not-italic font-bold bg-yellow-300 border-2 border-black rounded-md">
-                              Genius
-                            </span>
-                          </div>
-                          <p className="text-lg font-bold text-red-500">
-                            Song Description:
-                          </p>
-                          <div
-                            className="mb-1"
-                            dangerouslySetInnerHTML={{
-                              __html: songDescription,
-                            }}
-                          />
-                          <p className="text-lg font-bold text-green-500">
-                            Written by:
-                          </p>
-                          {songWriters.length > 0 ? (
-                            songWriters.map((a) => <p key={a.name}>{a.name}</p>)
-                          ) : (
-                            <p>No song writers found :(</p>
-                          )}
-                          <p className="text-lg font-bold text-blue-500">
-                            Produced by:
-                          </p>
-                          {songProducers.length > 0 ? (
-                            songProducers.map((p) => (
-                              <p key={p.name}>{p.name}</p>
-                            ))
-                          ) : (
-                            <p>No producers found :(</p>
-                          )}
-                        </div>
+                        <GeniusInfo
+                          setShowMoreInfo={setShowMoreInfo}
+                          songWriters={songWriters}
+                          songProducers={songProducers}
+                          songDescription={songDescription}
+                        />
                       ) : (
                         <div></div>
                       )}
