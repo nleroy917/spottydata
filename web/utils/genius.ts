@@ -32,6 +32,7 @@ export const searchForSongId = (
     )
     .then((res: GeniusResponse) => {
       // only set if the song id is not defifed yet or unchanged
+      console.log(res.data)
       if (res.data.response.hits.length > 0) {
         const songId = res.data.response.hits[0].result.id
         if (currentSongId === undefined || currentSongId !== songId) {

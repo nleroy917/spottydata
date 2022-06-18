@@ -345,7 +345,7 @@ const Auth = () => {
                           onClick={() => setShowMoreInfo(!showMoreInfo)}
                           className="bg-black text-white shadow-sm hover:shadow-md w-24 px-2 py-1 border-2 border-black rounded-lg hover:-translate-y-0.5 transition-all"
                         >
-                          {showMoreInfo ? 'Close' : 'More Info'}
+                          More Info
                         </button>
                       ) : (
                         <div></div>
