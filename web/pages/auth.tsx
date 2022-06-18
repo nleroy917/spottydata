@@ -30,6 +30,7 @@ import { secondsToMinutesSeconds } from '../utils/_helpers'
 import TopArtistsAndTracks from '../components/charts/TopArtistsAndTracks'
 import { getSongData, searchForSongId } from '../utils/genius'
 import GeniusInfo from '../components/genius/GeniusInfo'
+import { PlaybackController } from '../components/control/PlaybackController'
 
 const Auth = () => {
   // create router object
@@ -339,6 +340,7 @@ const Auth = () => {
                         )}
                       </span>
                     </div>
+                    <PlaybackController isPlaying={playback.is_playing} />
                     <div className="flex flex-col items-center mt-4">
                       {!showMoreInfo ? (
                         <button
