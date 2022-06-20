@@ -11,17 +11,17 @@ interface Props {
 const GeniusInfo: FC<Props> = (props) => {
   const { songDescription, songWriters, songProducers, setShowMoreInfo } = props
   return (
-    <div className="flex flex-col items-start w-full p-4 my-2 overflow-scroll">
-      <div className="flex flex-row items-center justify-between w-full">
+    <div className="flex flex-col items-start w-full p-2 my-2 overflow-scroll">
+      <div className="flex flex-row items-center justify-between w-full mb-2">
         <div>
           <button
-            className="px-2 mb-2 text-white bg-black border-2 border-black rounded-md hover:-translate-y-0.5 transition-all shadow-sm hover:shadow-md"
+            className="underline transition-all hover:font-bold"
             onClick={() => setShowMoreInfo(false)}
           >
             Less Info
           </button>
         </div>
-        <div className="mb-4 italic">
+        <div className="italic ">
           Powered by{' '}
           <span className="px-1 mx-1 not-italic font-bold bg-yellow-300 border-2 border-black rounded-md">
             Genius*

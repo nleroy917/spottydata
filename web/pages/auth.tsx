@@ -26,11 +26,9 @@ import * as ga from '../utils/ga'
 import { Error, Header, SEO } from '../components/layout'
 import { ErrorObject } from '../components/layout/Error'
 import { useInterval } from '../utils/useInterval'
-import { secondsToMinutesSeconds } from '../utils/_helpers'
 import TopArtistsAndTracks from '../components/charts/TopArtistsAndTracks'
 import { getSongData, searchForSongId } from '../utils/genius'
-import GeniusInfo from '../components/genius/GeniusInfo'
-import { PlaybackController } from '../components/control/PlaybackController'
+import { CurrentPlayback } from '../components/layout/CurrentPlayback'
 
 const Auth = () => {
   // create router object
@@ -83,13 +81,13 @@ const Auth = () => {
   const [trackTimeFrame, setTrackTimeFrame] = useState<string>('short_term')
   const [loadingMessage, setLoadingMessage] = useState<string>('')
   const [error, setError] = useState<ErrorObject | undefined>(undefined)
-  const [showMoreInfo, setShowMoreInfo] = useState<boolean>(false)
   const [geniusSongId, setGeniusSongId] = useState<number | undefined>(
     undefined
   )
   const [geniusSongData, setGeniusSongData] = useState<
     GeniusApi.SongResponse | undefined
   >(undefined)
+
   const [songDescription, setSongDescription] = useState<string>('')
   const [songWriters, setSongWriters] = useState<GeniusApi.Artist[]>([])
   const [songProducers, setSongProducers] = useState<GeniusApi.Artist[]>([])
@@ -279,96 +277,12 @@ const Auth = () => {
               Currently listening to:{' '}
             </p>
             {playback ? (
-              <>
-                <div className="flex flex-row items-center my-2">
-                  <img
-                    className="border-2 border-black rounded-lg shadow-md"
-                    height={75}
-                    width={75}
-                    src={playback.item.album.images[0].url}
-                  />
-                  <div className="ml-2">
-                    <p className="text-xl font-semibold md:text-2xl">
-                      {playback.item.name}
-                    </p>
-                    <p className="text-base italic">
-                      {playback.item.artists[0].name}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex flex-col my-2 text-lg md:flex-row md:text-2xl">
-                  <p>
-                    Song Key:{' '}
-                    <span className="mr-4 font-bold text-blue-500">
-                      {keyCodeToKey(playback.features.key)}
-                    </span>
-                  </p>
-                  <p>
-                    Tempo:{' '}
-                    <span className="mr-4 font-bold text-green-500">
-                      {Math.round(playback.features.tempo)} bpm
-                    </span>
-                  </p>
-                  <p>
-                    Mode:{' '}
-                    <span className="mr-4 font-bold text-red-500">
-                      {modeKeyToMode(playback.features.mode)}
-                    </span>
-                  </p>
-                </div>
-                {playback.progress_ms ? (
-                  <div>
-                    <div className="flex flex-row items-center ">
-                      <span className="mr-2 text-base text-gray-400">
-                        {secondsToMinutesSeconds(playback.progress_ms / 1000)}
-                      </span>
-                      <div className="w-full bg-gray-200 rounded-full h-2.5">
-                        <div
-                          className="bg-green-400 h-2.5 rounded-full"
-                          style={{
-                            width: `${
-                              (playback.progress_ms /
-                                playback.item.duration_ms) *
-                              100
-                            }%`,
-                          }}
-                        ></div>
-                      </div>
-                      <span className="ml-2 text-base text-gray-400">
-                        {secondsToMinutesSeconds(
-                          playback.item.duration_ms / 1000
-                        )}
-                      </span>
-                    </div>
-                    <PlaybackController isPlaying={playback.is_playing} />
-                    <div className="flex flex-col items-center mt-4">
-                      {!showMoreInfo ? (
-                        <button
-                          onClick={() => setShowMoreInfo(!showMoreInfo)}
-                          className="bg-black text-white shadow-sm hover:shadow-md w-24 px-2 py-1 border-2 border-black rounded-lg hover:-translate-y-0.5 transition-all"
-                        >
-                          More Info
-                        </button>
-                      ) : (
-                        <div></div>
-                      )}
-
-                      {showMoreInfo ? (
-                        <GeniusInfo
-                          setShowMoreInfo={setShowMoreInfo}
-                          songWriters={songWriters}
-                          songProducers={songProducers}
-                          songDescription={songDescription}
-                        />
-                      ) : (
-                        <div></div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div></div>
-                )}
-              </>
+              <CurrentPlayback
+                playback={playback}
+                songProducers={songProducers}
+                songWriters={songWriters}
+                songDescription={songDescription}
+              />
             ) : (
               <div className="flex flex-col items-center justify-center p-4 my-6 text-center">
                 <p className="text-2xl font-semibold text-gray-300">
