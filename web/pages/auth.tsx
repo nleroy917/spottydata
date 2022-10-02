@@ -10,8 +10,6 @@ import {
   fetchPlaylists,
   fetchProfile,
   fetchTopData,
-  keyCodeToKey,
-  modeKeyToMode,
   TopData,
   isFetchingTopData,
   CurrentSongWithFeatures,
@@ -29,6 +27,8 @@ import { useInterval } from '../utils/useInterval'
 import TopArtistsAndTracks from '../components/charts/TopArtistsAndTracks'
 import { getSongData, searchForSongId } from '../utils/genius'
 import { CurrentPlayback } from '../components/layout/CurrentPlayback'
+import { ProfileHeader } from '../components/layout/ProfileHeader'
+import { ProfileInfo } from '../components/layout/ProfileInfo'
 
 const Auth = () => {
   // create router object
@@ -229,55 +229,15 @@ const Auth = () => {
           </p>
         </div>
         <div className="w-11/12 p-4 mx-4 -translate-y-20 bg-white border-2 border-black rounded-lg shadow-xl md:-translate-y-26 md:max-w-screen-lg md:mb-4">
-          <div className="flex flex-row items-start justify-between pb-4 mb-4 border-b border-gray-200">
-            <div className="flex flex-row items-center">
-              <img
-                className="mr-4 border-2 border-black rounded-lg shadow-md"
-                height={75}
-                width={75}
-                src={profile.images ? profile.images[0].url : ''}
-              />
-              <p className="text-2xl font-extrabold md:text-4xl">
-                Welcome,{' '}
-                <span className="text-green-500">{profile.display_name}</span>
-              </p>
-            </div>
-            {playback?.is_playing ? (
-              <div className="px-2 py-1 text-xs text-center text-green-600 bg-green-200 border-2 border-green-600 rounded-full animate-pulse">
-                Listening
-              </div>
-            ) : (
-              <span className="px-2 py-1 text-xs text-center bg-gray-200 border-2 border-black rounded-full">
-                Paused
-              </span>
-            )}
-          </div>
-          <div className="flex flex-row flex-wrap items-start justify-start pb-4 mb-4 text-lg font-bold border-b border-gray-200 md:text-xl">
-            <p className="mr-4">
-              Followers:{' '}
-              <span className="text-purple-500">
-                {profile.followers ? profile.followers.total : '0'}
-              </span>
-            </p>
-            <p className="mr-4">
-              Playlists:{' '}
-              <span className="text-red-500">{playlists.length}</span>
-            </p>
-            <p className="mr-4">
-              Total tracks:{' '}
-              <span className="text-yellow-500">
-                {playlists
-                  .map((p) => p.tracks.total)
-                  .reduce((a, b) => a + b, 0)}
-              </span>
-            </p>
-          </div>
+          <ProfileHeader profile={profile} playback={playback} />
+          <ProfileInfo profile={profile} playlists={playlists} />
           <div className="flex flex-col justify-start">
             <p className="text-2xl font-bold md:text-3xl">
               Currently listening to:{' '}
             </p>
             {playback ? (
               <CurrentPlayback
+                authData={authData}
                 playback={playback}
                 songProducers={songProducers}
                 songWriters={songWriters}

@@ -1,9 +1,14 @@
 import { FC } from 'react'
 import { HiFastForward } from 'react-icons/hi'
+import { CurrentSongWithFeatures } from '../../utils/spotify'
 
-interface Props {}
+interface Props {
+  authData: Spottydata.AuthData
+  playback: CurrentSongWithFeatures
+}
 
 export const SkipForwardButton: FC<Props> = (props) => {
+  const { authData } = props
   return (
     <button className="mx-2 transition-all hover:text-gray-800">
       <HiFastForward className="w-10 h-10 transition-all hover:w-11 hover:h-11" />

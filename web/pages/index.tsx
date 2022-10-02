@@ -15,7 +15,7 @@ const payload = {
   client_id: '0ca7dd0007fd4ff2a34c3aab07379970',
   response_type: 'code',
   scope:
-    'playlist-read-private playlist-read-collaborative user-top-read user-library-read user-read-playback-state user-read-recently-played',
+    'playlist-read-private playlist-read-collaborative user-top-read user-library-read user-read-playback-state user-read-recently-played user-modify-playback-state streaming',
   redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI,
   // show dialog if inside the development environment
   // for debugging purposes.
