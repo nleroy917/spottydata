@@ -20,4 +20,4 @@ six==1.16.0
 spotipy==2.18.0
 urllib3==1.26.6
 watchdog==1.0.2
-Werkzeug==2.0.1
+Werkzeug==2.2.3
